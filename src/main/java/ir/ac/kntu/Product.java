@@ -1,9 +1,13 @@
 package ir.ac.kntu;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Product {
+public abstract class Product {
     private String name;
     private double price;
     private ProductType type;
+    private Seller seller;
+    private List<Double> ratings = new ArrayList<>(); 
     
     public String getName() {
         return name;
