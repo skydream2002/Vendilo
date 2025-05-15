@@ -2,11 +2,53 @@ package ir.ac.kntu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class UserRepository {
     private static List<Customer> customers = new ArrayList<>();
     private static List<Seller> sellers = new ArrayList<>();
     private static List<Support> supports = new ArrayList<>();
+
+    public void signUp(String role) {
+        Scanner scanner = new Scanner(System.in);
+        
+        if (role.equals("support")) {
+            System.out.println("you can't sign up as a supporter");
+            return;
+        }
+        
+        System.out.println("-----Sign up Menu-----");
+        
+        System.out.println("Enter you first name :");
+        String firstName = scanner.nextLine();
+        
+        System.out.println("Enter you last name :");
+        String lastName = scanner.nextLine();
+        
+        System.out.println("Enter email :");
+        String email = scanner.nextLine();
+
+        System.out.println("Enter password :");
+        String password = scanner.nextLine();
+
+        System.out.println("Enter phone numbor :");
+        String phoneNumbor = scanner.nextLine();
+
+        for (User user : getAllUsers()) {
+            if(email.equals(user.getEmail())) {
+                System.out.println("This email is already registered.");
+                return;
+            }
+        }
+
+        if(role.equals("customer")) {
+            Customer customer = new Customer(email, firstName, lastName, password, phoneNumbor);
+            customers.add(customer);
+        } else if (role.equals("seller")) {
+            Seller seller = new Seller(email, firstName, lastName, password, phoneNumbor);
+            sellers.add(seller);
+        }
+    }
 
     public void addCustomer(Customer customer) {
         customers.add(customer);
@@ -16,7 +58,7 @@ public class UserRepository {
         sellers.add(seller);
     }
 
-    public void addsellerupport(Support support) {
+    public void addSupport(Support support) {
         supports.add(support);
     }
 
