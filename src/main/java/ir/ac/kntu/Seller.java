@@ -25,7 +25,7 @@ public class Seller extends User {
             System.out.println("-------5.back------");
             System.out.println("choose:");
             int choice = scanner.nextInt();
-
+            // complete this
             switch (choice) {
                 case 1 -> System.out.println("view products");
                 case 2 -> System.out.println("add product");
