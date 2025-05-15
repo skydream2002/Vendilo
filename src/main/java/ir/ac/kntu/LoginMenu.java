@@ -11,11 +11,18 @@ public class LoginMenu {
             System.out.println("-------1.Login---------");
             System.out.println("-------2.Sign up-------");
             System.out.println("--------3.Exit---------");
+            
             int choice = scanner.nextInt();
-            // complete this
+
             switch (choice) {
                 case 1 -> login();
-                case 2 -> System.out.println("Sign up");
+                case 2 -> {
+                    scanner.nextLine();
+                    System.out.println("Enter your role : (customer or seller)");
+                    System.out.println("supporter can't sign up");
+                    String role = scanner.nextLine().trim().toLowerCase();
+                    UserRepository.signUp(role);
+                }
                 case 3 -> {
                     scanner.close();
                     return;
