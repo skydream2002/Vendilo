@@ -8,6 +8,8 @@ public abstract class User {
     private String password;
     private Wallet wallet;
 
+    public abstract void usersMenu();
+
     public User(String email, String firstName, String lastName, String password, int phoneNumber) {
         this.email = email;
         this.firstName = firstName;
