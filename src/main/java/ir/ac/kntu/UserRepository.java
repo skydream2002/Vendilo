@@ -47,6 +47,8 @@ public class UserRepository {
         } else if (role.equals("seller")) {
             Seller seller = new Seller(email, firstName, lastName, password, phoneNumbor);
             sellers.add(seller);
+        } else {
+            System.out.println("invalid role");
         }
     }
 
