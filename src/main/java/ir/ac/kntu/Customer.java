@@ -47,7 +47,7 @@ public class Customer extends User {
 
     }
 
-    public Customer(String email, String firstName, String lastName, String password, int phoneNumber) {
+    public Customer(String email, String firstName, String lastName, String password, String phoneNumber) {
         super(email, firstName, lastName, password, phoneNumber);
     }
 

@@ -33,7 +33,7 @@ public class Support extends User {
         }
     }
 
-    public Support(String email, String firstName, String lastName, String password, int phoneNumber) {
+    public Support(String email, String firstName, String lastName, String password, String phoneNumber) {
         super(email, firstName, lastName, password, phoneNumber);
     }
 

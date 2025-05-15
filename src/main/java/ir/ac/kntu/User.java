@@ -4,13 +4,13 @@ public abstract class User {
     private String firstName;
     private String lastName;
     private String email;
-    private int phoneNumber;
+    private String phoneNumber;
     private String password;
     private Wallet wallet;
 
     public abstract void usersMenu();
 
-    public User(String email, String firstName, String lastName, String password, int phoneNumber) {
+    public User(String email, String firstName, String lastName, String password, String phoneNumber) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -21,7 +21,7 @@ public abstract class User {
     public User() {
     }
 
-    public User(String email, String firstName, String lastName, String password, int phoneNumber, Wallet wallet) {
+    public User(String email, String firstName, String lastName, String password, String phoneNumber, Wallet wallet) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -54,11 +54,11 @@ public abstract class User {
         this.email = email;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
