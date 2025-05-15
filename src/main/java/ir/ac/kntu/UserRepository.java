@@ -32,4 +32,12 @@ public class UserRepository {
         return supports;
     }
 
+    public static List<User> getAllUsers() {
+        List<User> all = new ArrayList<>();
+        all.addAll(customers);
+        all.addAll(sellers);
+        all.addAll(supports);
+        return all;
+    }
+
 }
