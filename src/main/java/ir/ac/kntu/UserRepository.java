@@ -9,7 +9,7 @@ public class UserRepository {
     private static List<Seller> sellers = new ArrayList<>();
     private static List<Support> supports = new ArrayList<>();
 
-    public void signUp(String role) {
+    public static void signUp(String role) {
         Scanner scanner = new Scanner(System.in);
         
         if (role.equals("support")) {
