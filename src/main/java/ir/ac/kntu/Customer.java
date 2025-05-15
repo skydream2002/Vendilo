@@ -34,7 +34,6 @@ public class Customer extends User {
                 case 5 -> System.out.println("orders");
                 case 6 -> System.out.println("settings");
                 case 7 -> {
-                    scanner.close();
                     return;
                 }
                 default -> System.out.println("invalid choice.");
