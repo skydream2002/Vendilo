@@ -23,11 +23,12 @@ public class ShoppingCart {
             return;
         }
 
-        double totalPrice = products.stream().mapToDouble(Product::getPrice).sum();
-        System.out.println("Total price : " + totalPrice + "toman");
-
         Scanner scanner = new Scanner(System.in);
         while (true) {
+            double totalPrice = products.stream().mapToDouble(Product::getPrice).sum();
+            System.out.println("Total price : " + totalPrice + "toman");
+
+            System.out.println("----- Products in Cart -----");
             int count = 1;
             for (Product product : products) {
                 System.out.println(count + "." + product.getName() + "-- Price :" + product.getPrice()
@@ -49,6 +50,36 @@ public class ShoppingCart {
         }
     }
 
+    public void removeFromCart() {
+        if (products.isEmpty()) {
+            System.out.println("shopping cart is empty");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("----- Products in Cart -----");
+            int count = 1;
+            for (Product product : products) {
+                System.out.println(count + "." + product.getName() + "-- Price :" + product.getPrice()
+                        + "toman" + "--Category : " + product.getType());
+                count++;
+            }
+            System.out.println("---0.back---");
+            System.out.println("please enter your choice to remove from shopping cart");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 0) {
+                return;
+            } else if (choice > 0 && choice <= products.size()) {
+                removeProduct(products.get(choice - 1));
+            } else {
+                System.out.println("invalid choice");
+            }
+        }
+    }
+
     public List<Product> getProducts() {
         return products;
     }
@@ -60,5 +91,4 @@ public class ShoppingCart {
     public void clearCart() {
         products.clear();
     }
-
 }
