@@ -1,6 +1,6 @@
 package ir.ac.kntu;
 
-public class DigitalProduct {
+public abstract class DigitalProduct extends Product {
     private String brand;
     private String storage;
     private String RAM;
