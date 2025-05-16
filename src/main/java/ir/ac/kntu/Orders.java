@@ -1,4 +1,5 @@
 package ir.ac.kntu;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,13 @@ public class Orders {
     private Address shippingAddress;
     private double totalPrice;
     private LocalDateTime orderDate;
+
+    public Orders() {
+    }
+
+    public Orders(Customer customer) {
+        this.customer = customer;
+    }
 
     public Customer getCustomer() {
         return customer;
