@@ -51,6 +51,10 @@ public class Customer extends User {
 
     }
 
+    public void addAddress(Address address) {
+        addresses.add(address);
+    }
+
     public Customer(String email, String firstName, String lastName, String password, String phoneNumber) {
         super(email, firstName, lastName, password, phoneNumber);
     }

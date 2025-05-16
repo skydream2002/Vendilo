@@ -6,7 +6,7 @@ public abstract class User {
     private String email;
     private String phoneNumber;
     private String password;
-    private Wallet wallet;
+    private Wallet wallet = new Wallet();
 
     public abstract void usersMenu();
 

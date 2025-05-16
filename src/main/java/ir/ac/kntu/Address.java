@@ -2,7 +2,7 @@ package ir.ac.kntu;
 
 public class Address {
     private String title;
-    private String Province;
+    private String province;
     private String city;
     private String description;
     
@@ -10,8 +10,12 @@ public class Address {
     }
     public Address(String title, String province, String city) {
         this.title = title;
-        Province = province;
+        this.province = province;
         this.city = city;
+    }
+    
+    public void showAddress() {
+        System.out.println("Tiltle: " + title + "Province: " + province + "city: " + city);
     }
     public String getTitle() {
         return title;
@@ -20,10 +24,10 @@ public class Address {
         this.title = title;
     }
     public String getProvince() {
-        return Province;
+        return province;
     }
     public void setProvince(String province) {
-        Province = province;
+        this.province = province;
     }
     public String getCity() {
         return city;
