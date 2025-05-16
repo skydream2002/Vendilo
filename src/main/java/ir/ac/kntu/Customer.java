@@ -27,7 +27,12 @@ public class Customer extends User {
             int choice = scanner.nextInt();
             // complete this
             switch (choice) {
-                case 1 -> System.out.println("showing shopping cart");
+                case 1 -> {
+                    if (shoppingCart == null) {
+                        shoppingCart = new ShoppingCart();
+                    }
+                    shoppingCart.shoppingCartMenu();
+                }
                 case 2 -> System.out.println("search");
                 case 3 -> System.out.println("address");
                 case 4 -> System.out.println("wallet");

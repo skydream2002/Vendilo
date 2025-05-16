@@ -7,6 +7,34 @@ import java.util.Scanner;
 public class ShoppingCart {
     private List<Product> products = new ArrayList<>();
 
+    public void shoppingCartMenu() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("====== Shopping Cart Menu ====== ");
+            System.out.println("---------1.view products---------");
+            System.out.println("--------2.Remove a product-------");
+            System.out.println("------------3.Checkout-----------");
+            System.out.println("-----------4.Clear cart----------");
+            System.out.println("-------------5.Back--------------");
+            System.out.println("Choose an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1 -> viewProducts();
+                case 2 -> removeFromCart();
+                //case 3 -> checkout();
+                case 4 -> clearCart();
+                case 5 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid option!");
+            }
+
+        }
+    }
+
     public void addProduct(Product product) {
         products.add(product);
         System.out.println(product.getName() + " added to cart.");
@@ -90,5 +118,6 @@ public class ShoppingCart {
 
     public void clearCart() {
         products.clear();
+        System.out.println("Shopping cart has been cleared.");
     }
 }
