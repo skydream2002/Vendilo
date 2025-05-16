@@ -18,7 +18,7 @@ public class Mobile extends DigitalProduct {
         System.out.println("Rear Camera : " + getRearCameraResolution());
         System.out.println("Network : " + getInternetNetwork());
         System.out.println("Storage : " + getStorage());
-        System.out.println("RAM : " + getRAM());
+        System.out.println("RAM : " + getRAM() + "}");
     }
 
     public String getFrontCameraResolution() {

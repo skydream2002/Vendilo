@@ -22,12 +22,13 @@ public class ShoppingCart {
             return;
         }
 
-        double totalPrice = 0;
         int count = 1;
         for (Product product : products) {
             System.out.println(count + "." + product.getName() + "- Price :" + product.getPrice() + "toman");
-            totalPrice += product.getPrice();
+            count++;
         }
+
+        double totalPrice = products.stream().mapToDouble(Product::getPrice).sum();
         System.out.println("Total price : " + totalPrice + "toman");
     }
 

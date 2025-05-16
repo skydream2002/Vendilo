@@ -19,7 +19,7 @@ public class Book extends Product{
         System.out.println("Pages : " + getPages());
         System.out.println("Genre : " + getGenre());
         System.out.println("Age Group : " + getAgeGroup());
-        System.out.println("ISBN : " + getISBN());
+        System.out.println("ISBN : " + getISBN() + "}");
     }
     
     public String getAuthor() {

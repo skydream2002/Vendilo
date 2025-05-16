@@ -18,7 +18,7 @@ public class Laptop extends DigitalProduct {
         System.out.println("Bluetooth : " + isIsHaveBluetooth());
         System.out.println("Webcam : " + isIsHaveWebcam());
         System.out.println("Storage : " + getStorage());
-        System.out.println("RAM : " + getRAM());
+        System.out.println("RAM : " + getRAM() + "}");
     }
 
     public String getGPUModel() {
