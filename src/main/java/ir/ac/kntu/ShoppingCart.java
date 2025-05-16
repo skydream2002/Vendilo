@@ -2,6 +2,7 @@ package ir.ac.kntu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ShoppingCart {
     private List<Product> products = new ArrayList<>();
@@ -22,14 +23,30 @@ public class ShoppingCart {
             return;
         }
 
-        int count = 1;
-        for (Product product : products) {
-            System.out.println(count + "." + product.getName() + "- Price :" + product.getPrice() + "toman");
-            count++;
-        }
-
         double totalPrice = products.stream().mapToDouble(Product::getPrice).sum();
         System.out.println("Total price : " + totalPrice + "toman");
+
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            int count = 1;
+            for (Product product : products) {
+                System.out.println(count + "." + product.getName() + "-- Price :" + product.getPrice()
+                        + "toman" + "--Category : " + product.getType());
+                count++;
+            }
+            System.out.println("0.back");
+            System.out.println("Enter product number to see more details");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            if (choice > 0 && choice <= products.size()) {
+                products.get(choice - 1).showDetails();
+            } else if (choice == 0) {
+                return;
+            } else {
+                System.out.println("invalid choice");
+            }
+        }
     }
 
     public List<Product> getProducts() {
