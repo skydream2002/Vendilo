@@ -7,7 +7,7 @@ public class Laptop extends DigitalProduct {
 
     @Override
     public void showDetails() {
-        System.out.println("{----Product Details----");
+        System.out.println("{----Product Details (Laptop)----");
         System.out.println("Name : " + getName());
         System.out.println("Category : " + getType());
         System.out.println("Brand : " + getBrand());
