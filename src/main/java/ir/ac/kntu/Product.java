@@ -60,8 +60,11 @@ public abstract class Product {
     public void addRatings(String email, double rate) {
         if (ratings.containsKey(email)) {
             System.out.println("This customer has already rated");
-        } else {
+        } else if (rate >= 1 && rate <= 5) {
             ratings.put(email, rate);
+            System.out.println("Thank you! Your rating has been submitted.");
+        } else {
+            System.out.println("Invalid rating. Must be between 1 and 5.");
         }
     }
 }
