@@ -13,9 +13,9 @@ public class Address {
         this.province = province;
         this.city = city;
     }
-    
-    public void showAddress() {
-        System.out.println("Tiltle: " + title + "Province: " + province + "city: " + city);
+    @Override
+    public String toString() {
+        return "Tiltle: " + title + "Province: " + province + "city: " + city;
     }
     public String getTitle() {
         return title;
