@@ -1,6 +1,7 @@
 package ir.ac.kntu;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.OptionalDouble;
 
 public abstract class Product {
@@ -8,7 +9,7 @@ public abstract class Product {
     private double price;
     private ProductType type;
     private Seller seller;
-    private List<Double> ratings = new ArrayList<>(); 
+    private Map<String, Double> ratings = new HashMap<>();
 
     public abstract void showDetails();
 
@@ -16,25 +17,30 @@ public abstract class Product {
         if (ratings == null || ratings.isEmpty()) {
             return "-";
         }
-        OptionalDouble averageRates = ratings.stream().mapToDouble(Double::doubleValue).average();
-        return averageRates.isPresent() ? (String.format("%.2f",averageRates.getAsDouble())) : "-";
+        OptionalDouble averageRates = ratings.values().stream().mapToDouble(Double::doubleValue).average();
+        return averageRates.isPresent() ? (String.format("%.2f", averageRates.getAsDouble())) : "-";
     }
-    
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public double getPrice() {
         return price;
     }
+
     public void setPrice(double price) {
         this.price = price;
     }
+
     public ProductType getType() {
         return type;
     }
+
     public void setType(ProductType type) {
         this.type = type;
     }
@@ -47,11 +53,15 @@ public abstract class Product {
         this.seller = seller;
     }
 
-    public List<Double> getRatings() {
+    public Map<String, Double> getRatings() {
         return ratings;
     }
 
-    public void setRatings(List<Double> ratings) {
-        this.ratings = ratings;
+    public void addRatings(String email, double rate) {
+        if (ratings.containsKey(email)) {
+            System.out.println("This customer has already rated");
+        } else {
+            ratings.put(email, rate);
+        }
     }
 }
