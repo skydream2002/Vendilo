@@ -4,17 +4,21 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Orders {
+public class Order {
     private Customer customer;
     private List<Product> products = new ArrayList<>();
     private Address shippingAddress;
     private double totalPrice;
     private LocalDateTime orderDate;
 
-    public Orders() {
+    // private double calculateTotalPrice() {
+    //     return products.stream().mapToDouble(Product::getPrice).sum();
+    // }
+
+    public Order() {
     }
 
-    public Orders(Customer customer) {
+    public Order(Customer customer) {
         this.customer = customer;
     }
 
