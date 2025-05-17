@@ -2,8 +2,6 @@ package ir.ac.kntu;
 
 import java.util.Scanner;
 
-import main.java.ir.ac.kntu.User;
-
 public class Support extends User {
     private String userName;
 
