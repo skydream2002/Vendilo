@@ -8,12 +8,11 @@ public class Order {
     private Customer customer;
     private List<Product> products = new ArrayList<>();
     private Address shippingAddress;
-    private double totalPrice;
     private LocalDateTime orderDate;
 
-    // private double calculateTotalPrice() {
-    //     return products.stream().mapToDouble(Product::getPrice).sum();
-    // }
+    public double calculateTotalPrice() {
+        return products.stream().mapToDouble(Product::getPrice).sum();
+    }
 
     public Order() {
     }
@@ -34,6 +33,14 @@ public class Order {
         return products;
     }
 
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+    }
+
     public void setProducts(List<Product> products) {
         this.products = products;
     }
@@ -44,14 +51,6 @@ public class Order {
 
     public void setShippingAddress(Address shippingAddress) {
         this.shippingAddress = shippingAddress;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public LocalDateTime getOrderDate() {
