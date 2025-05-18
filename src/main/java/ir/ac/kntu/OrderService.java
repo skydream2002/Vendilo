@@ -1,13 +1,11 @@
 package ir.ac.kntu;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class OrderService {
-    private List<Order> orders = new ArrayList<>();
 
-    public void orderMenu(User user, List<Order> orders) {
+    public static void orderMenu(User user, List<Order> orders) {
         if (orders.isEmpty()) {
             System.out.println("No orders found.");
             return;
@@ -37,7 +35,7 @@ public class OrderService {
         }
     }
 
-    public void showOrderDetail(User user, Order order) {
+    public static void showOrderDetail(User user, Order order) {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -69,7 +67,7 @@ public class OrderService {
         }
     }
 
-    private void rateProducts(Customer customer, Order order) {
+    private static void rateProducts(Customer customer, Order order) {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -100,7 +98,7 @@ public class OrderService {
         }
     }
 
-    private void showProductsList(List<Product> products) {
+    private static void showProductsList(List<Product> products) {
         int number = 1;
         for (Product product : products) {
             System.out.println(number + ". " + product.getName()

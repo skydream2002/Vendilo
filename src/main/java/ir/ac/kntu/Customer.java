@@ -35,8 +35,10 @@ public class Customer extends User {
                 }
                 case 2 -> System.out.println("search");
                 case 3 -> System.out.println("address");
-                case 4 -> System.out.println("wallet");
-                case 5 -> orderMenu(this, orders);
+                case 4 -> this.getWallet().walletMenu();
+                case 5 -> {
+                    OrderService.orderMenu(this, orders);
+                }
                 case 6 -> System.out.println("settings");
                 case 7 -> {
                     return;
