@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class OrderService {
     private List<Order> orders = new ArrayList<>();
 
-    public void showOrders(User user, List<Order> orders) {
+    public void orderMenu(User user, List<Order> orders) {
         if (orders.isEmpty()) {
             System.out.println("No orders found.");
             return;
@@ -19,8 +19,7 @@ public class OrderService {
             System.out.println("==== Order Menu ====");
             int number = 1;
             for (Order order : orders) {
-                System.out
-                        .println(number + ". " + order.getOrderDate() + " Total Price :" + order.calculateTotalPrice());
+                System.out.println(number + ". " + order.getOrderDate() + " Total Price :" + order.calculateTotalPrice());
                 number++;
             }
             System.out.println("0. back");

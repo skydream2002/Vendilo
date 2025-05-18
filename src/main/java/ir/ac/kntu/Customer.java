@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Customer extends User {
     private List<Address> addresses = new ArrayList<>();
     private ShoppingCart shoppingCart;
-    private List<Orders> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
     private List<SupportRequest> supportRequests = new ArrayList<>();
 
     @Override
@@ -36,7 +36,7 @@ public class Customer extends User {
                 case 2 -> System.out.println("search");
                 case 3 -> System.out.println("address");
                 case 4 -> System.out.println("wallet");
-                case 5 -> System.out.println("orders");
+                case 5 -> orderMenu(this, orders);
                 case 6 -> System.out.println("settings");
                 case 7 -> {
                     return;
@@ -75,11 +75,11 @@ public class Customer extends User {
         this.shoppingCart = shoppingCart;
     }
 
-    public List<Orders> getOrders() {
+    public List<Order> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<Orders> orders) {
+    public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
 
