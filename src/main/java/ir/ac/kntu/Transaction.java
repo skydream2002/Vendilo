@@ -5,7 +5,31 @@ import java.time.LocalDateTime;
 public class Transaction {
     private LocalDateTime date;
     private double amount;
-    private String transactionType;
+    private String type; // Deposit or Withdraw
+    private String description;
+
+    public Transaction(double amount, LocalDateTime date, String description, String type) {
+        this.amount = amount;
+        this.date = date;
+        this.description = description;
+        this.type = type;
+    }
+
+    public Transaction() {
+    }
+
+    public String trascationSummary() {
+        return "Type: " + type + "|"
+                + " Amount: " + amount;
+    }
+
+    @Override
+    public String toString() {
+        return "Type: " + type + "|"
+                + " Amount: " + amount + "|"
+                + " Date: " + date.toString()
+                + "|" + " Description: " + description;
+    }
 
     public LocalDateTime getDate() {
         return date;
@@ -23,11 +47,19 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getTransactionType() {
-        return transactionType;
+    public String getType() {
+        return type;
     }
 
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
