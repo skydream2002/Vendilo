@@ -37,9 +37,43 @@ public class Wallet {
                     scanner.nextLine();
                     withdraw(amount);
                 }
-                //case 3 -> 
+                // case 3 ->
                 default -> System.out.println("Invalid choice!");
             }
+        }
+    }
+
+    public void transactionMenu() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("------ Transaction Menu -----");
+
+            if (transactions.isEmpty()) {
+                System.out.println("No transactions found.");
+            }
+
+            int number = 1;
+            for (Transaction transaction : transactions) {
+                System.out.println(number + ". " + transaction.trascationSummary());
+                number++;
+            }
+            System.out.println((transactions.size() + 2) + ". Filter by date range.");
+            System.out.println("---------- 0. back ----------");
+            System.out.println("Choose: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 0) {
+                return;
+            } else if (choice == transactions.size() + 2) {
+                // filter
+            } else if (choice > 0 && choice <= transactions.size()) {
+                transactions.get(choice - 1).toString();
+            } else {
+                System.out.println("Invalid choice!");
+            }
+
         }
     }
 
