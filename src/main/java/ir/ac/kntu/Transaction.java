@@ -8,7 +8,7 @@ public class Transaction {
     private String type; // Deposit or Withdraw
     private String description;
 
-    public Transaction(double amount, LocalDateTime date, String description, String type) {
+    public Transaction(double amount, String type, LocalDateTime date, String description) {
         this.amount = amount;
         this.date = date;
         this.description = description;
@@ -16,6 +16,12 @@ public class Transaction {
     }
 
     public Transaction() {
+    }
+
+    public Transaction(double amount, String type, LocalDateTime date) {
+        this.amount = amount;
+        this.date = date;
+        this.type = type;
     }
 
     public String trascationSummary() {
