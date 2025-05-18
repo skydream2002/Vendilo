@@ -32,15 +32,19 @@ public class Wallet {
                     System.out.println("Enter the amount you want to deposit.");
                     double amount = scanner.nextDouble();
                     scanner.nextLine();
-                    deposit(amount);
+                    System.out.println("Enter the describtion for transaction");
+                    String describtion = scanner.nextLine();
+                    deposit(amount, describtion);
                 }
                 case 2 -> {
                     System.out.println("Enter the amount you want to withdraw.");
                     double amount = scanner.nextDouble();
                     scanner.nextLine();
-                    withdraw(amount);
+                    System.out.println("Enter the description for transaction");
+                    String description = scanner.nextLine();
+                    withdraw(amount, description);
                 }
-                // case 3 ->
+                case 3 -> transactionMenu();
                 default -> System.out.println("Invalid choice!");
             }
         }
@@ -52,16 +56,28 @@ public class Wallet {
         while (true) {
             System.out.println("------ Transaction Menu -----");
 
-            if (transactions.isEmpty()) {
-                System.out.println("No transactions found.");
-            }
+            List<Transaction> filteredTransactions = getFilteredTransactions();
 
-            int number = 1;
-            for (Transaction transaction : transactions) {
-                System.out.println(number + ". " + transaction.trascationSummary());
-                number++;
+            if (filteredTransactions.isEmpty()) {
+                System.out.println("No transactions found.");
+            } else {
+
+                if (filterStartDate != null && filterEndDate != null) {
+                    System.out.println("Filter active: " + filterStartDate.toLocalDate()
+                            + " to " + filterEndDate.toLocalDate());
+                } else {
+                    System.out.println("Filter not active.");
+                }
+
+                int number = 1;
+                for (Transaction transaction : filteredTransactions) {
+                    System.out.println(number + ". " + transaction.trascationSummary());
+                    number++;
+                }
             }
-            System.out.println((transactions.size() + 2) + ". Filter by date range.");
+            int baseOption = filteredTransactions.size();
+            System.out.println((baseOption + 2) + ". Filter by date range.");
+            System.out.println((baseOption + 3) + ". Clear filter.");
             System.out.println("---------- 0. back ----------");
             System.out.println("Choose: ");
             int choice = scanner.nextInt();
@@ -69,10 +85,13 @@ public class Wallet {
 
             if (choice == 0) {
                 return;
-            } else if (choice == transactions.size() + 2) {
-                // filter
-            } else if (choice > 0 && choice <= transactions.size()) {
-                transactions.get(choice - 1).toString();
+            } else if (choice == baseOption + 2) {
+                setFilterRange(scanner);
+                System.out.println("Filter applied successfully.");
+            } else if (choice == baseOption + 3) {
+                clearFilter();
+            } else if (choice > 0 && choice <= baseOption) {
+                System.out.println(filteredTransactions.get(choice - 1));
             } else {
                 System.out.println("Invalid choice!");
             }
@@ -124,14 +143,26 @@ public class Wallet {
         this.accountBalance = accountBalance;
     }
 
-    public void deposit(double amount) {
+    public void deposit(double amount, String describtion) {
+        if (amount <= 0) {
+            System.out.println("Amount must be greater than zero.");
+            return;
+        }
+        
         accountBalance += amount;
+        transactions.add(new Transaction(amount, "Deposit", LocalDateTime.now(), describtion));
         System.out.println("The deposit was successful.");
     }
 
-    public void withdraw(double amount) {
+    public void withdraw(double amount, String describtion) {
+        if (amount <= 0) {
+            System.out.println("Amount must be greater than zero.");
+            return;
+        }
+
         if (accountBalance >= amount) {
             accountBalance -= amount;
+            transactions.add(new Transaction(-amount, "Withdraw", LocalDateTime.now(), describtion));
             System.out.println("Paid " + amount + " from your wallet.\nRemaining amount :" + accountBalance);
         } else {
             System.out.println("Insufficient wallet balance!");
