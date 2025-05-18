@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,6 +8,8 @@ import java.util.Scanner;
 public class Wallet {
     private double accountBalance;
     private List<Transaction> transactions = new ArrayList<>();
+    private LocalDateTime filterStartDate = null;
+    private LocalDateTime filterEndDate = null;
 
     public void walletMenu() {
         Scanner scanner = new Scanner(System.in);
@@ -75,6 +78,42 @@ public class Wallet {
             }
 
         }
+    }
+
+    private void setFilterRange(Scanner scanner) {
+        System.out.println("Enter start date (yyyy-mm-dd):");
+        String startInput = scanner.nextLine();
+        System.out.println("Enter end date (yyyy-mm-dd):");
+        String endInput = scanner.nextLine();
+
+        try {
+            filterStartDate = LocalDateTime.parse(startInput + "T00:00:00");
+            filterEndDate = LocalDateTime.parse(endInput + "T23:59:59");
+        } catch (Exception e) {
+            System.out.println("Invalid date format.");
+            filterStartDate = null;
+            filterEndDate = null;
+        }
+    }
+
+    private void clearFilter() {
+        filterStartDate = null;
+        filterEndDate = null;
+        System.out.println("Filter cleared.");
+    }
+
+    private List<Transaction> getFilteredTransactions() {
+        if (filterStartDate == null || filterEndDate == null) {
+            return transactions;
+        }
+
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (!transaction.getDate().isBefore(filterStartDate) && !transaction.getDate().isAfter(filterEndDate)) {
+                result.add(transaction);
+            }
+        }
+        return result;
     }
 
     public Wallet() {

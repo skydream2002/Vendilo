@@ -20,7 +20,8 @@ public class Transaction {
 
     public String trascationSummary() {
         return "Type: " + type + "|"
-                + " Amount: " + amount;
+                + " Amount: " + amount
+                + " Date: " + date.toString();
     }
 
     @Override
