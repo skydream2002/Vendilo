@@ -53,6 +53,12 @@ public class Customer extends User {
 
     public void addAddress(Address address) {
         addresses.add(address);
+        System.out.println("Address successfuly added.");
+    }
+
+    public void removeAddress(Address address) {
+        addresses.remove(address);
+        System.out.println("Address successfuly deleted.");
     }
 
     public Customer(String email, String firstName, String lastName, String password, String phoneNumber) {
