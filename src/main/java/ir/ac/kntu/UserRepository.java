@@ -24,37 +24,27 @@ public class UserRepository {
 
         System.out.println("Enter you last name :");
         String lastName = scanner.nextLine();
-        
-        System.out.println("Enter you email :");
+
+        System.out.println("Enter your email :");
         String email = scanner.nextLine();
-        while (!isValidEmail(email)) {
-            System.out.println("Invalid email format. Please enter a valid email:");
+        while (!isValidEmail(email) || emailExists(email)) {
+            System.out.println("Invalid or duplicate email. Please enter a valid and unique email:");
             email = scanner.nextLine();
         }
 
         System.out.println("Enter password :");
         String password = scanner.nextLine();
         while (!isStrongPassword(password)) {
-            System.out.println("Password must be at least 8 characters long and contain at least one uppercase letter, \none lowercase letter, \none digit, \nand one special character.");
+            System.out.println(
+                    "Password must be at least 8 characters long and contain at least one uppercase letter, \none lowercase letter, \none digit, \nand one special character.");
             password = scanner.nextLine();
         }
 
-        System.out.println("Enter phone numbor :");
+        System.out.println("Enter phone number :");
         String phoneNumbor = scanner.nextLine();
-        while (!isValidPhoneNumber(phoneNumbor)) {
-            System.out.println("Invalid phone number format. Please enter a valid phone number:");
+        while (!isValidPhoneNumber(phoneNumbor) || phoneExists(phoneNumbor)) {
+            System.out.println("Invalid or duplicate phone number. Please enter a valid and unique phone number:");
             phoneNumbor = scanner.nextLine();
-        }
-
-        for (User user : getAllUsers()) {
-            if (email.equals(user.getEmail())) {
-                System.out.println("This email is already registered.");
-                return;
-            }
-            if (phoneNumbor.equals(user.getPhoneNumber())) {
-                System.out.println("This phone number is already registered.");
-                return;
-            }
         }
 
         if (role.equals("customer")) {
@@ -68,16 +58,35 @@ public class UserRepository {
         }
     }
 
-    private static boolean isStrongPassword(String password) {
+    public static boolean isStrongPassword(String password) {
         return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$");
     }
 
-    private static boolean isValidEmail(String email) {
+    public static boolean isValidEmail(String email) {
         return email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
     }
 
-    private static boolean isValidPhoneNumber(String phoneNumber) {
+    public static boolean isValidPhoneNumber(String phoneNumber) {
         return phoneNumber.matches("^09\\d{9}$");
+    }
+
+    public static boolean emailExists(String email) {
+        for (User user : getAllUsers()) {
+            if (user.getEmail().equals(email)) {
+                System.out.println("This email is already registered.");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean phoneExists(String phone) {
+        for (User user : getAllUsers()) {
+            if (user.getPhoneNumber().equals(phone)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addCustomer(Customer customer) {
