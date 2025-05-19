@@ -76,8 +76,8 @@ public class Wallet {
                 }
             }
             int baseOption = filteredTransactions.size();
-            System.out.println((baseOption + 2) + ". Filter by date range.");
-            System.out.println((baseOption + 3) + ". Clear filter.");
+            System.out.println((baseOption + 1) + ". Filter by date range.");
+            System.out.println((baseOption + 2) + ". Clear filter.");
             System.out.println("---------- 0. back ----------");
             System.out.println("Choose: ");
             int choice = scanner.nextInt();
@@ -85,17 +85,35 @@ public class Wallet {
 
             if (choice == 0) {
                 return;
-            } else if (choice == baseOption + 2) {
+            } else if (choice == baseOption + 1) {
                 setFilterRange(scanner);
                 System.out.println("Filter applied successfully.");
-            } else if (choice == baseOption + 3) {
+            } else if (choice == baseOption + 2) {
                 clearFilter();
             } else if (choice > 0 && choice <= baseOption) {
-                System.out.println(filteredTransactions.get(choice - 1));
+                transactionDetails(scanner, filteredTransactions.get(choice - 1));
             } else {
                 System.out.println("Invalid choice!");
             }
 
+        }
+    }
+
+    public void transactionDetails(Scanner scanner , Transaction transaction) {
+        while (true) { 
+            System.out.println("----- Transaction Details -----");
+            System.out.println(transaction);
+            System.out.println("----------- 0. back -----------");
+            System.out.println("Enter your selection: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid choice!");
+            }
         }
     }
 
@@ -143,14 +161,14 @@ public class Wallet {
         this.accountBalance = accountBalance;
     }
 
-    public void deposit(double amount, String describtion) {
+    public void deposit(double amount, String description) {
         if (amount <= 0) {
             System.out.println("Amount must be greater than zero.");
             return;
         }
-        
+
         accountBalance += amount;
-        transactions.add(new Transaction(amount, "Deposit", LocalDateTime.now(), describtion));
+        transactions.add(new Transaction(amount, "Deposit", LocalDateTime.now(), description));
         System.out.println("The deposit was successful.");
     }
 
