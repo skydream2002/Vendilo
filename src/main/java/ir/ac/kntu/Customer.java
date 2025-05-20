@@ -40,7 +40,10 @@ public class Customer extends User {
                 }
                 case 4 -> this.getWallet().walletMenu();
                 case 5 -> OrderService.orderMenu(this, orders);
-                case 6 -> System.out.println("settings");
+                case 6 -> {
+                    Settings setting = new Settings();
+                    setting.settingMenu(this);
+                }
                 case 7 -> {
                     return;
                 }
