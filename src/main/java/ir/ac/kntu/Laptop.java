@@ -1,7 +1,5 @@
 package ir.ac.kntu;
 
-import java.util.Scanner;
-
 public class Laptop extends DigitalProduct {
     private String GPUModel;
     private boolean hasHaveBluetooth;
@@ -9,29 +7,18 @@ public class Laptop extends DigitalProduct {
 
     @Override
     public void showDetails() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("{----Product Details (Laptop)----");
-            System.out.println("Name : " + getName());
-            System.out.println("Category : " + getType());
-            System.out.println("Brand : " + getBrand());
-            System.out.println("Price : " + getPrice());
-            System.out.println("Seller's Name : " + getSeller().getFirstName() + " " + getSeller().getLastName());
-            System.out.println("Rating Average : " + getAverageRating());
-            System.out.println("GPU : " + getGPUModel());
-            System.out.println("Bluetooth : " + isHasHaveBluetooth());
-            System.out.println("Webcam : " + isHasHaveWebcam());
-            System.out.println("Storage : " + getStorage());
-            System.out.println("RAM : " + getRAM() + "}");
-
-            System.out.println("-----1.back------");
-            int choice = scanner.nextInt();
-            if (choice == 1) {
-                return;
-            } else {
-                System.out.println("invalid choice");
-            }
-        }
+        System.out.println("{----Product Details (Laptop)----");
+        System.out.println("Name : " + getName());
+        System.out.println("Category : " + getType());
+        System.out.println("Brand : " + getBrand());
+        System.out.println("Price : " + getPrice());
+        System.out.println("Seller's Name : " + getSeller().getFirstName() + " " + getSeller().getLastName());
+        System.out.println("Rating Average : " + getAverageRating());
+        System.out.println("GPU : " + getGPUModel());
+        System.out.println("Bluetooth : " + isHasHaveBluetooth());
+        System.out.println("Webcam : " + isHasHaveWebcam());
+        System.out.println("Storage : " + getStorage());
+        System.out.println("RAM : " + getRAM() + "}");
     }
 
     public String getGPUModel() {

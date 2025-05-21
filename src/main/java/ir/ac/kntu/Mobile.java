@@ -1,7 +1,5 @@
 package ir.ac.kntu;
 
-import java.util.Scanner;
-
 public class Mobile extends DigitalProduct {
     private String frontCameraResolution;
     private String rearCameraResolution;
@@ -9,8 +7,6 @@ public class Mobile extends DigitalProduct {
 
     @Override
     public void showDetails() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
             System.out.println("{----Product Details (Mobile)----");
             System.out.println("Name : " + getName());
             System.out.println("Category : " + getType());
@@ -23,15 +19,6 @@ public class Mobile extends DigitalProduct {
             System.out.println("Network : " + getInternetNetwork());
             System.out.println("Storage : " + getStorage());
             System.out.println("RAM : " + getRAM() + "}");
-
-            System.out.println("-----1.back------");
-            int choice = scanner.nextInt();
-            if (choice == 1) {
-                return;
-            } else {
-                System.out.println("invalid choice");
-            }
-        }
     }
 
     public String getFrontCameraResolution() {

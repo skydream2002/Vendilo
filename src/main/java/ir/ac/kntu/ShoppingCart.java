@@ -24,7 +24,7 @@ public class ShoppingCart {
             switch (choice) {
                 case 1 -> viewProducts();
                 case 2 -> removeFromCart();
-                //case 3 -> checkout();
+                // case 3 -> checkout();
                 case 4 -> clearCart();
                 case 5 -> {
                     return;
@@ -69,7 +69,17 @@ public class ShoppingCart {
             int choice = scanner.nextInt();
             scanner.nextLine();
             if (choice > 0 && choice <= products.size()) {
-                products.get(choice - 1).showDetails();
+                while (true) {
+                    products.get(choice - 1).showDetails();
+                    System.out.println("-----1.back------");
+                    System.out.println("Choose :");
+                    int selection = scanner.nextInt();
+                    if (choice == 1) {
+                        break;
+                    } else {
+                        System.out.println("Invalid choice.");
+                    }
+                }
             } else if (choice == 0) {
                 return;
             } else {

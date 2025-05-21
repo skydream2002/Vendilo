@@ -1,7 +1,5 @@
 package ir.ac.kntu;
 
-import java.util.Scanner;
-
 public class Book extends Product {
     private String author;
     private int pages;
@@ -11,8 +9,6 @@ public class Book extends Product {
 
     @Override
     public void showDetails() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
             System.out.println("{----Product Details (Book)----");
             System.out.println("Name : " + getName());
             System.out.println("Category : " + getType());
@@ -24,15 +20,6 @@ public class Book extends Product {
             System.out.println("Genre : " + getGenre());
             System.out.println("Age Group : " + getAgeGroup());
             System.out.println("ISBN : " + getISBN() + "}");
-
-            System.out.println("-----1.back------");
-            int choice = scanner.nextInt();
-            if (choice == 1) {
-                return;
-            } else {
-                System.out.println("invalid choice");
-            }
-        }
     }
 
     public String getAuthor() {
