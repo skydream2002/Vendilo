@@ -8,7 +8,7 @@ import java.util.Stack;
 public class SearchProduct {
     private static final int PAGE_SIZE = 10;
 
-    public void showSearchMenu() {
+    public void showSearchMenu(Customer customer) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("----- Product Search Menu -----");
@@ -19,7 +19,7 @@ public class SearchProduct {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> searching(scanner);
+                case 1 -> searching(scanner, customer);
                 case 0 -> {
                     return;
                 }
@@ -28,8 +28,8 @@ public class SearchProduct {
         }
     }
 
-    public void searching(Scanner scanner) {
-        System.out.println("Enter product name keyword (or press Enter to skip):");
+    public void searching(Scanner scanner, Customer customer) {
+        System.out.println("Enter product name (or press Enter to skip):");
         String name = scanner.nextLine().trim();
 
         System.out.println("Enter category (or press Enter to skip):");
@@ -67,7 +67,7 @@ public class SearchProduct {
         System.out.println(filteredProducts.size() + " product(s) found.");
         String sortType = selectSortType(scanner);
         sortProducts(filteredProducts, sortType);
-        paginate(filteredProducts, scanner);
+        paginate(filteredProducts, scanner, customer);
     }
 
     public static List<Product> getAllProducts() {
@@ -107,7 +107,7 @@ public class SearchProduct {
         }
     }
 
-    private void paginate(List<Product> products, Scanner scanner) {
+    private void paginate(List<Product> products, Scanner scanner, Customer customer) {
         if (products.isEmpty()) {
             System.out.println("No products found with the given criteria.");
             return;
@@ -119,10 +119,20 @@ public class SearchProduct {
 
         while (true) {
             showPage(products, currentPage);
+            System.out.println("\nSelect your product to see more :");
             System.out.println("\n--- page" + (currentPage + 1) + "of " + totalPage + " ---");
-            System.out.println("n: next | p: previous | page: go to | b: back | e: exit");
+            System.out.println("n: next | p: previous | page (number): go to page | b: back | e: exit");
 
             String input = scanner.nextLine();
+            if (input.matches("\\d+")) {
+                int selection = Integer.parseInt(input);
+                int index = currentPage * PAGE_SIZE + selection - 1;
+                if (index >= 0 && index < products.size()) {
+                    showDetailsAndAddToCart(products.get(index), customer, scanner);
+                } else {
+                    System.out.println("Invalid selection.");
+                }
+            }
 
             if (input.equals("e"))
                 break;
@@ -134,8 +144,9 @@ public class SearchProduct {
                 currentPage--;
             } else if (input.equals("b") && !pageHistory.isEmpty()) {
                 currentPage = pageHistory.pop();
-            } else if (input.matches("\\d+")) {
-                int page = Integer.parseInt(input) - 1;
+            } else if (input.matches("^page ?\\\\d+")) {
+                int page = Integer.parseInt(input.replaceAll("[^0-9]", "")) - 1;
+
                 if (page >= 0 && page < totalPage) {
                     pageHistory.push(currentPage);
                     currentPage = page;
@@ -153,7 +164,27 @@ public class SearchProduct {
         int end = Math.min(start + PAGE_SIZE, products.size());
         for (int i = start; i < end; i++) {
             Product product = products.get(i);
-            System.out.println((i + 1) + ". " + product.getName() + "|" + product.getType() + "|" + product.getPrice());
+            System.out.println((i + 1 - start) + ". " + product.getName() + " | " + product.getType() + " | "
+                    + product.getPrice());
+        }
+    }
+
+    public void showDetailsAndAddToCart(Product product, Customer customer, Scanner scanner) {
+        product.showDetails();
+
+        while (true) {
+            System.out.println("Do you want to add this product to your cart? (y/n)");
+            String answer = scanner.nextLine().trim().toLowerCase();
+
+            if (answer.equals("y")) {
+                customer.addToShoppingCart(product);
+                System.out.println("Added to your cart.");
+                return;
+            } else if (answer.equals("n")) {
+                return;
+            } else {
+                System.out.println("Invalid choice. Please type y or n.");
+            }
         }
     }
 }

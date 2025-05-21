@@ -74,7 +74,7 @@ public class ShoppingCart {
                     System.out.println("-----1.back------");
                     System.out.println("Choose :");
                     int selection = scanner.nextInt();
-                    if (choice == 1) {
+                    if (selection == 1) {
                         break;
                     } else {
                         System.out.println("Invalid choice.");
