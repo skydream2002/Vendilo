@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserRepository {
-    private static List<Customer> customers = new ArrayList<>();
-    private static List<Seller> sellers = new ArrayList<>();
-    private static List<Support> supports = new ArrayList<>();
+    private static final List<Customer> customers = new ArrayList<>();
+    private static final List<Seller> sellers = new ArrayList<>();
+    private static final List<Support> supports = new ArrayList<>();
 
     public static void signUp(String role) {
         Scanner scanner = new Scanner(System.in);
