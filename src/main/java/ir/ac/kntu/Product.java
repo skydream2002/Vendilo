@@ -9,6 +9,7 @@ public abstract class Product {
     private double price;
     private ProductType type;
     private Seller seller;
+    private int stock;
     private Map<String, Double> ratings = new HashMap<>();
 
     public abstract void showDetails();
@@ -66,5 +67,13 @@ public abstract class Product {
         } else {
             System.out.println("Invalid rating. Must be between 1 and 5.");
         }
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 }
