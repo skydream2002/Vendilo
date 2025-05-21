@@ -25,7 +25,7 @@ public class Customer extends User {
             System.out.println("--------7.back-------");
             System.out.println("choose:");
             int choice = scanner.nextInt();
-            // complete this
+
             switch (choice) {
                 case 1 -> {
                     if (shoppingCart == null) {
@@ -33,7 +33,7 @@ public class Customer extends User {
                     }
                     shoppingCart.shoppingCartMenu();
                 }
-                case 2 -> System.out.println("search");
+                case 2 -> SearchProduct.showSearchMenu(this);
                 case 3 -> {
                     Address addressMenu = new Address();
                     addressMenu.addressMenu(this);
@@ -48,7 +48,6 @@ public class Customer extends User {
                     return;
                 }
                 default -> System.out.println("invalid choice.");
-
             }
         }
     }

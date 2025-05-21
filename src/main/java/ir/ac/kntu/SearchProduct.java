@@ -6,9 +6,9 @@ import java.util.Scanner;
 import java.util.Stack;
 
 public class SearchProduct {
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 5;
 
-    public void showSearchMenu(Customer customer) {
+    public static void showSearchMenu(Customer customer) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("----- Product Search Menu -----");
@@ -28,7 +28,7 @@ public class SearchProduct {
         }
     }
 
-    public void searching(Scanner scanner, Customer customer) {
+    public static void searching(Scanner scanner, Customer customer) {
         System.out.println("Enter product name (or press Enter to skip):");
         String name = scanner.nextLine().trim();
 
@@ -78,7 +78,7 @@ public class SearchProduct {
         return all;
     }
 
-    private List<Product> filterProducts(String productName, String category, Double minPrice, Double maxPrice) {
+    private static List<Product> filterProducts(String productName, String category, Double minPrice, Double maxPrice) {
         return getAllProducts().stream()
                 .filter(product -> productName.isEmpty()
                         || product.getName().toLowerCase().contains(productName.toLowerCase()))
@@ -88,7 +88,7 @@ public class SearchProduct {
                 .toList();
     }
 
-    private String selectSortType(Scanner scanner) {
+    private static String selectSortType(Scanner scanner) {
         System.out.println("Sort by price:");
         System.out.println("1. Ascending");
         System.out.println("2. Descending");
@@ -98,7 +98,7 @@ public class SearchProduct {
         return selection;
     }
 
-    private void sortProducts(List<Product> products, String sortType) {
+    private static void sortProducts(List<Product> products, String sortType) {
         switch (sortType) {
             case "1" -> products.sort(java.util.Comparator.comparingDouble(Product::getPrice));
             case "2" -> products.sort(java.util.Comparator.comparingDouble(Product::getPrice).reversed());
@@ -107,7 +107,7 @@ public class SearchProduct {
         }
     }
 
-    private void paginate(List<Product> products, Scanner scanner, Customer customer) {
+    private static void paginate(List<Product> products, Scanner scanner, Customer customer) {
         if (products.isEmpty()) {
             System.out.println("No products found with the given criteria.");
             return;
@@ -159,7 +159,7 @@ public class SearchProduct {
         }
     }
 
-    public void showPage(List<Product> products, int page) {
+    public static void showPage(List<Product> products, int page) {
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, products.size());
         for (int i = start; i < end; i++) {
@@ -169,7 +169,7 @@ public class SearchProduct {
         }
     }
 
-    public void showDetailsAndAddToCart(Product product, Customer customer, Scanner scanner) {
+    public static void showDetailsAndAddToCart(Product product, Customer customer, Scanner scanner) {
         product.showDetails();
 
         while (true) {
