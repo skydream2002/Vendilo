@@ -53,8 +53,8 @@ public class Customer extends User {
         }
     }
 
-    public void addToShoppingCart() {
-
+    public void addToShoppingCart(Product product) {
+        shoppingCart.getProducts().add(product);
     }
 
     public void addAddress(Address address) {
