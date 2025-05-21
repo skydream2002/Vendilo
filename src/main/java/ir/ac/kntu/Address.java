@@ -33,7 +33,7 @@ public class Address {
         }
     }
 
-    public void addingAddress(Scanner scanner, Customer customer) {
+    public static void addingAddress(Scanner scanner, Customer customer) {
         System.out.println("Enter title :");
         String title = scanner.nextLine();
         System.out.println("Province :");

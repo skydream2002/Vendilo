@@ -29,7 +29,7 @@ public class Customer extends User {
             switch (choice) {
                 case 1 -> {
                     if (shoppingCart == null) {
-                        shoppingCart = new ShoppingCart();
+                        shoppingCart = new ShoppingCart(this);
                     }
                     shoppingCart.shoppingCartMenu();
                 }

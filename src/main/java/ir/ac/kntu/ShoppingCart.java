@@ -6,6 +6,11 @@ import java.util.Scanner;
 
 public class ShoppingCart {
     private List<Product> products = new ArrayList<>();
+    private Customer customer;
+
+    public ShoppingCart(Customer customer) {
+        this.customer = customer;
+    }
 
     public void shoppingCartMenu() {
         Scanner scanner = new Scanner(System.in);
@@ -24,7 +29,7 @@ public class ShoppingCart {
             switch (choice) {
                 case 1 -> viewProducts();
                 case 2 -> removeFromCart();
-                // case 3 -> checkout();
+                case 3 -> checkout(scanner);
                 case 4 -> clearCart();
                 case 5 -> {
                     return;
@@ -53,7 +58,7 @@ public class ShoppingCart {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            double totalPrice = products.stream().mapToDouble(Product::getPrice).sum();
+            double totalPrice = getTotalPrice();
             System.out.println("Total price : " + totalPrice + "toman");
 
             System.out.println("----- Products in Cart -----");
@@ -116,6 +121,89 @@ public class ShoppingCart {
                 System.out.println("invalid choice");
             }
         }
+    }
+
+    public void checkout(Scanner scanner) {
+        if (products.isEmpty()) {
+            System.out.println("Shopping cart is empty.");
+            return;
+        }
+        while (true) {
+            System.out.println("---- Checkout Menu ----");
+            System.out.println("--- Total Price : " + getTotalPrice());
+            int number = 1;
+            for (Address address : customer.getAddresses()) {
+                System.out.println(number + ". " + address);
+                number++;
+            }
+            System.out.println(number + ". Add address");
+            System.out.println("---- 0. back ----");
+            System.out.println("Select address or add :");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            Address selectedAddress;
+            if (choice == 0) {
+                return;
+            } else if (choice > 0 && choice <= customer.getAddresses().size()) {
+                selectedAddress = customer.getAddresses().get(choice - 1);
+            } else if (choice == number) {
+                Address.addingAddress(scanner, customer);
+                continue;
+            } else {
+                System.out.println(" Invalid selection.");
+                continue;
+            }
+
+            for (Product product : products) {
+                if (product.getStock() <= 0) {
+                    System.out.println("Product " + product.getName() + " is out of stock.");
+                    return;
+                }
+            }
+
+            double shippingCost = handlePriceWithAddress(selectedAddress);
+            double totalCost = getTotalPrice() + shippingCost;
+
+            System.out.println("Shipping cost: " + shippingCost + " toman");
+            System.out.println("Total cost (with shipping): " + totalCost + " toman");
+            System.out.println("Your wallet balance: " + customer.getWallet().getAccountBalance() + " toman");
+            System.out.println("Do you want to confirm payment? (y/n)");
+            String confirm = scanner.nextLine().trim().toLowerCase();
+
+            if (confirm.equals("y")) {
+                if (customer.getWallet().getAccountBalance() < totalCost) {
+                    System.out.println("Insufficient wallet balance.");
+                    return;
+                }
+
+                for (Product product : products) {
+                    product.setStock(product.getStock() - 1);
+                }
+
+                customer.getWallet().withdraw(totalCost, "Buying");
+                clearCart();
+                System.out.println("Order completed successfully!");
+            } else {
+                System.out.println("Checkout canceled.");
+            }
+            return;
+        }
+    }
+
+    private double handlePriceWithAddress(Address customerAddress) {
+        final double NORMAL_SHIPPING_COST = 30000;
+        boolean allInSameProvince = true;
+
+        for (Product product : products) {
+            Seller seller = product.getSeller();
+            String sellerAddress = seller.getProvince();
+            if (!customerAddress.getProvince().equalsIgnoreCase(sellerAddress)) {
+                allInSameProvince = false;
+                break;
+            }
+        }
+        return allInSameProvince ? NORMAL_SHIPPING_COST / 3.0 : NORMAL_SHIPPING_COST;
     }
 
     public List<Product> getProducts() {
