@@ -11,6 +11,7 @@ public class Seller extends User {
     private String province;
     private boolean isVerified;
     private List<Product> products = new ArrayList<>();
+    private final Wallet wallet = new Wallet(UserType.SELLER);
 
     @Override
     public void usersMenu() {
@@ -29,7 +30,7 @@ public class Seller extends User {
             switch (choice) {
                 case 1 -> viewProducts(scanner);
                 case 2 -> addingProduct(scanner);
-                case 3 -> System.out.println("wallet");
+                case 3 -> wallet.walletMenu();
                 case 4 -> System.out.println("orders");
                 case 5 -> {
                     scanner.close();

@@ -6,7 +6,6 @@ public abstract class User {
     private String email;
     private String phoneNumber;
     private String password;
-    private Wallet wallet = new Wallet();
 
     public abstract void usersMenu();
 
@@ -19,15 +18,6 @@ public abstract class User {
     }
 
     public User() {
-    }
-
-    public User(String email, String firstName, String lastName, String password, String phoneNumber, Wallet wallet) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.wallet = wallet;
     }
 
     public String getFirstName() {
@@ -70,11 +60,4 @@ public abstract class User {
         this.password = password;
     }
 
-    public Wallet getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(Wallet wallet) {
-        this.wallet = wallet;
-    }
 }

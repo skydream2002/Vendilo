@@ -7,46 +7,62 @@ import java.util.Scanner;
 
 public class Wallet {
     private double accountBalance;
-    private List<Transaction> transactions = new ArrayList<>();
+    private final List<Transaction> transactions = new ArrayList<>();
     private LocalDateTime filterStartDate = null;
     private LocalDateTime filterEndDate = null;
+    private UserType userType;
+
+    public Wallet(UserType userType) {
+        this.userType = userType;
+    }
 
     public void walletMenu() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("--------- Wallet Menu ---------");
-            System.out.println("Account Balance: " + accountBalance);
-            System.out.println("--------- 1. Deposit ----------");
-            System.out.println("--------- 2. Withdraw ---------");
-            System.out.println("------ 3. Transactions --------");
+            System.out.println("-- Account Balance: " + accountBalance + " --");
+
+            int optionNumber = 1;
+
+            if (userType == UserType.CUSTOMER) {
+                System.out.println("--------- " + optionNumber + ". Deposit ----------");
+                optionNumber++;
+            }
+            if (userType == UserType.SELLER) {
+                System.out.println("--------- " + optionNumber + ". Withdraw ---------");
+                optionNumber++;
+            }
+            System.out.println("------ " + optionNumber + ". Transactions --------");
+            optionNumber++;
             System.out.println("---------- 0. back ------------");
             System.out.println("Enter your choice: ");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
-            switch (choice) {
-                case 0 -> {
-                    return;
-                }
-                case 1 -> {
-                    System.out.println("Enter the amount you want to deposit.");
-                    double amount = scanner.nextDouble();
-                    scanner.nextLine();
-                    System.out.println("Enter the describtion for transaction");
-                    String describtion = scanner.nextLine();
-                    deposit(amount, describtion);
-                }
-                case 2 -> {
-                    System.out.println("Enter the amount you want to withdraw.");
-                    double amount = scanner.nextDouble();
-                    scanner.nextLine();
-                    System.out.println("Enter the description for transaction");
-                    String description = scanner.nextLine();
-                    withdraw(amount, description);
-                }
-                case 3 -> transactionMenu();
-                default -> System.out.println("Invalid choice!");
+
+            if (choice == 0)
+                return;
+            if (userType == UserType.CUSTOMER && choice == 1) {
+                System.out.println("Enter the amount you want to deposit.");
+                double amount = scanner.nextDouble();
+                scanner.nextLine();
+                System.out.println("Enter the describtion for transaction");
+                String describtion = scanner.nextLine();
+                deposit(amount, describtion);
+            } else if (userType == UserType.SELLER && choice == 1) {
+                System.out.println("Enter the amount you want to withdraw.");
+                double amount = scanner.nextDouble();
+                scanner.nextLine();
+                System.out.println("Enter the description for transaction");
+                String description = scanner.nextLine();
+                withdraw(amount, description);
+            } else if ((userType == UserType.CUSTOMER && choice == 2) ||
+                    (userType == UserType.SELLER && choice == 2)) {
+                transactionMenu();
+            } else {
+                System.out.println("Invalid choice!");
             }
+
         }
     }
 
@@ -99,8 +115,8 @@ public class Wallet {
         }
     }
 
-    public void transactionDetails(Scanner scanner , Transaction transaction) {
-        while (true) { 
+    public void transactionDetails(Scanner scanner, Transaction transaction) {
+        while (true) {
             System.out.println("----- Transaction Details -----");
             System.out.println(transaction);
             System.out.println("----------- 0. back -----------");

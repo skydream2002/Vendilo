@@ -9,6 +9,7 @@ public class Customer extends User {
     private ShoppingCart shoppingCart;
     private List<Order> orders = new ArrayList<>();
     private List<SupportRequest> supportRequests = new ArrayList<>();
+    private final Wallet wallet = new Wallet(UserType.CUSTOMER);
 
     @Override
     public void usersMenu() {
@@ -38,7 +39,7 @@ public class Customer extends User {
                     Address addressMenu = new Address();
                     addressMenu.addressMenu(this);
                 }
-                case 4 -> this.getWallet().walletMenu();
+                case 4 -> wallet.walletMenu();
                 case 5 -> OrderService.orderMenu(this, orders);
                 case 6 -> {
                     Settings setting = new Settings();
