@@ -102,4 +102,8 @@ public class Customer extends User {
     public void setSupportRequests(List<SupportRequest> supportRequests) {
         this.supportRequests = supportRequests;
     }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
 }

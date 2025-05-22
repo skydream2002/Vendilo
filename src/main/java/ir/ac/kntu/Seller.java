@@ -188,4 +188,8 @@ public class Seller extends User {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
 }
