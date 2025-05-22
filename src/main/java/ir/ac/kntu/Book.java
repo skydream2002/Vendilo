@@ -1,11 +1,17 @@
 package ir.ac.kntu;
 
+import java.util.Scanner;
+
 public class Book extends Product {
     private String author;
     private int pages;
     private String genre;
     private String ageGroup;
     private String ISBN;
+
+    public Book() {
+        super.setType(ProductType.BOOK);
+    }
 
     @Override
     public void showDetails() {
@@ -21,7 +27,38 @@ public class Book extends Product {
         System.out.println("Age Group : " + getAgeGroup());
         System.out.println("ISBN : " + getISBN() + "}");
         System.out.println("Stock : " + getStock());
+    }
 
+    @Override
+    public void addProduct(Scanner scanner, Seller seller) {
+        super.setSeller(seller);
+        System.out.println("Enter name :");
+        String name = scanner.nextLine();
+        super.setName(name);
+        System.out.println("Price :");
+        double price = scanner.nextDouble();
+        scanner.nextLine();
+        super.setPrice(price);
+        System.out.println("Stock :");
+        int stock = scanner.nextInt();
+        scanner.nextLine();
+        super.setStock(stock);
+        System.out.println("Author : ");
+        String authorBook = scanner.nextLine();
+        setAuthor(authorBook);
+        System.out.println("number of Pages : ");
+        int pageNumbers = scanner.nextInt();
+        scanner.nextLine();
+        setPages(pageNumbers);
+        System.out.println("Genre :");
+        String genreBook = scanner.nextLine();
+        setGenre(genreBook);
+        System.out.println("Age Group :");
+        String ageGroupBook = scanner.nextLine();
+        setAgeGroup(ageGroupBook);
+        System.out.println(" ISBN :");
+        String isbn = scanner.nextLine();
+        setISBN(isbn);
     }
 
     public String getAuthor() {

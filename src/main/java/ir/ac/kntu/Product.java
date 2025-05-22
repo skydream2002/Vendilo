@@ -3,6 +3,7 @@ package ir.ac.kntu;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalDouble;
+import java.util.Scanner;
 
 public abstract class Product {
     private String name;
@@ -13,6 +14,7 @@ public abstract class Product {
     private Map<String, Double> ratings = new HashMap<>();
 
     public abstract void showDetails();
+    public abstract void addProduct(Scanner scanner, Seller seller);
 
     public String getAverageRating() {
         if (ratings == null || ratings.isEmpty()) {

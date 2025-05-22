@@ -27,11 +27,11 @@ public class Seller extends User {
             int choice = scanner.nextInt();
             // complete this
             switch (choice) {
-                case 1 -> System.out.println("view products");
-                case 2 -> System.out.println("add product");
+                case 1 -> viewProducts(scanner);
+                case 2 -> addingProduct(scanner);
                 case 3 -> System.out.println("wallet");
                 case 4 -> System.out.println("orders");
-                case 6 -> {
+                case 5 -> {
                     scanner.close();
                     return;
                 }
@@ -94,8 +94,38 @@ public class Seller extends User {
         }
     }
 
-    public void addProduct() {
-        
+    public void addingProduct(Scanner scanner) {
+        while (true) {
+            System.out.println("Choose category:");
+            System.out.println("1. Book");
+            System.out.println("2. Laptop");
+            System.out.println("3. Mobile");
+            System.out.println("0. back");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 0 -> {
+                    return;
+                }
+                case 1 -> {
+                    Book book = new Book();
+                    book.addProduct(scanner, this);
+                    products.add(book);
+                }
+                case 2 -> {
+                    Laptop laptop = new Laptop();
+                    laptop.addProduct(scanner, this);
+                    products.add(laptop);
+                }
+                case 3 -> {
+                    Mobile mobile = new Mobile();
+                    mobile.addProduct(scanner, this);
+                    products.add(mobile);
+                }
+                default -> System.out.println("Invalid category.");
+            }
+        }
     }
 
     public void handleVerificationRequests() {

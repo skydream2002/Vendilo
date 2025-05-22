@@ -1,9 +1,15 @@
 package ir.ac.kntu;
 
+import java.util.Scanner;
+
 public class Laptop extends DigitalProduct {
     private String GPUModel;
     private boolean hasHaveBluetooth;
     private boolean hasHaveWebcam;
+
+    public Laptop() {
+        super.setType(ProductType.DIGITAL_PRODUCT);
+    }
 
     @Override
     public void showDetails() {
@@ -20,6 +26,34 @@ public class Laptop extends DigitalProduct {
         System.out.println("Storage : " + getStorage());
         System.out.println("RAM : " + getRAM() + "}");
         System.out.println("Stock : " + getStock());
+    }
+
+    @Override
+    public void addProduct(Scanner scanner, Seller seller) {
+        super.setSeller(seller);
+        System.out.println("Enter name :");
+        String name = scanner.nextLine();
+        super.setName(name);
+        System.out.println("Brand : ");
+        String brand = scanner.nextLine();
+        super.setBrand(brand);
+        System.out.println("Price :");
+        double price = scanner.nextDouble();
+        scanner.nextLine();
+        super.setPrice(price);
+        System.out.println("Stock :");
+        int stock = scanner.nextInt();
+        scanner.nextLine();
+        super.setStock(stock);
+        System.out.println("GPU model :");
+        String GPU = scanner.nextLine();
+        setGPUModel(GPU);
+        System.out.println("Bluetooth : (true/false)");
+        boolean bluetooth = scanner.nextBoolean();
+        setHasHaveBluetooth(bluetooth);
+        System.out.println("Webcam : (true/false)");
+        boolean webcam = scanner.nextBoolean();
+        setHasHaveWebcam(webcam);
     }
 
     public String getGPUModel() {
