@@ -22,6 +22,23 @@ public abstract class Product {
         return averageRates.isPresent() ? (String.format("%.2f", averageRates.getAsDouble())) : "-";
     }
 
+    public void increaseStock(int count) {
+        for (int i = 0 ; i < count ; i++) {
+            stock++;
+        }
+        System.out.println("Product inventory increased by " + count + ".");
+    }
+
+    public void decreaseStock(int count) {
+        if (count > stock) {
+            System.out.println("Cannot decrease stock by more than available amount.");
+        }
+        for (int i = 0 ; i < count ; i++) {
+            stock--;
+        }
+        System.out.println("Product inventory decreased by " + count + ".");
+    }
+
     public String getName() {
         return name;
     }

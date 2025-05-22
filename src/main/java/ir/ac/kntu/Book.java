@@ -9,17 +9,19 @@ public class Book extends Product {
 
     @Override
     public void showDetails() {
-            System.out.println("{----Product Details (Book)----");
-            System.out.println("Name : " + getName());
-            System.out.println("Category : " + getType());
-            System.out.println("Author : " + getAuthor());
-            System.out.println("Price : " + getPrice());
-            System.out.println("Seller's Name : " + getSeller().getFirstName() + " " + getSeller().getLastName());
-            System.out.println("Rating Average : " + getAverageRating());
-            System.out.println("Pages : " + getPages());
-            System.out.println("Genre : " + getGenre());
-            System.out.println("Age Group : " + getAgeGroup());
-            System.out.println("ISBN : " + getISBN() + "}");
+        System.out.println("{----Product Details (Book)----");
+        System.out.println("Name : " + getName());
+        System.out.println("Category : " + getType());
+        System.out.println("Author : " + getAuthor());
+        System.out.println("Price : " + getPrice());
+        System.out.println("Seller's Name : " + getSeller().getFirstName() + " " + getSeller().getLastName());
+        System.out.println("Rating Average : " + getAverageRating());
+        System.out.println("Pages : " + getPages());
+        System.out.println("Genre : " + getGenre());
+        System.out.println("Age Group : " + getAgeGroup());
+        System.out.println("ISBN : " + getISBN() + "}");
+        System.out.println("Stock : " + getStock());
+
     }
 
     public String getAuthor() {

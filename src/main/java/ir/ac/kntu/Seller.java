@@ -11,12 +11,12 @@ public class Seller extends User {
     private String province;
     private boolean isVerified;
     private List<Product> products = new ArrayList<>();
-    
+
     @Override
     public void usersMenu() {
         Scanner scanner = new Scanner(System.in);
 
-        while (true) { 
+        while (true) {
             System.out.println("----Seller Menu----");
             System.out.println("--1.Veiw Products--");
             System.out.println("---2.Add Product---");
@@ -41,16 +41,69 @@ public class Seller extends User {
 
     }
 
-    public void addProduct() {
+    public void viewProducts(Scanner scanner) {
+        while (true) {
+            System.out.println("---- Products ----");
+            int number = 1;
+            for (Product product : products) {
+                System.out.println(number + ". " + product.getName()
+                        + " | " + product.getType()
+                        + " | " + product.getPrice()
+                        + " | stock :" + product.getStock());
+                number++;
+            }
+            System.out.println("---- 0. back ----");
+            System.out.println("Select product to Increase or decrease its stock and see more Details:");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
+            if (choice == 0) {
+                return;
+            } else if (choice > 0 && choice < number) {
+                changeStockAmount(scanner, products.get(choice - 1));
+            } else {
+                System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+    private void changeStockAmount(Scanner scanner, Product product) {
+        while (true) {
+            product.showDetails();
+            System.out.println("--- 1. Increase Stock ---");
+            System.out.println("--- 2. Decrease Stock ---");
+            System.out.println("--- 0. back ---");
+            System.out.println("Choose :");
+            int selection = scanner.nextInt();
+            switch (selection) {
+                case 0 -> {
+                    return;
+                }
+                case 1 -> {
+                    System.out.println("Enter count :");
+                    int count = scanner.nextInt();
+                    product.increaseStock(count);
+                }
+                case 2 -> {
+                    System.out.println("Enter count :");
+                    int count = scanner.nextInt();
+                    product.decreaseStock(count);
+                }
+                default -> System.out.println("Invalid selection.");
+            }
+        }
+    }
+
+    public void addProduct() {
+        
     }
 
     public void handleVerificationRequests() {
 
     }
 
-    public void respondToSupportRequest(){
-        
+    public void respondToSupportRequest() {
+
     }
 
     public Seller(String email, String firstName, String lastName, String password, String phoneNumber) {
