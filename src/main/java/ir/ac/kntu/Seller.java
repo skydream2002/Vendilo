@@ -11,6 +11,7 @@ public class Seller extends User {
     private String province;
     private boolean isVerified;
     private List<Product> products = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
     private final Wallet wallet = new Wallet(UserType.SELLER);
 
     @Override
@@ -191,5 +192,13 @@ public class Seller extends User {
 
     public Wallet getWallet() {
         return wallet;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

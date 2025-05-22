@@ -10,6 +10,13 @@ public class Order {
     private Address shippingAddress;
     private LocalDateTime orderDate;
 
+    public Order(List<Product> products, Customer customer, LocalDateTime orderDate, Address shippingAddress) {
+        this.customer = customer;
+        this.orderDate = orderDate;
+        this.shippingAddress = shippingAddress;
+        this.products = products;
+    }
+
     public double calculateTotalPrice() {
         return products.stream().mapToDouble(Product::getPrice).sum();
     }

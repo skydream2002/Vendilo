@@ -1,7 +1,10 @@
 package ir.ac.kntu;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ShoppingCart {
@@ -177,14 +180,32 @@ public class ShoppingCart {
                     return;
                 }
 
+                Map<Seller, List<Product>> sellerProductsMap = new HashMap<>();
                 for (Product product : products) {
-                    product.setStock(product.getStock() - 1);
-                    Seller seller = product.getSeller();
-                    double sellerShare = product.getPrice() * 0.9;
-                    seller.getWallet().deposit(sellerShare, "Sale of product: " + product.getName());
+                    sellerProductsMap
+                            .computeIfAbsent(product.getSeller(), k -> new ArrayList<>())
+                            .add(product);
+                }
+
+                for (Map.Entry<Seller, List<Product>> entry : sellerProductsMap.entrySet()) {
+                    Seller seller = entry.getKey();
+                    List<Product> sellerProducts = entry.getValue();
+
+                    Order order = new Order(sellerProducts, customer, LocalDateTime.now(), selectedAddress);
+                    seller.getOrders().add(order);
+
+                    double sellerIncome = 0;
+                    for (Product product : sellerProducts) {
+                        product.setStock(product.getStock() - 1);
+                        sellerIncome += product.getPrice() * 0.9;
+                    }
+
+                    seller.getWallet().deposit(sellerIncome, "Product sold to " + customer.getEmail());
                 }
 
                 customer.getWallet().withdraw(totalCost, "Buying");
+                Order newOrder = new Order(products, customer, LocalDateTime.now(), selectedAddress);
+                customer.getOrders().add(newOrder);
                 clearCart();
 
                 System.out.println("Order completed successfully!");
