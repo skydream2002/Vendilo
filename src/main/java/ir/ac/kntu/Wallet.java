@@ -40,8 +40,9 @@ public class Wallet {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
-            if (choice == 0)
+            if (choice == 0) {
                 return;
+            }
             if (userType == UserType.CUSTOMER && choice == 1) {
                 System.out.println("Enter the amount you want to deposit.");
                 double amount = scanner.nextDouble();

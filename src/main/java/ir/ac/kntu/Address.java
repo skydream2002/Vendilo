@@ -29,6 +29,7 @@ public class Address {
                 case 5 -> {
                     return;
                 }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }
@@ -87,37 +88,31 @@ public class Address {
                 return;
             } else if (selection > 0 && selection <= customer.getAddresses().size()) {
                 Address address = customer.getAddresses().get(selection - 1);
-
                 System.out.println("Leave field blank to keep current value.");
-
                 System.out.println("Current title: " + address.getTitle());
                 System.out.print("New title: ");
                 String newTitle = scanner.nextLine();
                 if (!newTitle.isBlank()) {
                     address.setTitle(newTitle);
                 }
-
                 System.out.println("Current province: " + address.getProvince());
                 System.out.print("New province: ");
                 String newProvince = scanner.nextLine();
                 if (!newProvince.isBlank()) {
                     address.setProvince(newProvince);
                 }
-
                 System.out.println("Current city: " + address.getCity());
                 System.out.print("New city: ");
                 String newCity = scanner.nextLine();
                 if (!newCity.isBlank()) {
                     address.setCity(newCity);
                 }
-
                 System.out.println("Current description: " + address.getDescription());
                 System.out.print("New description: ");
                 String newDescription = scanner.nextLine();
                 if (!newDescription.isBlank()) {
                     address.setDescription(newDescription);
                 }
-
                 System.out.println("Address updated successfully.");
             } else {
                 System.out.println("Invalid choice!");

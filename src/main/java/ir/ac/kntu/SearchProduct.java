@@ -39,8 +39,9 @@ public class SearchProduct {
         while (true) {
             System.out.println("Enter min price (or press Enter to skip):");
             String min = scanner.nextLine().trim();
-            if (min.isEmpty())
+            if (min.isEmpty()) {
                 break;
+            }
             try {
                 minPrice = Double.parseDouble(min);
                 break;
@@ -53,8 +54,9 @@ public class SearchProduct {
         while (true) {
             System.out.println("Enter max price (or press Enter to skip):");
             String max = scanner.nextLine().trim();
-            if (max.isEmpty())
+            if (max.isEmpty()) {
                 break;
+            }
             try {
                 maxPrice = Double.parseDouble(max);
                 break;
@@ -112,7 +114,6 @@ public class SearchProduct {
             System.out.println("No products found with the given criteria.");
             return;
         }
-
         int totalPage = (int) Math.ceil((double) products.size() / PAGE_SIZE);
         int currentPage = 0;
         Stack<Integer> pageHistory = new Stack<>();
@@ -133,10 +134,9 @@ public class SearchProduct {
                     System.out.println("Invalid selection.");
                 }
             }
-
-            if (input.equals("e"))
+            if (input.equals("e")) {
                 break;
-            else if (input.equals("n") && currentPage < totalPage - 1) {
+            } else if (input.equals("n") && currentPage < totalPage - 1) {
                 pageHistory.push(currentPage);
                 currentPage++;
             } else if (input.equals("p") && currentPage > 0) {

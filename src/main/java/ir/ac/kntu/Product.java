@@ -14,6 +14,7 @@ public abstract class Product {
     private Map<String, Double> ratings = new HashMap<>();
 
     public abstract void showDetails();
+
     public abstract void addProduct(Scanner scanner, Seller seller);
 
     public String getAverageRating() {
@@ -25,7 +26,7 @@ public abstract class Product {
     }
 
     public void increaseStock(int count) {
-        for (int i = 0 ; i < count ; i++) {
+        for (int i = 0; i < count; i++) {
             stock++;
         }
         System.out.println("Product inventory increased by " + count + ".");
@@ -35,7 +36,7 @@ public abstract class Product {
         if (count > stock) {
             System.out.println("Cannot decrease stock by more than available amount.");
         }
-        for (int i = 0 ; i < count ; i++) {
+        for (int i = 0; i < count; i++) {
             stock--;
         }
         System.out.println("Product inventory decreased by " + count + ".");

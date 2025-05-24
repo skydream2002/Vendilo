@@ -69,6 +69,7 @@ public class OrderService {
                         System.out.println("You are not a customer who can rate.");
                     }
                 }
+                default -> System.out.println("Invalid chioce.");
             }
         }
     }
