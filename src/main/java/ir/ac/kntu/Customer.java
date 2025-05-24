@@ -8,8 +8,8 @@ public class Customer extends User {
     private List<Address> addresses = new ArrayList<>();
     private ShoppingCart shoppingCart;
     private List<Order> orders = new ArrayList<>();
-    private List<SupportRequest> supportRequests = new ArrayList<>();
     private final Wallet wallet = new Wallet(UserType.CUSTOMER);
+    private List<CustomerSupportRequest> supportRequests = new ArrayList<>();
 
     @Override
     public void usersMenu() {
@@ -23,7 +23,8 @@ public class Customer extends User {
             System.out.println("------4.Wallet-------");
             System.out.println("------5.Orders-------");
             System.out.println("------6.Setting------");
-            System.out.println("--------7.back-------");
+            System.out.println("------7.Support------");
+            System.out.println("--------8.back-------");
             System.out.println("choose:");
             int choice = scanner.nextInt();
 
@@ -45,10 +46,121 @@ public class Customer extends User {
                     Settings setting = new Settings();
                     setting.settingMenu(this);
                 }
-                case 7 -> {
+                case 7 -> supportMenu(scanner);
+                case 8 -> {
                     return;
                 }
                 default -> System.out.println("invalid choice.");
+            }
+        }
+    }
+
+    private void supportMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("---- Support Menu ----");
+            System.out.println("1. Submit a new request");
+            System.out.println("2. View my open requests");
+            System.out.println("0. Back");
+            System.out.print("Choose: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1 -> submitSupportRequest(scanner);
+                case 2 -> viewOpenSupportRequests(scanner);
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+    private void submitSupportRequest(Scanner scanner) {
+        while (true) {
+            System.out.println("Select request category:");
+            System.out.println("1. Product quality issue");
+            System.out.println("2. Order mismatch");
+            System.out.println("3. Settings / technical issues");
+            System.out.println("4. Order not received");
+            System.out.println("0. back");
+
+            int categoryChoice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (categoryChoice == 0) {
+                return;
+            } else if (categoryChoice >= 1 && categoryChoice <= 4) {
+                String category = switch (categoryChoice) {
+                    case 1 -> "Product quality issue";
+                    case 2 -> "Order mismatch";
+                    case 3 -> "Settings issue";
+                    case 4 -> "Order not received";
+                    default -> "";
+                };
+
+                System.out.println("Enter your request description:");
+                String message = scanner.nextLine();
+
+                CustomerSupportRequest request = new CustomerSupportRequest(category, message);
+                supportRequests.add(request);
+                SupportRepository.addRequest(request);
+                System.out.println("Request submitted successfully.");
+            } else {
+                System.out.println("Invalid category.");
+            }
+        }
+    }
+
+    private void viewOpenSupportRequests(Scanner scanner) {
+        List<CustomerSupportRequest> openRequests = new ArrayList<>();
+        for (CustomerSupportRequest request : supportRequests) {
+            if (!request.getStatus().equalsIgnoreCase("closed")) {
+                openRequests.add(request);
+            }
+        }
+
+        if (openRequests.isEmpty()) {
+            System.out.println("You have no open support requests.");
+            return;
+        }
+
+        while (true) {
+            int index = 1;
+            for (CustomerSupportRequest request : openRequests) {
+                System.out.println(index++ + ". " + request.getCategory() + " - Status: " + request.getStatus());
+            }
+
+            System.out.println("Enter number to view details or 0 to back:");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 0) {
+                return;
+            } else if (choice > 0 && choice <= openRequests.size()) {
+                showRequestDetails(openRequests.get(choice - 1), scanner);
+            }
+        }
+    }
+
+    private void showRequestDetails(CustomerSupportRequest request, Scanner scanner) {
+        while (true) {
+            System.out.println("---- Request Details ----");
+            System.out.println("Category: " + request.getCategory());
+            System.out.println("Status: " + request.getStatus());
+            System.out.println("Your message: " + request.getMessage());
+
+            if (request.getSupportResponse() != null) {
+                System.out.println("Support reply: " + request.getSupportResponse());
+            } else {
+                System.out.println("Support has not replied yet.");
+            }
+            System.out.println("---- 0. back ----");
+            System.out.println("Choose :");
+            int selection = scanner.nextInt();
+            scanner.nextLine();
+            if (selection == 0) {
+                return;
             }
         }
     }
@@ -95,11 +207,11 @@ public class Customer extends User {
         this.orders = orders;
     }
 
-    public List<SupportRequest> getSupportRequests() {
+    public List<CustomerSupportRequest> getSupportRequests() {
         return supportRequests;
     }
 
-    public void setSupportRequests(List<SupportRequest> supportRequests) {
+    public void setSupportRequests(List<CustomerSupportRequest> supportRequests) {
         this.supportRequests = supportRequests;
     }
 

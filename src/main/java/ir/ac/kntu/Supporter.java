@@ -2,12 +2,7 @@ package ir.ac.kntu;
 
 import java.util.Scanner;
 
-import main.java.ir.ac.kntu.Seller;
-import main.java.ir.ac.kntu.SellerSignUpRequest;
-import main.java.ir.ac.kntu.User;
-import main.java.ir.ac.kntu.UserRepository;
-
-public class Support extends User {
+public class Supporter extends User {
     private String userName;
 
     @Override
@@ -102,7 +97,7 @@ public class Support extends User {
         }
     }
 
-    public Support(String email, String firstName, String lastName, String password, String phoneNumber) {
+    public Supporter(String email, String firstName, String lastName, String password, String phoneNumber) {
         super(email, firstName, lastName, password, phoneNumber);
     }
 
