@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import ir.ac.kntu.Customer;
+import ir.ac.kntu.Support;
+
 public class UserRepository {
     private static final List<Customer> customers = new ArrayList<>();
     private static final List<Seller> sellers = new ArrayList<>();
     private static final List<Support> supports = new ArrayList<>();
+    private static final List<SellerSignUpRequest> pendingSellerRequests = new ArrayList<>();
 
     public static void signUp(String role) {
         Scanner scanner = new Scanner(System.in);
@@ -58,8 +62,12 @@ public class UserRepository {
             String province = scanner.nextLine();
             System.out.println("Enter your Store title :");
             String storeName = scanner.nextLine();
-            Seller seller = new Seller(storeName, nationalCode, province, email, firstName, lastName, password, phoneNumbor);
-            sellers.add(seller);
+            SellerSignUpRequest request = new ir.ac.kntu.SellerSignUpRequest(email, firstName, lastName, nationalCode,
+                    password, phoneNumbor, province, storeName);
+            pendingSellerRequests.add(request);
+            System.out.println("Your sign-up request has been submitted for review.");
+            System.out.println("Your Agent Code: " + request.generateAgentCode());
+            System.out.println("Please wait for approval by support.");
         } else {
             System.out.println("invalid role");
         }
@@ -94,6 +102,10 @@ public class UserRepository {
             }
         }
         return false;
+    }
+
+    public static List<SellerSignUpRequest> getPendingSellerRequests() {
+        return pendingSellerRequests;
     }
 
     public void addCustomer(Customer customer) {
