@@ -18,6 +18,7 @@ public class Seller extends User {
         super(email, firstName, lastName, password, phoneNumber);
         this.nationalCode = nationalCode;
         this.province = province;
+        this.isVerified = false;
     }
 
     @Override
@@ -134,14 +135,6 @@ public class Seller extends User {
                 default -> System.out.println("Invalid category.");
             }
         }
-    }
-
-    public void handleVerificationRequests() {
-
-    }
-
-    public void respondToSupportRequest() {
-
     }
 
     public Seller(String email, String firstName, String lastName, String password, String phoneNumber) {

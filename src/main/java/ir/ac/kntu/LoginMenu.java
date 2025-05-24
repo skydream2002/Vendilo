@@ -2,6 +2,11 @@ package ir.ac.kntu;
 
 import java.util.Scanner;
 
+import main.java.ir.ac.kntu.Seller;
+import main.java.ir.ac.kntu.SellerSignUpRequest;
+import main.java.ir.ac.kntu.User;
+import main.java.ir.ac.kntu.UserRepository;
+
 public class LoginMenu {
     private Scanner scanner = new Scanner(System.in);
 
@@ -11,7 +16,7 @@ public class LoginMenu {
             System.out.println("-------1.Login---------");
             System.out.println("-------2.Sign up-------");
             System.out.println("--------3.Exit---------");
-            
+
             int choice = scanner.nextInt();
 
             switch (choice) {
@@ -38,7 +43,20 @@ public class LoginMenu {
 
         System.out.println("Enter password :");
         String password = scanner.nextLine();
-        
+
+        SellerSignUpRequest request = UserRepository.getRequestByEmail(email);
+        if (request != null && request.getPassword().equals(password)) {
+            if (request.getReasonRejection() != null) {
+                System.out.println("Your registration was rejected.");
+                System.out.println("Reason: " + request.getReasonRejection());
+                request.editInfoAndResubmit(scanner);
+                return;
+            } else {
+                System.out.println("Your registration is pending approval.");
+                return;
+            }
+        }
+
         for (User user : UserRepository.getAllUsers()) {
             if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
                 System.out.println("Login succesfully");
