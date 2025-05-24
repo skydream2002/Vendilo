@@ -32,7 +32,7 @@ public class Seller extends User {
                 case 1 -> viewProducts(scanner);
                 case 2 -> addingProduct(scanner);
                 case 3 -> wallet.walletMenu();
-                case 4 -> System.out.println("orders");
+                case 4 -> OrderService.orderMenu(this, orders);
                 case 5 -> {
                     scanner.close();
                     return;

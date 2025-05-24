@@ -17,7 +17,8 @@ public class OrderService {
             System.out.println("==== Order Menu ====");
             int number = 1;
             for (Order order : orders) {
-                System.out.println(number + ". " + order.getOrderDate() + " Total Price :" + order.calculateTotalPrice());
+                System.out
+                .println(number + ". " + order.getOrderDate() + " Total Price :" + order.calculateTotalPrice());
                 number++;
             }
             System.out.println("0. back");
@@ -46,8 +47,13 @@ public class OrderService {
             System.out.println("Address: " + order.getShippingAddress().toString());
             System.out.println("Date: " + order.getOrderDate().toString());
             System.out.println("Total Price: " + order.calculateTotalPrice());
+            if (user instanceof Seller) {
+                System.out.println("Customer's email : " + order.getCustomer().getEmail());
+            }
             System.out.println("---- 0. back ----");
-            System.out.println("---- 1. rating ----");
+            if (user instanceof Customer) {
+                System.out.println("---- 1. rating ----");
+            }
             System.out.println("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -80,18 +86,19 @@ public class OrderService {
             if (selection == 0) {
                 return;
             } else if (selection > 0 && selection <= order.getProducts().size()) {
-                System.out.println("Enter your rate (1 to 5):");
-
-                double rate = scanner.nextDouble();
-                scanner.nextLine();
-
-                if (rate >= 1 && rate <= 5) {
-                    order.getProducts().get(selection - 1).addRatings(customer.getEmail(), rate);
-                } else {
-                    System.out.println("Please Enter rate in range :");
+                double rate = -1;
+                while (rate < 1 || rate > 5) {
+                    System.out.println("Enter your rate (1 to 5):");
                     rate = scanner.nextDouble();
                     scanner.nextLine();
+
+                    if (rate < 1 || rate > 5) {
+                        System.out.println("Invalid input. Rate must be between 1 and 5.");
+                    }
                 }
+
+                order.getProducts().get(selection - 1).addRatings(customer.getEmail(), rate);
+                System.out.println("Rating submitted.");
             } else {
                 System.out.println("invalid selection");
             }

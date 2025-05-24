@@ -194,13 +194,13 @@ public class ShoppingCart {
                     Order order = new Order(sellerProducts, customer, LocalDateTime.now(), selectedAddress);
                     seller.getOrders().add(order);
 
-                    double sellerIncome = 0;
+                    double sellerShare = 0;
                     for (Product product : sellerProducts) {
                         product.setStock(product.getStock() - 1);
-                        sellerIncome += product.getPrice() * 0.9;
+                        sellerShare += product.getPrice() * 0.9;
                     }
 
-                    seller.getWallet().deposit(sellerIncome, "Product sold to " + customer.getEmail());
+                    seller.getWallet().deposit(sellerShare, "Product sold to " + customer.getEmail());
                 }
 
                 customer.getWallet().withdraw(totalCost, "Buying");
