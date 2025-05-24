@@ -51,7 +51,14 @@ public class UserRepository {
             Customer customer = new Customer(email, firstName, lastName, password, phoneNumbor);
             customers.add(customer);
         } else if (role.equals("seller")) {
-            Seller seller = new Seller(email, firstName, lastName, password, phoneNumbor);
+            System.out.println("Enter your nationalCode :");
+            int nationalCode = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("Enter your province :");
+            String province = scanner.nextLine();
+            System.out.println("Enter your Store title :");
+            String storeName = scanner.nextLine();
+            Seller seller = new Seller(storeName, nationalCode, province, email, firstName, lastName, password, phoneNumbor);
             sellers.add(seller);
         } else {
             System.out.println("invalid role");

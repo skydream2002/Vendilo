@@ -14,6 +14,12 @@ public class Seller extends User {
     private List<Order> orders = new ArrayList<>();
     private final Wallet wallet = new Wallet(UserType.SELLER);
 
+    public Seller(String storeName, int nationalCode, String province, String email, String firstName, String lastName, String password, String phoneNumber) {
+        super(email, firstName, lastName, password, phoneNumber);
+        this.nationalCode = nationalCode;
+        this.province = province;
+    }
+
     @Override
     public void usersMenu() {
         Scanner scanner = new Scanner(System.in);
