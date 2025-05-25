@@ -18,11 +18,11 @@ public class Supporter extends User {
             System.out.println("-----------4.back-----------");
             System.out.println("choose :");
             int choice = scanner.nextInt();
-            // complete this
+
             switch (choice) {
                 case 1 -> handleAuthentication(scanner);
                 case 2 -> handleCustomersRequests(scanner);
-                case 3 -> System.out.println("-3.Orders-");
+                case 3 -> manageOrders(scanner);
                 case 4 -> {
                     scanner.close();
                     return;
@@ -176,6 +176,39 @@ public class Supporter extends User {
             request.setStatus(status);
 
             System.out.println("Response saved successfully.");
+        }
+    }
+
+    private void manageOrders(Scanner scanner) {
+        while (true) {
+            System.out.println("--- Order Management ---");
+            System.out.println("1. View all orders");
+            System.out.println("2. Filter by customer email");
+            System.out.println("3. Filter by date range");
+            System.out.println("0. Back");
+            System.out.print("Choose: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1 -> OrderService.orderMenu(this, OrderRepository.getAllOrders());
+                case 2 -> {
+                    System.out.print("Enter customer email: ");
+                    String email = scanner.nextLine();
+                    OrderService.orderMenu(this, OrderRepository.getOrdersByCustomerEmail(email));
+                }
+                case 3 -> {
+                    System.out.print("Enter start date (yyyy-mm-dd): ");
+                    String start = scanner.nextLine();
+                    System.out.print("Enter end date (yyyy-mm-dd): ");
+                    String end = scanner.nextLine();
+                    OrderService.orderMenu(this, OrderRepository.getOrdersByDateRange(start, end));
+                }
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid choice.");
+            }
         }
     }
 

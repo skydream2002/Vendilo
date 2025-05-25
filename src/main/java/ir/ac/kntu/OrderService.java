@@ -47,7 +47,7 @@ public class OrderService {
             System.out.println("Address: " + order.getShippingAddress().toString());
             System.out.println("Date: " + order.getOrderDate().toString());
             System.out.println("Total Price: " + order.calculateTotalPrice());
-            if (user instanceof Seller) {
+            if (!(user instanceof Customer)) {
                 System.out.println("Customer's email : " + order.getCustomer().getEmail());
             }
             System.out.println("---- 0. back ----");
