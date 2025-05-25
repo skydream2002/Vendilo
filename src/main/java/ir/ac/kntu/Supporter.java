@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Supporter extends User {
@@ -20,7 +21,7 @@ public class Supporter extends User {
             // complete this
             switch (choice) {
                 case 1 -> handleAuthentication(scanner);
-                case 2 -> System.out.println("Follow-up Requests");
+                case 2 -> handleCustomersRequests(scanner);
                 case 3 -> System.out.println("-3.Orders-");
                 case 4 -> {
                     scanner.close();
@@ -37,8 +38,8 @@ public class Supporter extends User {
             int number = 1;
             for (SellerSignUpRequest request : UserRepository.getPendingSellerRequests()) {
                 if (request.getReasonRejection() == null) {
-                    System.out.println(number + ". " + "store name : " + request.getStoreName() 
-                    + "seller's email : "+ request.getEmail());
+                    System.out.println(number + ". " + "store name : " + request.getStoreName()
+                            + "seller's email : " + request.getEmail());
                     number++;
                 }
             }
@@ -94,6 +95,87 @@ public class Supporter extends User {
                 }
                 default -> System.out.println("Invalid selection.");
             }
+        }
+    }
+
+    private void handleCustomersRequests(Scanner scanner) {
+        while (true) {
+            System.out.println("--- Support Request Management ---");
+            System.out.println("1. View all requests");
+            System.out.println("2. Filter by status");
+            System.out.println("3. Filter by category");
+            System.out.println("0. Back");
+            System.out.print("Choose: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1 -> displayRequests(SupportRepository.getAllRequests(), scanner);
+                case 2 -> {
+                    System.out.println("Enter status (submitted/in progress/closed):");
+                    String status = scanner.nextLine().toLowerCase();
+                    List<CustomerSupportRequest> filtered = SupportRepository.getRequestsByStatus(status);
+                    displayRequests(filtered, scanner);
+                }
+                case 3 -> {
+                    System.out.println("Enter category:");
+                    String category = scanner.nextLine();
+                    List<CustomerSupportRequest> filtered = SupportRepository.getRequestsByCategory(category);
+                    displayRequests(filtered, scanner);
+                }
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+    private void displayRequests(List<CustomerSupportRequest> requests, Scanner scanner) {
+        if (requests.isEmpty()) {
+            System.out.println("No requests found.");
+            return;
+        }
+
+        for (int i = 0; i < requests.size(); i++) {
+            CustomerSupportRequest request = requests.get(i);
+            System.out.println((i + 1) + ". " + request.getCategory() + " - " + request.getStatus());
+        }
+
+        System.out.println("Enter number to view details or 0 to back:");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (choice > 0 && choice <= requests.size()) {
+            respondToRequest(requests.get(choice - 1), scanner);
+        }
+    }
+
+    private void respondToRequest(CustomerSupportRequest request, Scanner scanner) {
+        System.out.println("--- Request Details ---");
+        System.out.println("Category: " + request.getCategory());
+        System.out.println("Status: " + request.getStatus());
+        System.out.println("Customer message: " + request.getMessage());
+
+        if (request.getSupportResponse() != null) {
+            System.out.println("Previous response: " + request.getSupportResponse());
+        }
+
+        System.out.println("1. Respond and update status");
+        System.out.println("0. Back");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (choice == 1) {
+            System.out.println("Enter your response:");
+            String response = scanner.nextLine();
+            request.setSupportResponse(response);
+
+            System.out.println("Set new status (in progress / closed):");
+            String status = scanner.nextLine().toLowerCase();
+            request.setStatus(status);
+
+            System.out.println("Response saved successfully.");
         }
     }
 
