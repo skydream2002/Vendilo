@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Address {
@@ -48,97 +49,75 @@ public class Address {
     }
 
     public void removingAddress(Scanner scanner, Customer customer) {
-        if (customer.getAddresses().isEmpty()) {
+        List<Address> addresses = customer.getAddresses();
+        
+        if (addresses.isEmpty()) {
             System.out.println("No addresses available.");
             return;
         }
 
-        while (true) {
-            showAddressDetails(customer);
-            System.out.println("-------- 0. back --------");
-            System.out.println("Select the address you want to delete.");
-            int selection = scanner.nextInt();
-            scanner.nextLine();
-
-            if (selection == 0) {
-                return;
-            } else if (selection > 0 && selection <= customer.getAddresses().size()) {
-                Address address = customer.getAddresses().get(selection - 1);
-                customer.removeAddress(address);
-            } else {
-                System.out.println("Invalid choice!");
-            }
-        }
+        PaginationHelper<Address> pagination = new PaginationHelper<>();
+        pagination.paginate(addresses, scanner, (address, sc) -> {
+            customer.removeAddress(address);
+        });
     }
 
     public void editAddress(Scanner scanner, Customer customer) {
-        if (customer.getAddresses().isEmpty()) {
+        List<Address> addresses = customer.getAddresses();
+
+        if (addresses.isEmpty()) {
             System.out.println("No addresses available.");
             return;
         }
 
-        while (true) {
-            showAddressDetails(customer);
-            System.out.println("-------- 0. back --------");
-            System.out.println("Select the address you want to change.");
-            int selection = scanner.nextInt();
-            scanner.nextLine();
+        PaginationHelper<Address> pagination = new PaginationHelper<>();
 
-            if (selection == 0) {
-                return;
-            } else if (selection > 0 && selection <= customer.getAddresses().size()) {
-                Address address = customer.getAddresses().get(selection - 1);
-                System.out.println("Leave field blank to keep current value.");
-                System.out.println("Current title: " + address.getTitle());
-                System.out.print("New title: ");
-                String newTitle = scanner.nextLine();
-                if (!newTitle.isBlank()) {
-                    address.setTitle(newTitle);
-                }
-                System.out.println("Current province: " + address.getProvince());
-                System.out.print("New province: ");
-                String newProvince = scanner.nextLine();
-                if (!newProvince.isBlank()) {
-                    address.setProvince(newProvince);
-                }
-                System.out.println("Current city: " + address.getCity());
-                System.out.print("New city: ");
-                String newCity = scanner.nextLine();
-                if (!newCity.isBlank()) {
-                    address.setCity(newCity);
-                }
-                System.out.println("Current description: " + address.getDescription());
-                System.out.print("New description: ");
-                String newDescription = scanner.nextLine();
-                if (!newDescription.isBlank()) {
-                    address.setDescription(newDescription);
-                }
-                System.out.println("Address updated successfully.");
-            } else {
-                System.out.println("Invalid choice!");
+        pagination.paginate(addresses, scanner, (address, sc) -> {
+            System.out.println("Leave field blank to keep current value.");
+
+            System.out.println("Current title: " + address.getTitle());
+            System.out.print("New title: ");
+            String newTitle = sc.nextLine();
+            if (!newTitle.isBlank()) {
+                address.setTitle(newTitle);
             }
-        }
+
+            System.out.println("Current province: " + address.getProvince());
+            System.out.print("New province: ");
+            String newProvince = sc.nextLine();
+            if (!newProvince.isBlank()) {
+                address.setProvince(newProvince);
+            }
+
+            System.out.println("Current city: " + address.getCity());
+            System.out.print("New city: ");
+            String newCity = sc.nextLine();
+            if (!newCity.isBlank()) {
+                address.setCity(newCity);
+            }
+
+            System.out.println("Current description: " + address.getDescription());
+            System.out.print("New description: ");
+            String newDescription = sc.nextLine();
+            if (!newDescription.isBlank()) {
+                address.setDescription(newDescription);
+            }
+
+            System.out.println("Address updated successfully.\n");
+        });
     }
 
     public void viewAddresses(Scanner scanner, Customer customer) {
-        if (customer.getAddresses().isEmpty()) {
+        List<Address> addresses = customer.getAddresses();
+
+        if (addresses.isEmpty()) {
             System.out.println("No addresses available.");
             return;
         }
 
-        while (true) {
-            showAddressDetails(customer);
-            System.out.println("-------- 0. back --------");
-            System.out.println("Enter your selection :");
-            int selection = scanner.nextInt();
-            scanner.nextLine();
-
-            if (selection == 0) {
-                return;
-            } else {
-                System.out.println("Invalid selection!");
-            }
-        }
+        PaginationHelper<Address> pagination = new PaginationHelper<>();
+        pagination.paginate(addresses, scanner, (address, sc) -> {
+        });
     }
 
     public void showAddressDetails(Customer customer) {
