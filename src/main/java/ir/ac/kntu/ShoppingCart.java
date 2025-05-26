@@ -104,6 +104,28 @@ public class ShoppingCart {
         });
     }
 
+    private Address selectAddressWithPagination(Scanner scanner) {
+        List<AddressOption> options = new ArrayList<>();
+
+        for (Address address : customer.getAddresses()) {
+            options.add(new AddressOption(address));
+        }
+
+        options.add(new AddressOption());
+
+        Address[] selected = new Address[1];
+        PaginationHelper<AddressOption> pagination = new PaginationHelper<>();
+        pagination.paginate(options, scanner, (option, sc) -> {
+            if (option.isAddNew()) {
+                Address.addingAddress(sc, customer);
+            } else {
+                selected[0] = option.getAddress();
+            }
+        });
+
+        return selected[0];
+    }
+
     public void checkout(Scanner scanner) {
         if (products.isEmpty()) {
             System.out.println("Shopping cart is empty.");
@@ -112,30 +134,14 @@ public class ShoppingCart {
         while (true) {
             System.out.println("---- Checkout Menu ----");
             System.out.println("--- Total Price : " + getTotalPrice());
-            int number = 1;
-            for (Address address : customer.getAddresses()) {
-                System.out.println(number + ". " + address);
-                number++;
-            }
-            System.out.println(number + ". Add address");
-            System.out.println("---- 0. back ----");
-            System.out.println("Select address or add :");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
 
-            Address selectedAddress;
-            if (choice == 0) {
+            Address selectedAddress = selectAddressWithPagination(scanner);
+            if (selectedAddress == null) {
                 return;
-            } else if (choice > 0 && choice <= customer.getAddresses().size()) {
-                selectedAddress = customer.getAddresses().get(choice - 1);
-            } else if (choice == number) {
-                Address.addingAddress(scanner, customer);
-                continue;
-            } else {
-                System.out.println(" Invalid selection.");
-                continue;
             }
+
             confirmPayment(selectedAddress, scanner);
+            return;
         }
     }
 
