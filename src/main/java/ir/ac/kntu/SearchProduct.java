@@ -164,7 +164,9 @@ public class SearchProduct {
         int end = Math.min(start + PAGE_SIZE, products.size());
         for (int i = start; i < end; i++) {
             Product product = products.get(i);
-            System.out.println((i + 1 - start) + ". " + product.getName() + " | " + product.getType() + " | "
+            System.out.println((i + 1 - start) + ". "
+                    + product.getName() + " | "
+                    + product.getType() + " | "
                     + product.getPrice());
         }
     }
