@@ -3,10 +3,8 @@ package ir.ac.kntu;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class SearchProduct {
-    private static final int PAGE_SIZE = 5;
 
     public static void showSearchMenu(Customer customer) {
         Scanner scanner = new Scanner(System.in);
@@ -69,7 +67,12 @@ public class SearchProduct {
         System.out.println(filteredProducts.size() + " product(s) found.");
         String sortType = selectSortType(scanner);
         sortProducts(filteredProducts, sortType);
-        paginate(filteredProducts, scanner, customer);
+
+        PaginationHelper<Product> pagination = new PaginationHelper<>();
+        pagination.paginate(filteredProducts, scanner, (product, sc) -> {
+            showDetailsAndAddToCart(product, customer, scanner);
+        });
+
     }
 
     public static List<Product> getAllProducts() {
@@ -106,68 +109,6 @@ public class SearchProduct {
             case "2" -> products.sort(java.util.Comparator.comparingDouble(Product::getPrice).reversed());
             default -> {
             }
-        }
-    }
-
-    private static void paginate(List<Product> products, Scanner scanner, Customer customer) {
-        if (products.isEmpty()) {
-            System.out.println("No products found with the given criteria.");
-            return;
-        }
-        int totalPage = (int) Math.ceil((double) products.size() / PAGE_SIZE);
-        int currentPage = 0;
-        Stack<Integer> pageHistory = new Stack<>();
-
-        while (true) {
-            showPage(products, currentPage);
-            System.out.println("\nSelect your product to see more :");
-            System.out.println("\n--- page" + (currentPage + 1) + "of " + totalPage + " ---");
-            System.out.println("n: next | p: previous | page (number): go to page | b: back | e: exit");
-
-            String input = scanner.nextLine();
-            if (input.matches("\\d+")) {
-                int selection = Integer.parseInt(input);
-                int index = currentPage * PAGE_SIZE + selection - 1;
-                if (index >= 0 && index < products.size()) {
-                    showDetailsAndAddToCart(products.get(index), customer, scanner);
-                } else {
-                    System.out.println("Invalid selection.");
-                }
-            }
-            if (input.equals("e")) {
-                break;
-            } else if (input.equals("n") && currentPage < totalPage - 1) {
-                pageHistory.push(currentPage);
-                currentPage++;
-            } else if (input.equals("p") && currentPage > 0) {
-                pageHistory.push(currentPage);
-                currentPage--;
-            } else if (input.equals("b") && !pageHistory.isEmpty()) {
-                currentPage = pageHistory.pop();
-            } else if (input.matches("^page ?\\\\d+")) {
-                int page = Integer.parseInt(input.replaceAll("[^0-9]", "")) - 1;
-
-                if (page >= 0 && page < totalPage) {
-                    pageHistory.push(currentPage);
-                    currentPage = page;
-                } else {
-                    System.out.println("Invalid page number.");
-                }
-            } else {
-                System.out.println("Invalid input.");
-            }
-        }
-    }
-
-    public static void showPage(List<Product> products, int page) {
-        int start = page * PAGE_SIZE;
-        int end = Math.min(start + PAGE_SIZE, products.size());
-        for (int i = start; i < end; i++) {
-            Product product = products.get(i);
-            System.out.println((i + 1 - start) + ". "
-                    + product.getName() + " | "
-                    + product.getType() + " | "
-                    + product.getPrice());
         }
     }
 
