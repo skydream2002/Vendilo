@@ -15,6 +15,11 @@ public abstract class Product {
 
     public abstract void showDetails();
 
+    @Override
+    public String toString() {
+        return name + "-- Price :" + price + "toman" + "--Category : " + type.name();
+    }
+
     public abstract void addProduct(Scanner scanner, Seller seller);
 
     public String getAverageRating() {

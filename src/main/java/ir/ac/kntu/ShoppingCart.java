@@ -60,40 +60,24 @@ public class ShoppingCart {
         }
 
         Scanner scanner = new Scanner(System.in);
-        while (true) {
-            double totalPrice = getTotalPrice();
-            System.out.println("Total price : " + totalPrice + "toman");
+        double totalPrice = getTotalPrice();
+        System.out.println("Total price : " + totalPrice + "toman");
 
-            System.out.println("----- Products in Cart -----");
-            int count = 1;
-            for (Product product : products) {
-                System.out.println(count + "." + product.getName() + "-- Price :" + product.getPrice()
-                        + "toman" + "--Category : " + product.getType());
-                count++;
-            }
-            System.out.println("0.back");
-            System.out.println("Enter product number to see more details");
+        PaginationHelper<Product> pagination = new PaginationHelper();
+        pagination.paginate(products, scanner, (product, sc) -> {
+            while (true) {
+                product.showDetails();
+                System.out.println("----- 1. Back -----");
+                System.out.print("Choose: ");
+                String choice = sc.nextLine();
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            if (choice > 0 && choice <= products.size()) {
-                while (true) {
-                    products.get(choice - 1).showDetails();
-                    System.out.println("-----1.back------");
-                    System.out.println("Choose :");
-                    int selection = scanner.nextInt();
-                    if (selection == 1) {
-                        break;
-                    } else {
-                        System.out.println("Invalid choice.");
-                    }
+                if (choice.equals("1")) {
+                    break;
+                } else {
+                    System.out.println("Invalid choice.");
                 }
-            } else if (choice == 0) {
-                return;
-            } else {
-                System.out.println("invalid choice");
             }
-        }
+        });
     }
 
     public void removeFromCart() {
@@ -103,27 +87,21 @@ public class ShoppingCart {
         }
 
         Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("----- Products in Cart -----");
-            int count = 1;
-            for (Product product : products) {
-                System.out.println(count + "." + product.getName() + "-- Price :" + product.getPrice()
-                        + "toman" + "--Category : " + product.getType());
-                count++;
-            }
-            System.out.println("---0.back---");
-            System.out.println("please enter your choice to remove from shopping cart");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
 
-            if (choice == 0) {
-                return;
-            } else if (choice > 0 && choice <= products.size()) {
-                removeProduct(products.get(choice - 1));
+        System.out.println("----- Products in Cart -----");
+        PaginationHelper<Product> pagination = new PaginationHelper<>();
+        pagination.paginate(products, scanner, (product, sc) -> {
+            System.out.println("Are you sure you want to remove \"" + product.getName() + "\" from the cart?");
+            System.out.println("1. Yes");
+            System.out.println("2. No");
+            System.out.print("Choose: ");
+            String input = sc.nextLine();
+            if (input.equals("1")) {
+                removeProduct(product);
             } else {
-                System.out.println("invalid choice");
+                System.out.println("Cancelled.");
             }
-        }
+        });
     }
 
     public void checkout(Scanner scanner) {
@@ -157,63 +135,72 @@ public class ShoppingCart {
                 System.out.println(" Invalid selection.");
                 continue;
             }
+            confirmPayment(selectedAddress, scanner);
+        }
+    }
 
-            for (Product product : products) {
-                if (product.getStock() <= 0) {
-                    System.out.println("Product " + product.getName() + " is out of stock.");
-                    return;
-                }
-            }
-
-            double shippingCost = handlePriceWithAddress(selectedAddress);
-            double totalCost = getTotalPrice() + shippingCost;
-
-            System.out.println("Shipping cost: " + shippingCost + " toman");
-            System.out.println("Total cost (with shipping): " + totalCost + " toman");
-            System.out.println("Your wallet balance: " + customer.getWallet().getAccountBalance() + " toman");
-            System.out.println("Do you want to confirm payment? (y/n)");
-            String confirm = scanner.nextLine().trim().toLowerCase();
-
-            if (confirm.equals("y")) {
-                if (customer.getWallet().getAccountBalance() < totalCost) {
-                    System.out.println("Insufficient wallet balance.");
-                    return;
-                }
-
-                Map<Seller, List<Product>> sellerProductsMap = new HashMap<>();
-                for (Product product : products) {
-                    sellerProductsMap
-                            .computeIfAbsent(product.getSeller(), k -> new ArrayList<>())
-                            .add(product);
-                }
-
-                for (Map.Entry<Seller, List<Product>> entry : sellerProductsMap.entrySet()) {
-                    Seller seller = entry.getKey();
-                    List<Product> sellerProducts = entry.getValue();
-
-                    Order order = new Order(sellerProducts, customer, LocalDateTime.now(), selectedAddress);
-                    seller.getOrders().add(order);
-
-                    double sellerShare = 0;
-                    for (Product product : sellerProducts) {
-                        product.setStock(product.getStock() - 1);
-                        sellerShare += product.getPrice() * 0.9;
-                    }
-
-                    seller.getWallet().deposit(sellerShare, "Product sold to " + customer.getEmail());
-                }
-
-                customer.getWallet().withdraw(totalCost, "Buying");
-                Order newOrder = new Order(products, customer, LocalDateTime.now(), selectedAddress);
-                customer.getOrders().add(newOrder);
-                clearCart();
-
-                System.out.println("Order completed successfully!");
-            } else {
-                System.out.println("Checkout canceled.");
-            }
+    public void confirmPayment(Address selectedAddress, Scanner scanner) {
+        if (!checkStockAvailability()) {
             return;
         }
+
+        double shippingCost = handlePriceWithAddress(selectedAddress);
+        double totalCost = getTotalPrice() + shippingCost;
+
+        System.out.println("Shipping cost: " + shippingCost + " toman");
+        System.out.println("Total cost (with shipping): " + totalCost + " toman");
+        System.out.println("Your wallet balance: " + customer.getWallet().getAccountBalance() + " toman");
+        System.out.println("Do you want to confirm payment? (y/n)");
+        String confirm = scanner.nextLine().trim().toLowerCase();
+
+        if (confirm.equals("y")) {
+            if (customer.getWallet().getAccountBalance() < totalCost) {
+                System.out.println("Insufficient wallet balance.");
+                return;
+            }
+
+            Map<Seller, List<Product>> sellerProductsMap = new HashMap<>();
+            for (Product product : products) {
+                sellerProductsMap
+                        .computeIfAbsent(product.getSeller(), k -> new ArrayList<>())
+                        .add(product);
+            }
+
+            for (Map.Entry<Seller, List<Product>> entry : sellerProductsMap.entrySet()) {
+                Seller seller = entry.getKey();
+                List<Product> sellerProducts = entry.getValue();
+
+                Order order = new Order(sellerProducts, customer, LocalDateTime.now(), selectedAddress);
+                seller.getOrders().add(order);
+
+                double sellerShare = 0;
+                for (Product product : sellerProducts) {
+                    product.setStock(product.getStock() - 1);
+                    sellerShare += product.getPrice() * 0.9;
+                }
+
+                seller.getWallet().deposit(sellerShare, "Product sold to " + customer.getEmail());
+            }
+
+            customer.getWallet().withdraw(totalCost, "Buying");
+            Order newOrder = new Order(products, customer, LocalDateTime.now(), selectedAddress);
+            customer.getOrders().add(newOrder);
+            clearCart();
+
+            System.out.println("Order completed successfully!");
+        } else {
+            System.out.println("Checkout canceled.");
+        }
+    }
+
+    private boolean checkStockAvailability() {
+        for (Product product : products) {
+            if (product.getStock() <= 0) {
+                System.out.println("Product " + product.getName() + " is out of stock.");
+                return false;
+            }
+        }
+        return true;
     }
 
     private double handlePriceWithAddress(Address customerAddress) {
