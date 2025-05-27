@@ -64,8 +64,12 @@ public class PaginationHelper<T> {
         int start = page * PAGE_SIZE;
         int end = Math.min(start + PAGE_SIZE, items.size());
         for (int i = start; i < end; i++) {
-            System.out.println((i - start + 1) + ". " + items.get(i));
+            System.out.println((i - start + 1) + ". " + formatItem(items.get(i)));
         }
+    }
+
+    public String formatItem(T item) {
+        return item.toString();
     }
 }
 

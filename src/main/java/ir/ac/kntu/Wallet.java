@@ -47,7 +47,7 @@ public class Wallet {
                 System.out.println("Enter the amount you want to deposit.");
                 double amount = scanner.nextDouble();
                 scanner.nextLine();
-                System.out.println("Enter the describtion for transaction");
+                System.out.println("Enter the description for transaction");
                 String describtion = scanner.nextLine();
                 deposit(amount, describtion);
             } else if (userType == UserType.SELLER && choice == 1) {
@@ -86,33 +86,34 @@ public class Wallet {
                     System.out.println("Filter not active.");
                 }
 
-                int number = 1;
-                for (Transaction transaction : filteredTransactions) {
-                    System.out.println(number + ". " + transaction.trascationSummary());
-                    number++;
+                PaginationHelper<Transaction> pagination = new PaginationHelper<>() {
+                    @Override
+                    public String formatItem(Transaction transaction) {
+                        return transaction.trascationSummary();
+                    }
+                };
+                pagination.paginate(filteredTransactions, scanner, (transaction, sc) -> {
+                    transactionDetails(sc, transaction);
+                });
+            }
+            System.out.println("F. Filter by date range.");
+            System.out.println("C. Clear filter.");
+            System.out.println("0. Back");
+            System.out.print("Choose: ");
+
+            String choice = scanner.nextLine().trim().toLowerCase();
+
+            switch (choice) {
+                case "0" -> {
+                    return;
                 }
+                case "f" -> {
+                    setFilterRange(scanner);
+                    System.out.println("Filter applied successfully.");
+                }
+                case "c" -> clearFilter();
+                default -> System.out.println("Invalid choice!");
             }
-            int baseOption = filteredTransactions.size();
-            System.out.println((baseOption + 1) + ". Filter by date range.");
-            System.out.println((baseOption + 2) + ". Clear filter.");
-            System.out.println("---------- 0. back ----------");
-            System.out.println("Choose: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            if (choice == 0) {
-                return;
-            } else if (choice == baseOption + 1) {
-                setFilterRange(scanner);
-                System.out.println("Filter applied successfully.");
-            } else if (choice == baseOption + 2) {
-                clearFilter();
-            } else if (choice > 0 && choice <= baseOption) {
-                transactionDetails(scanner, filteredTransactions.get(choice - 1));
-            } else {
-                System.out.println("Invalid choice!");
-            }
-
         }
     }
 
