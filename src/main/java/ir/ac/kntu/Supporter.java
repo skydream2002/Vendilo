@@ -33,29 +33,28 @@ public class Supporter extends User {
     }
 
     private void handleAuthentication(Scanner scanner) {
-        while (true) {
-            System.out.println("--- Sign up requests ---");
-            int number = 1;
-            for (SellerSignUpRequest request : UserRepository.getPendingSellerRequests()) {
-                if (request.getReasonRejection() == null) {
-                    System.out.println(number + ". " + "store name : " + request.getStoreName()
-                            + "seller's email : " + request.getEmail());
-                    number++;
-                }
-            }
-            System.out.println("--- 0. back ---");
-            System.out.println("Choose :");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+        List<SellerSignUpRequest> pendingRequests = UserRepository.getPendingSellerRequests().stream()
+                .filter(request -> request.getReasonRejection() == null)
+                .toList();
 
-            if (choice == 0) {
-                return;
-            } else if (choice > 0 && choice < number) {
-                showRequest(scanner, UserRepository.getPendingSellerRequests().get(choice - 1));
-            } else {
-                System.out.println("Invalid choice.");
-            }
+        if (pendingRequests.isEmpty()) {
+            System.out.println("No pending seller requests.");
+            return;
         }
+
+        System.out.println("--- Sign up requests ---");
+
+        PaginationHelper<SellerSignUpRequest> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(SellerSignUpRequest request) {
+                return "store name : " + request.getStoreName()
+                        + "seller's email : " + request.getEmail();
+            }
+        };
+
+        pagination.paginate(pendingRequests, scanner, (request, sc) -> {
+            showRequest(scanner, request);
+        });
     }
 
     private void showRequest(Scanner scanner, SellerSignUpRequest request) {
@@ -136,19 +135,16 @@ public class Supporter extends User {
             System.out.println("No requests found.");
             return;
         }
+        PaginationHelper<CustomerSupportRequest> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(CustomerSupportRequest request) {
+                return request.getCategory() + " - " + request.getStatus();
+            }
+        };
 
-        for (int i = 0; i < requests.size(); i++) {
-            CustomerSupportRequest request = requests.get(i);
-            System.out.println((i + 1) + ". " + request.getCategory() + " - " + request.getStatus());
-        }
-
-        System.out.println("Enter number to view details or 0 to back:");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-
-        if (choice > 0 && choice <= requests.size()) {
-            respondToRequest(requests.get(choice - 1), scanner);
-        }
+        pagination.paginate(requests, scanner, (request, sc) -> {
+            respondToRequest(request, scanner);
+        });
     }
 
     private void respondToRequest(CustomerSupportRequest request, Scanner scanner) {

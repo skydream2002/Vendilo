@@ -35,7 +35,7 @@ public class Seller extends User {
             System.out.println("-------5.back------");
             System.out.println("choose:");
             int choice = scanner.nextInt();
-            // complete this
+
             switch (choice) {
                 case 1 -> viewProducts(scanner);
                 case 2 -> addingProduct(scanner);
