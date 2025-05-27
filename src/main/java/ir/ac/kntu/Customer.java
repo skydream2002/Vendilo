@@ -125,22 +125,16 @@ public class Customer extends User {
             return;
         }
 
-        while (true) {
-            int index = 1;
-            for (CustomerSupportRequest request : openRequests) {
-                System.out.println(index++ + ". " + request.getCategory() + " - Status: " + request.getStatus());
+        PaginationHelper<CustomerSupportRequest> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(CustomerSupportRequest request) {
+                return request.getCategory() + " - Status: " + request.getStatus();
             }
+        };
 
-            System.out.println("Enter number to view details or 0 to back:");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            if (choice == 0) {
-                return;
-            } else if (choice > 0 && choice <= openRequests.size()) {
-                showRequestDetails(openRequests.get(choice - 1), scanner);
-            }
-        }
+        pagination.paginate(openRequests, scanner, (request, sc) -> {
+            showRequestDetails(request, sc);
+        });
     }
 
     private void showRequestDetails(CustomerSupportRequest request, Scanner scanner) {
