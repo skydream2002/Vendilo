@@ -14,7 +14,8 @@ public class Seller extends User {
     private List<Order> orders = new ArrayList<>();
     private final Wallet wallet = new Wallet(UserType.SELLER);
 
-    public Seller(String storeName, int nationalCode, String province, String email, String firstName, String lastName, String password, String phoneNumber) {
+    public Seller(String storeName, int nationalCode, String province, String email, String firstName, String lastName,
+            String password, String phoneNumber) {
         super(email, firstName, lastName, password, phoneNumber);
         this.nationalCode = nationalCode;
         this.province = province;
@@ -51,29 +52,20 @@ public class Seller extends User {
     }
 
     public void viewProducts(Scanner scanner) {
-        while (true) {
-            System.out.println("---- Products ----");
-            int number = 1;
-            for (Product product : products) {
-                System.out.println(number + ". " + product.getName()
+
+        PaginationHelper<Product> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(Product product) {
+                return product.getName()
                         + " | " + product.getType()
                         + " | " + product.getPrice()
-                        + " | stock :" + product.getStock());
-                number++;
+                        + " | stock :" + product.getStock();
             }
-            System.out.println("---- 0. back ----");
-            System.out.println("Select product to Increase or decrease its stock and see more Details:");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+        };
 
-            if (choice == 0) {
-                return;
-            } else if (choice > 0 && choice < number) {
-                changeStockAmount(scanner, products.get(choice - 1));
-            } else {
-                System.out.println("Invalid choice.");
-            }
-        }
+        pagination.paginate(products, scanner, (product, sc) -> {
+            changeStockAmount(sc, product);
+        });
     }
 
     private void changeStockAmount(Scanner scanner, Product product) {
