@@ -13,27 +13,15 @@ public class OrderService {
 
         Scanner scanner = new Scanner(System.in);
 
-        while (true) {
-            System.out.println("==== Order Menu ====");
-            int number = 1;
-            for (Order order : orders) {
-                System.out
-                .println(number + ". " + order.getOrderDate() + " Total Price :" + order.calculateTotalPrice());
-                number++;
+        PaginationHelper<Order> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(Order order) {
+                return order.getOrderDate() + " | Total Price: " + order.calculateTotalPrice();
             }
-            System.out.println("0. back");
-            System.out.print("Choose an order to see details or back: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            if (choice == 0) {
-                return;
-            } else if (choice > 0 && choice <= orders.size()) {
-                showOrderDetail(user, orders.get(choice - 1));
-            } else {
-                System.out.println("invalid choice!");
-            }
-        }
+        };
+        pagination.paginate(orders, scanner, (order, sc) -> {
+            showOrderDetail(user, order);
+        });
     }
 
     public static void showOrderDetail(User user, Order order) {
@@ -77,33 +65,32 @@ public class OrderService {
     private static void rateProducts(Customer customer, Order order) {
         Scanner scanner = new Scanner(System.in);
 
-        while (true) {
-            showProductsList(order.getProducts());
-            System.out.println("Select the product to rate.");
-            System.out.println("0. back");
-            int selection = scanner.nextInt();
-            scanner.nextLine();
-
-            if (selection == 0) {
-                return;
-            } else if (selection > 0 && selection <= order.getProducts().size()) {
-                double rate = -1;
-                while (rate < 1 || rate > 5) {
-                    System.out.println("Enter your rate (1 to 5):");
-                    rate = scanner.nextDouble();
-                    scanner.nextLine();
-
-                    if (rate < 1 || rate > 5) {
-                        System.out.println("Invalid input. Rate must be between 1 and 5.");
-                    }
-                }
-
-                order.getProducts().get(selection - 1).addRatings(customer.getEmail(), rate);
-                System.out.println("Rating submitted.");
-            } else {
-                System.out.println("invalid selection");
+        PaginationHelper<Product> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(Product product) {
+                return product.getName()
+                        + " | Category: " + product.getType()
+                        + " | Price: " + product.getPrice()
+                        + " | Seller: " + product.getSeller().getLastName()
+                        + " | Avg Rating: " + product.getAverageRating();
             }
-        }
+        };
+
+        pagination.paginate(order.getProducts(), scanner, (product, sc) -> {
+            double rate = -1;
+            while (rate < 1 || rate > 5) {
+                System.out.println("Enter your rate (1 to 5):");
+                rate = sc.nextDouble();
+                sc.nextLine();
+
+                if (rate < 1 || rate > 5) {
+                    System.out.println("Invalid input. Rate must be between 1 and 5.");
+                }
+            }
+
+            product.addRatings(customer.getEmail(), rate);
+            System.out.println("Rating submitted.");
+        });
     }
 
     private static void showProductsList(List<Product> products) {
