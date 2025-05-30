@@ -16,8 +16,8 @@ public class Wallet {
         this.userType = userType;
     }
 
-    public void walletMenu() {
-        Scanner scanner = new Scanner(System.in);
+    public void walletMenu(Scanner scanner) {
+
         while (true) {
             System.out.println("--------- Wallet Menu ---------");
             System.out.println("-- Account Balance: " + accountBalance + " --");
@@ -59,7 +59,7 @@ public class Wallet {
                 withdraw(amount, description);
             } else if ((userType == UserType.CUSTOMER && choice == 2) ||
                     (userType == UserType.SELLER && choice == 2)) {
-                transactionMenu();
+                transactionMenu(scanner);
             } else {
                 System.out.println("Invalid choice!");
             }
@@ -67,15 +67,13 @@ public class Wallet {
         }
     }
 
-    public void transactionMenu() {
-        Scanner scanner = new Scanner(System.in);
-
+    public void transactionMenu(Scanner scanner) {
         while (true) {
             System.out.println("------ Transaction Menu -----");
 
-            List<Transaction> filteredTransactions = getFilteredTransactions();
+            List<Transaction> filterTransactions = getFilteredTransactions();
 
-            if (filteredTransactions.isEmpty()) {
+            if (filterTransactions.isEmpty()) {
                 System.out.println("No transactions found.");
             } else {
 
@@ -92,7 +90,7 @@ public class Wallet {
                         return transaction.trascationSummary();
                     }
                 };
-                pagination.paginate(filteredTransactions, scanner, (transaction, sc) -> {
+                pagination.paginate(filterTransactions, scanner, (transaction, sc) -> {
                     transactionDetails(sc, transaction);
                 });
             }

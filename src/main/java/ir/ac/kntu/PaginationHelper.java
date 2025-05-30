@@ -21,15 +21,15 @@ public class PaginationHelper<T> {
             System.out.println("n: next | p: previous | b: back | page <number> | e: exit");
             String input = scanner.nextLine().trim();
 
-            if (input.equals("e")) {
+            if ("e".equals(input)) {
                 break;
-            } else if (input.equals("n") && currentPage < totalPage - 1) {
+            } else if ("n".equals(input) && currentPage < totalPage - 1) {
                 pageHistory.push(currentPage);
                 currentPage++;
-            } else if (input.equals("p") && currentPage > 0) {
+            } else if ("p".equals(input) && currentPage > 0) {
                 pageHistory.push(currentPage);
                 currentPage--;
-            } else if (input.equals("b") && !pageHistory.isEmpty()) {
+            } else if ("b".equals(input) && !pageHistory.isEmpty()) {
                 currentPage = pageHistory.pop();
             } else if (input.matches("\\d+")) {
                 int selection = Integer.parseInt(input);

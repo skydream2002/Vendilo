@@ -1,5 +1,7 @@
 package ir.ac.kntu;
 
+import java.util.Scanner;
+
 public abstract class User {
     private String firstName;
     private String lastName;
@@ -7,7 +9,7 @@ public abstract class User {
     private String phoneNumber;
     private String password;
 
-    public abstract void usersMenu();
+    public abstract void usersMenu(Scanner scanner);
 
     public User(String email, String firstName, String lastName, String password, String phoneNumber) {
         this.email = email;

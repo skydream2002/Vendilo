@@ -6,8 +6,7 @@ import java.util.Scanner;
 
 public class SearchProduct {
 
-    public static void showSearchMenu(Customer customer) {
-        Scanner scanner = new Scanner(System.in);
+    public static void showSearchMenu(Customer customer, Scanner scanner) {
         while (true) {
             System.out.println("----- Product Search Menu -----");
             System.out.println("1. Search");

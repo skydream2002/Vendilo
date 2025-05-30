@@ -12,8 +12,7 @@ public class Customer extends User {
     private List<CustomerSupportRequest> supportRequests = new ArrayList<>();
 
     @Override
-    public void usersMenu() {
-        Scanner scanner = new Scanner(System.in);
+    public void usersMenu(Scanner scanner) {
 
         while (true) {
             System.out.println("----Customer Menu----");
@@ -33,18 +32,18 @@ public class Customer extends User {
                     if (shoppingCart == null) {
                         shoppingCart = new ShoppingCart(this);
                     }
-                    shoppingCart.shoppingCartMenu();
+                    shoppingCart.shoppingCartMenu(scanner);
                 }
-                case 2 -> SearchProduct.showSearchMenu(this);
+                case 2 -> SearchProduct.showSearchMenu(this, scanner);
                 case 3 -> {
                     Address addressMenu = new Address();
-                    addressMenu.addressMenu(this);
+                    addressMenu.addressMenu(this, scanner);
                 }
-                case 4 -> wallet.walletMenu();
+                case 4 -> wallet.walletMenu(scanner);
                 case 5 -> OrderService.orderMenu(this, orders, scanner);
                 case 6 -> {
                     Settings setting = new Settings();
-                    setting.settingMenu(this);
+                    setting.settingMenu(this, scanner);
                 }
                 case 7 -> supportMenu(scanner);
                 case 8 -> {

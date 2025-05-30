@@ -7,9 +7,7 @@ public class Supporter extends User {
     private String userName;
 
     @Override
-    public void usersMenu() {
-        Scanner scanner = new Scanner(System.in);
-
+    public void usersMenu(Scanner scanner) {
         while (true) {
             System.out.println("--------Support Menu--------");
             System.out.println("--1.Authentication Request--");

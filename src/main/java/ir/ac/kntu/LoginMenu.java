@@ -21,7 +21,7 @@ public class LoginMenu {
                     System.out.println("Enter your role : (customer or seller)");
                     System.out.println("supporter can't sign up");
                     String role = scanner.nextLine().trim().toLowerCase();
-                    UserRepository.signUp(role);
+                    UserRepository.signUp(role, scanner);
                 }
                 case 3 -> {
                     scanner.close();
@@ -55,7 +55,7 @@ public class LoginMenu {
         for (User user : UserRepository.getAllUsers()) {
             if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
                 System.out.println("Login succesfully");
-                user.usersMenu();
+                user.usersMenu(scanner);
                 return;
             }
         }

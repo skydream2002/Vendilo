@@ -30,30 +30,39 @@ public class Mobile extends DigitalProduct {
 
     @Override
     public void addProduct(Scanner scanner, Seller seller) {
+        setBasicInfo(scanner, seller);
+        setCameraInfo(scanner);
+        setNetworkInfo(scanner);
+    }
+
+    private void setBasicInfo(Scanner scanner, Seller seller) {
         super.setSeller(seller);
-        System.out.println("Enter name :");
-        String name = scanner.nextLine();
-        super.setName(name);
-        System.out.println("Brand : ");
-        String brand = scanner.nextLine();
-        super.setBrand(brand);
-        System.out.println("Price :");
-        double price = scanner.nextDouble();
+        System.out.println("Enter name:");
+        super.setName(scanner.nextLine());
+
+        System.out.println("Brand:");
+        super.setBrand(scanner.nextLine());
+
+        System.out.println("Price:");
+        super.setPrice(scanner.nextDouble());
         scanner.nextLine();
-        super.setPrice(price);
-        System.out.println("Stock :");
-        int stock = scanner.nextInt();
+
+        System.out.println("Stock:");
+        super.setStock(scanner.nextInt());
         scanner.nextLine();
-        super.setStock(stock);
-        System.out.println("Front Camera Resolution");
-        String front = scanner.nextLine();
-        setFrontCamera(front);
-        System.out.println("Rear Camera Resolution :");
-        String rear = scanner.nextLine();
-        setRearCamera(rear);
-        System.out.println("Internet Network");
-        String network = scanner.nextLine();
-        setInternetNetwork(network);
+    }
+
+    private void setCameraInfo(Scanner scanner) {
+        System.out.println("Front Camera Resolution:");
+        setFrontCamera(scanner.nextLine());
+
+        System.out.println("Rear Camera Resolution:");
+        setRearCamera(scanner.nextLine());
+    }
+
+    private void setNetworkInfo(Scanner scanner) {
+        System.out.println("Internet Network:");
+        setInternetNetwork(scanner.nextLine());
     }
 
     public String getFrontCamera() {

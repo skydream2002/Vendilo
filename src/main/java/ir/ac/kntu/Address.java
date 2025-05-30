@@ -9,8 +9,7 @@ public class Address {
     private String city;
     private String description;
 
-    public void addressMenu(Customer customer) {
-        Scanner scanner = new Scanner(System.in);
+    public void addressMenu(Customer customer, Scanner scanner) {
         while (true) {
             System.out.println("----- Address menu -----");
             System.out.println("---- 1. Add address ----");

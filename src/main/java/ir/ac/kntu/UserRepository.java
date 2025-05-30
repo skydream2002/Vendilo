@@ -8,11 +8,10 @@ public class UserRepository {
     private static final List<Customer> customers = new ArrayList<>();
     private static final List<Seller> sellers = new ArrayList<>();
     private static final List<Supporter> supports = new ArrayList<>();
-    private static final List<SellerSignUpRequest> pendingSellerRequests = new ArrayList<>();
+    private static final List<SellerSignUpRequest> pendingRequests = new ArrayList<>();
 
-    public static void signUp(String role) {
-        Scanner scanner = new Scanner(System.in);
-        if (role.equals("support")) {
+    public static void signUp(String role, Scanner scanner) {
+        if ("support".equals(role)) {
             System.out.println("you can't sign up as a supporter");
             return;
         }
@@ -40,10 +39,10 @@ public class UserRepository {
             System.out.println("Invalid or duplicate phone number. Please enter a valid and unique phone number:");
             phoneNumbor = scanner.nextLine();
         }
-        if (role.equals("customer")) {
+        if ("customer".equals(role)) {
             Customer customer = new Customer(email, firstName, lastName, password, phoneNumbor);
             customers.add(customer);
-        } else if (role.equals("seller")) {
+        } else if ("seller".equals(role)) {
             System.out.println("Enter your nationalCode :");
             int nationalCode = scanner.nextInt();
             scanner.nextLine();
@@ -53,7 +52,7 @@ public class UserRepository {
             String storeName = scanner.nextLine();
             SellerSignUpRequest request = new SellerSignUpRequest(email, firstName, lastName, nationalCode,
                     password, phoneNumbor, province, storeName);
-            pendingSellerRequests.add(request);
+            pendingRequests.add(request);
             System.out.println("Your sign-up request has been submitted for review.");
             System.out.println("Please wait for approval by support.");
         } else {
@@ -93,7 +92,7 @@ public class UserRepository {
     }
 
     public static SellerSignUpRequest getRequestByEmail(String email) {
-        for (SellerSignUpRequest request : pendingSellerRequests) {
+        for (SellerSignUpRequest request : pendingRequests) {
             if (request.getEmail().equals(email)) {
                 return request;
             }
@@ -102,7 +101,7 @@ public class UserRepository {
     }
 
     public static List<SellerSignUpRequest> getPendingSellerRequests() {
-        return pendingSellerRequests;
+        return pendingRequests;
     }
 
     public void addCustomer(Customer customer) {

@@ -23,8 +23,7 @@ public class Seller extends User {
     }
 
     @Override
-    public void usersMenu() {
-        Scanner scanner = new Scanner(System.in);
+    public void usersMenu(Scanner scanner) {
 
         while (true) {
             System.out.println("----Seller Menu----");
@@ -39,7 +38,7 @@ public class Seller extends User {
             switch (choice) {
                 case 1 -> viewProducts(scanner);
                 case 2 -> addingProduct(scanner);
-                case 3 -> wallet.walletMenu();
+                case 3 -> wallet.walletMenu(scanner);
                 case 4 -> OrderService.orderMenu(this, orders, scanner);
                 case 5 -> {
                     scanner.close();

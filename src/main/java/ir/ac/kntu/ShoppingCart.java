@@ -15,9 +15,7 @@ public class ShoppingCart {
         this.customer = customer;
     }
 
-    public void shoppingCartMenu() {
-        Scanner scanner = new Scanner(System.in);
-
+    public void shoppingCartMenu(Scanner scanner) {
         while (true) {
             System.out.println("====== Shopping Cart Menu ====== ");
             System.out.println("---------1.view products---------");
@@ -30,8 +28,8 @@ public class ShoppingCart {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> viewProducts();
-                case 2 -> removeFromCart();
+                case 1 -> viewProducts(scanner);
+                case 2 -> removeFromCart(scanner);
                 case 3 -> checkout(scanner);
                 case 4 -> clearCart();
                 case 5 -> {
@@ -53,13 +51,12 @@ public class ShoppingCart {
         System.out.println(product.getName() + " removed from cart");
     }
 
-    public void viewProducts() {
+    public void viewProducts(Scanner scanner) {
         if (products.isEmpty()) {
             System.out.println("shopping cart is empty");
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
         double totalPrice = getTotalPrice();
         System.out.println("Total price : " + totalPrice + "toman");
 
@@ -71,7 +68,7 @@ public class ShoppingCart {
                 System.out.print("Choose: ");
                 String choice = sc.nextLine();
 
-                if (choice.equals("1")) {
+                if ("1".equals(choice)) {
                     break;
                 } else {
                     System.out.println("Invalid choice.");
@@ -80,13 +77,11 @@ public class ShoppingCart {
         });
     }
 
-    public void removeFromCart() {
+    public void removeFromCart(Scanner scanner) {
         if (products.isEmpty()) {
             System.out.println("shopping cart is empty");
             return;
         }
-
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("----- Products in Cart -----");
         PaginationHelper<Product> pagination = new PaginationHelper<>();
@@ -96,7 +91,7 @@ public class ShoppingCart {
             System.out.println("2. No");
             System.out.print("Choose: ");
             String input = sc.nextLine();
-            if (input.equals("1")) {
+            if ("1".equals(input)) {
                 removeProduct(product);
             } else {
                 System.out.println("Cancelled.");

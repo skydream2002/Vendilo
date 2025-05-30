@@ -4,8 +4,7 @@ import java.util.Scanner;
 
 public class Settings {
 
-    public void settingMenu(Customer customer) {
-        Scanner scanner = new Scanner(System.in);
+    public void settingMenu(Customer customer, Scanner scanner) {
         while (true) {
             System.out.println("----- Setting Menu -----");
             System.out.println("-- 1. Edit first name --");
