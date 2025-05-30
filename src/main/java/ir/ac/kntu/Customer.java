@@ -194,7 +194,7 @@ public class Customer extends User {
     }
 
     public List<Order> getOrders() {
-        return orders;
+        return new ArrayList<>(orders);
     }
 
     public void setOrders(List<Order> orders) {
