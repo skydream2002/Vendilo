@@ -3,8 +3,8 @@ package ir.ac.kntu;
 import java.util.Scanner;
 
 public class Mobile extends DigitalProduct {
-    private String frontCameraResolution;
-    private String rearCameraResolution;
+    private String frontCamera;
+    private String rearCamera;
     private String internetNetwork;
 
     public Mobile() {
@@ -20,8 +20,8 @@ public class Mobile extends DigitalProduct {
         System.out.println("Price : " + getPrice());
         System.out.println("Seller's Name : " + getSeller().getFirstName() + " " + getSeller().getLastName());
         System.out.println("Rating Average : " + getAverageRating());
-        System.out.println("Front Camera : " + getFrontCameraResolution());
-        System.out.println("Rear Camera : " + getRearCameraResolution());
+        System.out.println("Front Camera : " + getFrontCamera());
+        System.out.println("Rear Camera : " + getRearCamera());
         System.out.println("Network : " + getInternetNetwork());
         System.out.println("Storage : " + getStorage());
         System.out.println("RAM : " + getRAM() + "}");
@@ -46,30 +46,30 @@ public class Mobile extends DigitalProduct {
         scanner.nextLine();
         super.setStock(stock);
         System.out.println("Front Camera Resolution");
-        String frontCamera = scanner.nextLine();
-        setFrontCameraResolution(frontCamera);
+        String front = scanner.nextLine();
+        setFrontCamera(front);
         System.out.println("Rear Camera Resolution :");
-        String rearCamera = scanner.nextLine();
-        setRearCameraResolution(rearCamera);
+        String rear = scanner.nextLine();
+        setRearCamera(rear);
         System.out.println("Internet Network");
         String network = scanner.nextLine();
         setInternetNetwork(network);
     }
 
-    public String getFrontCameraResolution() {
-        return frontCameraResolution;
+    public String getFrontCamera() {
+        return frontCamera;
     }
 
-    public void setFrontCameraResolution(String frontCameraResolution) {
-        this.frontCameraResolution = frontCameraResolution;
+    public void setFrontCamera(String frontCamera) {
+        this.frontCamera = frontCamera;
     }
 
-    public String getRearCameraResolution() {
-        return rearCameraResolution;
+    public String getRearCamera() {
+        return rearCamera;
     }
 
-    public void setRearCameraResolution(String rearCameraResolution) {
-        this.rearCameraResolution = rearCameraResolution;
+    public void setRearCamera(String rearCamera) {
+        this.rearCamera = rearCamera;
     }
 
     public String getInternetNetwork() {

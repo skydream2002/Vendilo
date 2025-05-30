@@ -41,7 +41,7 @@ public class Customer extends User {
                     addressMenu.addressMenu(this);
                 }
                 case 4 -> wallet.walletMenu();
-                case 5 -> OrderService.orderMenu(this, orders);
+                case 5 -> OrderService.orderMenu(this, orders, scanner);
                 case 6 -> {
                     Settings setting = new Settings();
                     setting.settingMenu(this);

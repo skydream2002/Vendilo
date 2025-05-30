@@ -25,7 +25,7 @@ public abstract class DigitalProduct extends Product {
         return RAM;
     }
 
-    public void setRAM(String RAM) {
+    public void setRam(String RAM) {
         this.RAM = RAM;
     }
 }

@@ -31,36 +31,42 @@ public class Laptop extends DigitalProduct {
     @Override
     public void addProduct(Scanner scanner, Seller seller) {
         super.setSeller(seller);
-        System.out.println("Enter name :");
-        String name = scanner.nextLine();
-        super.setName(name);
-        System.out.println("Brand : ");
-        String brand = scanner.nextLine();
-        super.setBrand(brand);
-        System.out.println("Price :");
-        double price = scanner.nextDouble();
+        readAndSetBasicProductInfo(scanner);
+        readAndSetLaptopSpecificInfo(scanner);
+    }
+
+    private void readAndSetBasicProductInfo(Scanner scanner) {
+        System.out.println("Enter name:");
+        super.setName(scanner.nextLine());
+
+        System.out.println("Brand:");
+        super.setBrand(scanner.nextLine());
+
+        System.out.println("Price:");
+        super.setPrice(scanner.nextDouble());
         scanner.nextLine();
-        super.setPrice(price);
-        System.out.println("Stock :");
-        int stock = scanner.nextInt();
+
+        System.out.println("Stock:");
+        super.setStock(scanner.nextInt());
         scanner.nextLine();
-        super.setStock(stock);
-        System.out.println("GPU model :");
-        String GPU = scanner.nextLine();
-        setGPUModel(GPU);
-        System.out.println("Bluetooth : (true/false)");
-        boolean bluetooth = scanner.nextBoolean();
-        setHasHaveBluetooth(bluetooth);
-        System.out.println("Webcam : (true/false)");
-        boolean webcam = scanner.nextBoolean();
-        setHasHaveWebcam(webcam);
+    }
+
+    private void readAndSetLaptopSpecificInfo(Scanner scanner) {
+        System.out.println("GPU model:");
+        setGpuModel(scanner.nextLine());
+
+        System.out.println("Bluetooth (true/false):");
+        setHasHaveBluetooth(scanner.nextBoolean());
+
+        System.out.println("Webcam (true/false):");
+        setHasHaveWebcam(scanner.nextBoolean());
     }
 
     public String getGPUModel() {
         return GPUModel;
     }
 
-    public void setGPUModel(String GPUModel) {
+    public void setGpuModel(String GPUModel) {
         this.GPUModel = GPUModel;
     }
 

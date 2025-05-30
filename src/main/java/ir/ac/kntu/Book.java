@@ -31,34 +31,40 @@ public class Book extends Product {
 
     @Override
     public void addProduct(Scanner scanner, Seller seller) {
+        setBasicInfo(scanner, seller);
+        setBookDetails(scanner);
+    }
+
+    private void setBasicInfo(Scanner scanner, Seller seller) {
         super.setSeller(seller);
-        System.out.println("Enter name :");
-        String name = scanner.nextLine();
-        super.setName(name);
-        System.out.println("Price :");
-        double price = scanner.nextDouble();
+        System.out.println("Enter name:");
+        super.setName(scanner.nextLine());
+
+        System.out.println("Price:");
+        super.setPrice(scanner.nextDouble());
         scanner.nextLine();
-        super.setPrice(price);
-        System.out.println("Stock :");
-        int stock = scanner.nextInt();
+
+        System.out.println("Stock:");
+        super.setStock(scanner.nextInt());
         scanner.nextLine();
-        super.setStock(stock);
-        System.out.println("Author : ");
-        String authorBook = scanner.nextLine();
-        setAuthor(authorBook);
-        System.out.println("number of Pages : ");
-        int pageNumbers = scanner.nextInt();
+    }
+
+    private void setBookDetails(Scanner scanner) {
+        System.out.println("Author:");
+        setAuthor(scanner.nextLine());
+
+        System.out.println("Number of Pages:");
+        setPages(scanner.nextInt());
         scanner.nextLine();
-        setPages(pageNumbers);
-        System.out.println("Genre :");
-        String genreBook = scanner.nextLine();
-        setGenre(genreBook);
-        System.out.println("Age Group :");
-        String ageGroupBook = scanner.nextLine();
-        setAgeGroup(ageGroupBook);
-        System.out.println(" ISBN :");
-        String isbn = scanner.nextLine();
-        setISBN(isbn);
+
+        System.out.println("Genre:");
+        setGenre(scanner.nextLine());
+
+        System.out.println("Age Group:");
+        setAgeGroup(scanner.nextLine());
+
+        System.out.println("ISBN:");
+        setISBN(scanner.nextLine());
     }
 
     public String getAuthor() {

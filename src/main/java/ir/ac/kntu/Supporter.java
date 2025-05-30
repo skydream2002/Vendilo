@@ -187,18 +187,18 @@ public class Supporter extends User {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> OrderService.orderMenu(this, OrderRepository.getAllOrders());
+                case 1 -> OrderService.orderMenu(this, OrderRepository.getAllOrders(), scanner);
                 case 2 -> {
                     System.out.print("Enter customer email: ");
                     String email = scanner.nextLine();
-                    OrderService.orderMenu(this, OrderRepository.getOrdersByCustomerEmail(email));
+                    OrderService.orderMenu(this, OrderRepository.getOrdersByCustomerEmail(email), scanner);
                 }
                 case 3 -> {
                     System.out.print("Enter start date (yyyy-mm-dd): ");
                     String start = scanner.nextLine();
                     System.out.print("Enter end date (yyyy-mm-dd): ");
                     String end = scanner.nextLine();
-                    OrderService.orderMenu(this, OrderRepository.getOrdersByDateRange(start, end));
+                    OrderService.orderMenu(this, OrderRepository.getOrdersByDateRange(start, end), scanner);
                 }
                 case 0 -> {
                     return;

@@ -5,13 +5,11 @@ import java.util.Scanner;
 
 public class OrderService {
 
-    public static void orderMenu(User user, List<Order> orders) {
+    public static void orderMenu(User user, List<Order> orders, Scanner scanner) {
         if (orders.isEmpty()) {
             System.out.println("No orders found.");
             return;
         }
-
-        Scanner scanner = new Scanner(System.in);
 
         PaginationHelper<Order> pagination = new PaginationHelper<>() {
             @Override
@@ -20,13 +18,11 @@ public class OrderService {
             }
         };
         pagination.paginate(orders, scanner, (order, sc) -> {
-            showOrderDetail(user, order);
+            showOrderDetail(user, order, scanner);
         });
     }
 
-    public static void showOrderDetail(User user, Order order) {
-        Scanner scanner = new Scanner(System.in);
-
+    public static void showOrderDetail(User user, Order order, Scanner scanner) {
         while (true) {
             System.out.println("-------- Order Details ---------");
             System.out.println("-------- Products List ---------");
@@ -52,7 +48,7 @@ public class OrderService {
                 }
                 case 1 -> {
                     if (user instanceof Customer customer) {
-                        rateProducts(customer, order);
+                        rateProducts(customer, order, scanner);
                     } else {
                         System.out.println("You are not a customer who can rate.");
                     }
@@ -62,9 +58,7 @@ public class OrderService {
         }
     }
 
-    private static void rateProducts(Customer customer, Order order) {
-        Scanner scanner = new Scanner(System.in);
-
+    private static void rateProducts(Customer customer, Order order, Scanner scanner) {
         PaginationHelper<Product> pagination = new PaginationHelper<>() {
             @Override
             public String formatItem(Product product) {
