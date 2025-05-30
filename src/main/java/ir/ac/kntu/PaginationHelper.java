@@ -11,17 +11,14 @@ public class PaginationHelper<T> {
             System.out.println("Nothing to display.");
             return;
         }
-
         int totalPage = (int) Math.ceil((double) items.size() / PAGE_SIZE);
         int currentPage = 0;
         Stack<Integer> pageHistory = new Stack<>();
-
         while (true) {
             showPage(items, currentPage);
             System.out.println("\n--- Page " + (currentPage + 1) + " of " + totalPage + " ---");
             System.out.println("Select item number to view details.");
             System.out.println("n: next | p: previous | b: back | page <number> | e: exit");
-
             String input = scanner.nextLine().trim();
 
             if (input.equals("e")) {

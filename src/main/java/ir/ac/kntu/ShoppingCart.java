@@ -149,7 +149,6 @@ public class ShoppingCart {
         if (!checkStockAvailability()) {
             return;
         }
-
         double shippingCost = handlePriceWithAddress(selectedAddress);
         double totalCost = getTotalPrice() + shippingCost;
 
@@ -164,14 +163,12 @@ public class ShoppingCart {
                 System.out.println("Insufficient wallet balance.");
                 return;
             }
-
             Map<Seller, List<Product>> sellerProductsMap = new HashMap<>();
             for (Product product : products) {
                 sellerProductsMap
                         .computeIfAbsent(product.getSeller(), k -> new ArrayList<>())
                         .add(product);
             }
-
             for (Map.Entry<Seller, List<Product>> entry : sellerProductsMap.entrySet()) {
                 Seller seller = entry.getKey();
                 List<Product> sellerProducts = entry.getValue();
@@ -184,7 +181,6 @@ public class ShoppingCart {
                     product.setStock(product.getStock() - 1);
                     sellerShare += product.getPrice() * 0.9;
                 }
-
                 seller.getWallet().deposit(sellerShare, "Product sold to " + customer.getEmail());
             }
 

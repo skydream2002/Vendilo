@@ -2,11 +2,6 @@ package ir.ac.kntu;
 
 import java.util.Scanner;
 
-import main.java.ir.ac.kntu.Seller;
-import main.java.ir.ac.kntu.SellerSignUpRequest;
-import main.java.ir.ac.kntu.User;
-import main.java.ir.ac.kntu.UserRepository;
-
 public class LoginMenu {
     private Scanner scanner = new Scanner(System.in);
 

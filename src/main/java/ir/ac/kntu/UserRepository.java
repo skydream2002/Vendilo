@@ -7,32 +7,26 @@ import java.util.Scanner;
 public class UserRepository {
     private static final List<Customer> customers = new ArrayList<>();
     private static final List<Seller> sellers = new ArrayList<>();
-    private static final List<Support> supports = new ArrayList<>();
+    private static final List<Supporter> supports = new ArrayList<>();
     private static final List<SellerSignUpRequest> pendingSellerRequests = new ArrayList<>();
 
     public static void signUp(String role) {
         Scanner scanner = new Scanner(System.in);
-
         if (role.equals("support")) {
             System.out.println("you can't sign up as a supporter");
             return;
         }
-
         System.out.println("-----Sign up Menu-----");
-
         System.out.println("Enter you first name :");
         String firstName = scanner.nextLine();
-
         System.out.println("Enter you last name :");
         String lastName = scanner.nextLine();
-
         System.out.println("Enter your email :");
         String email = scanner.nextLine();
         while (!isValidEmail(email) || emailExists(email)) {
             System.out.println("Invalid or duplicate email. Please enter a valid and unique email:");
             email = scanner.nextLine();
         }
-
         System.out.println("Enter password :");
         String password = scanner.nextLine();
         while (!isStrongPassword(password)) {
@@ -40,14 +34,12 @@ public class UserRepository {
                     "Password must be at least 8 characters long and contain at least one uppercase letter, \none lowercase letter, \none digit, \nand one special character.");
             password = scanner.nextLine();
         }
-
         System.out.println("Enter phone number :");
         String phoneNumbor = scanner.nextLine();
         while (!isValidPhoneNumber(phoneNumbor) || phoneExists(phoneNumbor)) {
             System.out.println("Invalid or duplicate phone number. Please enter a valid and unique phone number:");
             phoneNumbor = scanner.nextLine();
         }
-
         if (role.equals("customer")) {
             Customer customer = new Customer(email, firstName, lastName, password, phoneNumbor);
             customers.add(customer);
@@ -59,10 +51,8 @@ public class UserRepository {
             String province = scanner.nextLine();
             System.out.println("Enter your Store title :");
             String storeName = scanner.nextLine();
-
             SellerSignUpRequest request = new SellerSignUpRequest(email, firstName, lastName, nationalCode,
                     password, phoneNumbor, province, storeName);
-
             pendingSellerRequests.add(request);
             System.out.println("Your sign-up request has been submitted for review.");
             System.out.println("Please wait for approval by support.");
@@ -123,7 +113,7 @@ public class UserRepository {
         sellers.add(seller);
     }
 
-    public void addSupport(Support support) {
+    public void addSupport(Supporter support) {
         supports.add(support);
     }
 
@@ -135,7 +125,7 @@ public class UserRepository {
         return sellers;
     }
 
-    public static List<Support> getSupports() {
+    public static List<Supporter> getSupports() {
         return supports;
     }
 

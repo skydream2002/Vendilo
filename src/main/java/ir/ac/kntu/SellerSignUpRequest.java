@@ -17,11 +17,11 @@ public class SellerSignUpRequest {
 
     @Override
     public String toString() {
-        return "Store name : " + storeName 
-        + " seller's email : " + email 
-        + " seller's name : " + firstName + " " + lastName 
-        + "\n" + "phone number : " + phoneNumber 
-        + " province : " + province;
+        return "Store name : " + storeName
+                + " seller's email : " + email
+                + " seller's name : " + firstName + " " + lastName
+                + "\n" + "phone number : " + phoneNumber
+                + " province : " + province;
     }
 
     public SellerSignUpRequest(String email, String firstName, String lastName, int nationalCode, String password,
@@ -38,17 +38,17 @@ public class SellerSignUpRequest {
     }
 
     public void editInfoAndResubmit(Scanner scanner) {
-    System.out.println("Edit Store Name: ");
-    setStoreName(scanner.nextLine());
+        System.out.println("Edit Store Name: ");
+        setStoreName(scanner.nextLine());
 
-    System.out.println("Edit National Code: ");
-    setNationalCode(Integer.parseInt(scanner.nextLine()));
+        System.out.println("Edit National Code: ");
+        setNationalCode(Integer.parseInt(scanner.nextLine()));
 
-    System.out.println("Edit Province: ");
-    setProvince(scanner.nextLine());
+        System.out.println("Edit Province: ");
+        setProvince(scanner.nextLine());
 
-    setReasonRejection(null);
-}
+        setReasonRejection(null);
+    }
 
     public String generateAgentCode() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
