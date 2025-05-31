@@ -22,7 +22,6 @@ public class Supporter extends User {
                 case 2 -> handleCustomersRequests(scanner);
                 case 3 -> manageOrders(scanner);
                 case 4 -> {
-                    scanner.close();
                     return;
                 }
                 default -> System.out.println("invalid choice");

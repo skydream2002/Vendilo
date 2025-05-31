@@ -6,8 +6,9 @@ public class Main {
 
         LoginMenu menu = new LoginMenu();
         Supporter admin = new Supporter("ali.1384@email.com", "ali", "abbasi", "mohammad134A", "09151458098");
+        UserRepository.addSupport(admin);
         menu.startMenu();
-        UserRepository.getSupports().add(admin);
+
 
     }
 

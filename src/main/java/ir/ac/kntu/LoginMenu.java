@@ -13,6 +13,7 @@ public class LoginMenu {
             System.out.println("--------3.Exit---------");
 
             int choice = scanner.nextInt();
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> login();

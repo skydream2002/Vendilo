@@ -159,7 +159,7 @@ public class UserRepository {
         sellers.add(seller);
     }
 
-    public void addSupport(Supporter support) {
+    public static void addSupport(Supporter support) {
         supports.add(support);
     }
 
