@@ -13,7 +13,6 @@ public class Customer extends User {
 
     @Override
     public void usersMenu(Scanner scanner) {
-
         while (true) {
             System.out.println("----Customer Menu----");
             System.out.println("---1.Shopping Cart---");
@@ -26,7 +25,6 @@ public class Customer extends User {
             System.out.println("--------8.back-------");
             System.out.println("choose:");
             int choice = scanner.nextInt();
-
             switch (choice) {
                 case 1 -> {
                     if (shoppingCart == null) {
@@ -114,7 +112,7 @@ public class Customer extends User {
     private void viewOpenSupportRequests(Scanner scanner) {
         List<CustomerSupportRequest> openRequests = new ArrayList<>();
         for (CustomerSupportRequest request : supportRequests) {
-            if (!request.getStatus().equalsIgnoreCase("closed")) {
+            if (!"closed".equalsIgnoreCase(request.getStatus())) {
                 openRequests.add(request);
             }
         }

@@ -3,7 +3,7 @@ package ir.ac.kntu;
 import java.util.Scanner;
 
 public class Laptop extends DigitalProduct {
-    private String GPUModel;
+    private String gpuModel;
     private boolean hasHaveBluetooth;
     private boolean hasHaveWebcam;
 
@@ -24,7 +24,7 @@ public class Laptop extends DigitalProduct {
         System.out.println("Bluetooth : " + isHasHaveBluetooth());
         System.out.println("Webcam : " + isHasHaveWebcam());
         System.out.println("Storage : " + getStorage());
-        System.out.println("RAM : " + getRAM() + "}");
+        System.out.println("RAM : " + getRam() + "}");
         System.out.println("Stock : " + getStock());
     }
 
@@ -63,11 +63,11 @@ public class Laptop extends DigitalProduct {
     }
 
     public String getGPUModel() {
-        return GPUModel;
+        return gpuModel;
     }
 
-    public void setGpuModel(String GPUModel) {
-        this.GPUModel = GPUModel;
+    public void setGpuModel(String gpuModel) {
+        this.gpuModel = gpuModel;
     }
 
     public boolean isHasHaveBluetooth() {

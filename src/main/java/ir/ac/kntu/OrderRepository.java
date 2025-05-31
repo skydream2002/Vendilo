@@ -26,7 +26,8 @@ public class OrderRepository {
         LocalDate startDate = LocalDate.parse(start);
         LocalDate endDate = LocalDate.parse(end);
         return orders.stream()
-                .filter(o -> !o.getOrderDate().toLocalDate().isBefore(startDate) && !o.getOrderDate().toLocalDate().isAfter(endDate))
+                .filter(o -> !o.getOrderDate().toLocalDate().isBefore(startDate) && 
+                !o.getOrderDate().toLocalDate().isAfter(endDate))
                 .toList();
     }
 }

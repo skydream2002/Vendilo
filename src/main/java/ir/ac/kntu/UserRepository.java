@@ -11,53 +11,100 @@ public class UserRepository {
     private static final List<SellerSignUpRequest> pendingRequests = new ArrayList<>();
 
     public static void signUp(String role, Scanner scanner) {
-        if ("support".equals(role)) {
-            System.out.println("you can't sign up as a supporter");
+        if (isInvalidRole(role)) {
             return;
         }
-        System.out.println("-----Sign up Menu-----");
-        System.out.println("Enter you first name :");
-        String firstName = scanner.nextLine();
-        System.out.println("Enter you last name :");
-        String lastName = scanner.nextLine();
-        System.out.println("Enter your email :");
-        String email = scanner.nextLine();
-        while (!isValidEmail(email) || emailExists(email)) {
-            System.out.println("Invalid or duplicate email. Please enter a valid and unique email:");
-            email = scanner.nextLine();
-        }
-        System.out.println("Enter password :");
-        String password = scanner.nextLine();
-        while (!isStrongPassword(password)) {
-            System.out.println(
-                    "Password must be at least 8 characters long and contain at least one uppercase letter, \none lowercase letter, \none digit, \nand one special character.");
-            password = scanner.nextLine();
-        }
-        System.out.println("Enter phone number :");
-        String phoneNumbor = scanner.nextLine();
-        while (!isValidPhoneNumber(phoneNumbor) || phoneExists(phoneNumbor)) {
-            System.out.println("Invalid or duplicate phone number. Please enter a valid and unique phone number:");
-            phoneNumbor = scanner.nextLine();
-        }
+
+        UserInput userInput = collectUserInput(scanner);
+
         if ("customer".equals(role)) {
-            Customer customer = new Customer(email, firstName, lastName, password, phoneNumbor);
-            customers.add(customer);
+            createCustomer(userInput);
         } else if ("seller".equals(role)) {
-            System.out.println("Enter your nationalCode :");
-            int nationalCode = scanner.nextInt();
-            scanner.nextLine();
-            System.out.println("Enter your province :");
-            String province = scanner.nextLine();
-            System.out.println("Enter your Store title :");
-            String storeName = scanner.nextLine();
-            SellerSignUpRequest request = new SellerSignUpRequest(email, firstName, lastName, nationalCode,
-                    password, phoneNumbor, province, storeName);
-            pendingRequests.add(request);
-            System.out.println("Your sign-up request has been submitted for review.");
-            System.out.println("Please wait for approval by support.");
-        } else {
-            System.out.println("invalid role");
+            createSellerRequest(scanner, userInput);
         }
+    }
+
+    private static boolean isInvalidRole(String role) {
+        if ("support".equals(role)) {
+            System.out.println("You can't sign up as a supporter");
+            return true;
+        }
+        return false;
+    }
+
+    private static UserInput collectUserInput(Scanner scanner) {
+        UserInput input = new UserInput();
+
+        System.out.println("-----Sign up Menu-----");
+        input.firstName = getInput(scanner, "Enter your first name:");
+        input.lastName = getInput(scanner, "Enter your last name:");
+        input.email = getValidEmail(scanner);
+        input.password = getValidPassword(scanner);
+        input.phoneNumber = getValidPhoneNumber(scanner);
+
+        return input;
+    }
+
+    private static String getInput(Scanner scanner, String prompt) {
+        System.out.println(prompt);
+        return scanner.nextLine();
+    }
+
+    private static String getValidEmail(Scanner scanner) {
+        String email = getInput(scanner, "Enter your email:");
+        while (!isValidEmail(email) || emailExists(email)) {
+            email = getInput(scanner, "Invalid or duplicate email. Please enter a valid and unique email:");
+        }
+        return email;
+    }
+
+    private static String getValidPassword(Scanner scanner) {
+        String password = getInput(scanner, "Enter password:");
+        while (!isStrongPassword(password)) {
+            System.out.println("Password must be at least 8 characters long and contain...");
+            password = getInput(scanner, "Please enter a valid password:");
+        }
+        return password;
+    }
+
+    private static String getValidPhoneNumber(Scanner scanner) {
+        String phone = getInput(scanner, "Enter phone number:");
+        while (!isValidPhoneNumber(phone) || phoneExists(phone)) {
+            phone = getInput(scanner, "Invalid or duplicate phone number. Please enter a valid one:");
+        }
+        return phone;
+    }
+
+    private static void createCustomer(UserInput input) {
+        Customer customer = new Customer(
+                input.email,
+                input.firstName,
+                input.lastName,
+                input.password,
+                input.phoneNumber);
+        customers.add(customer);
+    }
+
+    private static void createSellerRequest(Scanner scanner, UserInput input) {
+        System.out.println("Enter your nationalCode:");
+        int nationalCode = scanner.nextInt();
+        scanner.nextLine();
+
+        String province = getInput(scanner, "Enter your province:");
+        String storeName = getInput(scanner, "Enter your Store title:");
+
+        SellerSignUpRequest request = new SellerSignUpRequest(
+                input.email,
+                input.firstName,
+                input.lastName,
+                nationalCode,
+                input.password,
+                input.phoneNumber,
+                province,
+                storeName);
+
+        pendingRequests.add(request);
+        System.out.println("Your sign-up request has been submitted for review.");
     }
 
     public static boolean isStrongPassword(String password) {
@@ -136,4 +183,12 @@ public class UserRepository {
         return all;
     }
 
+}
+
+class UserInput {
+    public String firstName;
+    public String lastName;
+    public String email;
+    public String password;
+    public String phoneNumber;
 }

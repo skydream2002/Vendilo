@@ -3,7 +3,7 @@ package ir.ac.kntu;
 public abstract class DigitalProduct extends Product {
     private String brand;
     private String storage;
-    private String RAM;
+    private String ram;
 
     public String getBrand() {
         return brand;
@@ -21,11 +21,11 @@ public abstract class DigitalProduct extends Product {
         this.storage = storage;
     }
 
-    public String getRAM() {
-        return RAM;
+    public String getRam() {
+        return ram;
     }
 
-    public void setRam(String RAM) {
-        this.RAM = RAM;
+    public void setRam(String ram) {
+        this.ram = ram;
     }
 }
