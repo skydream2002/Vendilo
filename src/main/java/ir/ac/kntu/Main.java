@@ -4,7 +4,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Hello World!");
+        LoginMenu menu = new LoginMenu();
+        Supporter admin = new Supporter("ali.1384@email.com", "ali", "abbasi", "mohammad134A", "09151458098");
+        menu.startMenu();
+        UserRepository.getSupports().add(admin);
 
     }
 
