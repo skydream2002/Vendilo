@@ -144,49 +144,93 @@ public class ShoppingCart {
         if (!checkStockAvailability()) {
             return;
         }
-        double shippingCost = handlePriceWithAddress(selectedAddress);
-        double totalCost = getTotalPrice() + shippingCost;
 
-        System.out.println("Shipping cost: " + shippingCost + " toman");
-        System.out.println("Total cost (with shipping): " + totalCost + " toman");
+        PaymentInfo paymentInfo = calculatePaymentInfo(selectedAddress);
+        displayPaymentSummary(paymentInfo);
+
+        if (!confirmPayment(scanner, paymentInfo.totalCost)) {
+            return;
+        }
+
+        processPayment(selectedAddress, paymentInfo.totalCost);
+    }
+
+    private PaymentInfo calculatePaymentInfo(Address address) {
+        double shippingCost = handlePriceWithAddress(address);
+        double totalCost = getTotalPrice() + shippingCost;
+        return new PaymentInfo(shippingCost, totalCost);
+    }
+
+    private void displayPaymentSummary(PaymentInfo paymentInfo) {
+        System.out.println("Shipping cost: " + paymentInfo.shippingCost + " toman");
+        System.out.println("Total cost (with shipping): " + paymentInfo.totalCost + " toman");
         System.out.println("Your wallet balance: " + customer.getWallet().getAccountBalance() + " toman");
+    }
+
+    private boolean confirmPayment(Scanner scanner, double totalCost) {
         System.out.println("Do you want to confirm payment? (y/n)");
         String confirm = scanner.nextLine().trim().toLowerCase();
 
-        if (confirm.equals("y")) {
-            if (customer.getWallet().getAccountBalance() < totalCost) {
-                System.out.println("Insufficient wallet balance.");
-                return;
-            }
-            Map<Seller, List<Product>> sellerProductsMap = new HashMap<>();
-            for (Product product : products) {
-                sellerProductsMap
-                        .computeIfAbsent(product.getSeller(), k -> new ArrayList<>())
-                        .add(product);
-            }
-            for (Map.Entry<Seller, List<Product>> entry : sellerProductsMap.entrySet()) {
-                Seller seller = entry.getKey();
-                List<Product> sellerProducts = entry.getValue();
-
-                Order order = new Order(sellerProducts, customer, LocalDateTime.now(), selectedAddress);
-                seller.getOrders().add(order);
-
-                double sellerShare = 0;
-                for (Product product : sellerProducts) {
-                    product.setStock(product.getStock() - 1);
-                    sellerShare += product.getPrice() * 0.9;
-                }
-                seller.getWallet().deposit(sellerShare, "Product sold to " + customer.getEmail());
-            }
-
-            customer.getWallet().withdraw(totalCost, "Buying");
-            Order newOrder = new Order(products, customer, LocalDateTime.now(), selectedAddress);
-            customer.getOrders().add(newOrder);
-            clearCart();
-
-            System.out.println("Order completed successfully!");
-        } else {
+        if (!"y".equals(confirm)) {
             System.out.println("Checkout canceled.");
+            return false;
+        }
+
+        if (customer.getWallet().getAccountBalance() < totalCost) {
+            System.out.println("Insufficient wallet balance.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void processPayment(Address address, double totalCost) {
+        Map<Seller, List<Product>> sellerProducts = groupProductsBySeller();
+
+        sellerProducts.forEach((seller, products) -> {
+            createSellerOrder(seller, products, address);
+            processSellerPayment(seller, products);
+        });
+
+        completeCustomerOrder(address, totalCost);
+        clearCart();
+        System.out.println("Order completed successfully!");
+    }
+
+    private Map<Seller, List<Product>> groupProductsBySeller() {
+        Map<Seller, List<Product>> map = new HashMap<>();
+        products.forEach(product -> map.computeIfAbsent(product.getSeller(), k -> new ArrayList<>()).add(product));
+        return map;
+    }
+
+    private void createSellerOrder(Seller seller, List<Product> products, Address address) {
+        Order order = new Order(products, customer, LocalDateTime.now(), address);
+        seller.getOrders().add(order);
+    }
+
+    private void processSellerPayment(Seller seller, List<Product> products) {
+        double sellerShare = products.stream()
+                .mapToDouble(product -> {
+                    product.setStock(product.getStock() - 1);
+                    return product.getPrice() * 0.9;
+                })
+                .sum();
+        seller.getWallet().deposit(sellerShare, "Product sold to " + customer.getEmail());
+    }
+
+    private void completeCustomerOrder(Address address, double totalCost) {
+        customer.getWallet().withdraw(totalCost, "Buying");
+        Order newOrder = new Order(products, customer, LocalDateTime.now(), address);
+        customer.getOrders().add(newOrder);
+    }
+
+    private class PaymentInfo {
+        final double shippingCost;
+        final double totalCost;
+
+        PaymentInfo(double shippingCost, double totalCost) {
+            this.shippingCost = shippingCost;
+            this.totalCost = totalCost;
         }
     }
 
