@@ -71,9 +71,9 @@ public class Wallet {
         while (true) {
             System.out.println("------ Transaction Menu -----");
 
-            List<Transaction> filterTransactions = getFilteredTransactions();
+            List<Transaction> filtered = getFilteredTransactions();
 
-            if (filterTransactions.isEmpty()) {
+            if (filtered.isEmpty()) {
                 System.out.println("No transactions found.");
             } else {
 
@@ -90,7 +90,7 @@ public class Wallet {
                         return transaction.trascationSummary();
                     }
                 };
-                pagination.paginate(filterTransactions, scanner, (transaction, sc) -> {
+                pagination.paginate(filtered, scanner, (transaction, sc) -> {
                     transactionDetails(sc, transaction);
                 });
             }
