@@ -36,11 +36,11 @@ public class UserRepository {
         UserInput input = new UserInput();
 
         System.out.println("-----Sign up Menu-----");
-        input.firstName = getInput(scanner, "Enter your first name:");
-        input.lastName = getInput(scanner, "Enter your last name:");
-        input.email = getValidEmail(scanner);
-        input.password = getValidPassword(scanner);
-        input.phoneNumber = getValidPhoneNumber(scanner);
+        input.setFirstName(getInput(scanner, "Enter your first name:"));
+        input.setLastName(getInput(scanner, "Enter your last name:"));
+        input.setEmail(getValidEmail(scanner));
+        input.setPassword(getValidPassword(scanner));
+        input.setPhoneNumber(getValidPhoneNumber(scanner));
 
         return input;
     }
@@ -77,11 +77,11 @@ public class UserRepository {
 
     private static void createCustomer(UserInput input) {
         Customer customer = new Customer(
-                input.email,
-                input.firstName,
-                input.lastName,
-                input.password,
-                input.phoneNumber);
+                input.getEmail(),
+                input.getFirstName(),
+                input.getLastName(),
+                input.getPassword(),
+                input.getPhoneNumber());
         customers.add(customer);
     }
 
@@ -94,12 +94,12 @@ public class UserRepository {
         String storeName = getInput(scanner, "Enter your Store title:");
 
         SellerSignUpRequest request = new SellerSignUpRequest(
-                input.email,
-                input.firstName,
-                input.lastName,
+                input.getEmail(),
+                input.getFirstName(),
+                input.getLastName(),
                 nationalCode,
-                input.password,
-                input.phoneNumber,
+                input.getPassword(),
+                input.getPhoneNumber(),
                 province,
                 storeName);
 
@@ -186,9 +186,39 @@ public class UserRepository {
 }
 
 class UserInput {
-    public String firstName;
-    public String lastName;
-    public String email;
-    public String password;
-    public String phoneNumber;
+    private String firstName;
+    private String lastName;
+    private String email;
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    private String password;
+    private String phoneNumber;
 }

@@ -225,8 +225,8 @@ public class ShoppingCart {
     }
 
     private class PaymentInfo {
-        final double shippingCost;
-        final double totalCost;
+        private final double shippingCost;
+        private final double totalCost;
 
         PaymentInfo(double shippingCost, double totalCost) {
             this.shippingCost = shippingCost;

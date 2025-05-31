@@ -24,7 +24,7 @@ public class Mobile extends DigitalProduct {
         System.out.println("Rear Camera : " + getRearCamera());
         System.out.println("Network : " + getInternetNetwork());
         System.out.println("Storage : " + getStorage());
-        System.out.println("RAM : " + getRAM() + "}");
+        System.out.println("RAM : " + getRam() + "}");
         System.out.println("Stock : " + getStock());
     }
 
