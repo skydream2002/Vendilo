@@ -37,7 +37,7 @@ public class OrderService {
         printOrderHeader();
         showProductsList(order.getProducts());
         printOrderDetails(order);
-        CustomerEmailIfNeeded(user, order);
+        customerEmailIfNeeded(user, order);
         printMenuOptions(user);
     }
 
@@ -52,7 +52,7 @@ public class OrderService {
         System.out.println("Total Price: " + order.calculateTotalPrice());
     }
 
-    private static void CustomerEmailIfNeeded(User user, Order order) {
+    private static void customerEmailIfNeeded(User user, Order order) {
         if (!(user instanceof Customer)) {
             System.out.println("Customer's email: " + order.getCustomer().getEmail());
         }

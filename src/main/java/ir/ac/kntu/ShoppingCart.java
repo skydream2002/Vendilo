@@ -245,7 +245,7 @@ public class ShoppingCart {
     }
 
     private double handlePriceWithAddress(Address customerAddress) {
-        final double NORMAL_SHIPPING_COST = 30000;
+        final double shippingCost = 30000;
         boolean allInSameProvince = true;
 
         for (Product product : products) {
@@ -256,7 +256,7 @@ public class ShoppingCart {
                 break;
             }
         }
-        return allInSameProvince ? NORMAL_SHIPPING_COST / 3.0 : NORMAL_SHIPPING_COST;
+        return allInSameProvince ? shippingCost / 3.0 : shippingCost;
     }
 
     public List<Product> getProducts() {
