@@ -24,37 +24,70 @@ public class OrderService {
 
     public static void showOrderDetail(User user, Order order, Scanner scanner) {
         while (true) {
-            System.out.println("-------- Order Details ---------");
-            System.out.println("-------- Products List ---------");
+            displayOrderInformation(user, order);
+            int choice = getMenuChoice(scanner);
 
-            showProductsList(order.getProducts());
-            System.out.println("Address: " + order.getShippingAddress().toString());
-            System.out.println("Date: " + order.getOrderDate().toString());
-            System.out.println("Total Price: " + order.calculateTotalPrice());
-            if (!(user instanceof Customer)) {
-                System.out.println("Customer's email : " + order.getCustomer().getEmail());
+            if (!processUserChoice(choice, user, order, scanner)) {
+                break;
             }
-            System.out.println("---- 0. back ----");
-            if (user instanceof Customer) {
-                System.out.println("---- 1. rating ----");
-            }
-            System.out.println("Enter your choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+        }
+    }
 
-            switch (choice) {
-                case 0 -> {
-                    return;
-                }
-                case 1 -> {
-                    if (user instanceof Customer customer) {
-                        rateProducts(customer, order, scanner);
-                    } else {
-                        System.out.println("You are not a customer who can rate.");
-                    }
-                }
-                default -> System.out.println("Invalid chioce.");
-            }
+    private static void displayOrderInformation(User user, Order order) {
+        printOrderHeader();
+        showProductsList(order.getProducts());
+        printOrderDetails(order);
+        CustomerEmailIfNeeded(user, order);
+        printMenuOptions(user);
+    }
+
+    private static void printOrderHeader() {
+        System.out.println("-------- Order Details ---------");
+        System.out.println("-------- Products List ---------");
+    }
+
+    private static void printOrderDetails(Order order) {
+        System.out.println("Address: " + order.getShippingAddress());
+        System.out.println("Date: " + order.getOrderDate());
+        System.out.println("Total Price: " + order.calculateTotalPrice());
+    }
+
+    private static void CustomerEmailIfNeeded(User user, Order order) {
+        if (!(user instanceof Customer)) {
+            System.out.println("Customer's email: " + order.getCustomer().getEmail());
+        }
+    }
+
+    private static void printMenuOptions(User user) {
+        System.out.println("---- 0. back ----");
+        if (user instanceof Customer) {
+            System.out.println("---- 1. rating ----");
+        }
+    }
+
+    private static int getMenuChoice(Scanner scanner) {
+        System.out.print("Enter your choice: ");
+        return scanner.nextInt();
+    }
+
+    private static boolean processUserChoice(int choice, User user, Order order, Scanner scanner) {
+        switch (choice) {
+            case 0:
+                return false;
+            case 1:
+                handleRatingOption(user, order, scanner);
+                return true;
+            default:
+                System.out.println("Invalid choice.");
+                return true;
+        }
+    }
+
+    private static void handleRatingOption(User user, Order order, Scanner scanner) {
+        if (user instanceof Customer customer) {
+            rateProducts(customer, order, scanner);
+        } else {
+            System.out.println("You are not a customer who can rate.");
         }
     }
 
