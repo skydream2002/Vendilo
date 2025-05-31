@@ -245,7 +245,7 @@ public class ShoppingCart {
     }
 
     private double handlePriceWithAddress(Address customerAddress) {
-        final double shippingCost = 30000;
+        double shippingCost = 30000;
         boolean allInSameProvince = true;
 
         for (Product product : products) {
