@@ -1,7 +1,7 @@
 package ir.ac.kntu;
 
 public enum ProductType {
-    DIGITAL_PRODUCT,
+    DIGITAL,
     LAPTOP,
     MOBILE,
     BOOK

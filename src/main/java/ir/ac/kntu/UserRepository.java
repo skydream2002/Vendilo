@@ -61,7 +61,7 @@ public class UserRepository {
     private static String getValidPassword(Scanner scanner) {
         String password = getInput(scanner, "Enter password:");
         while (!isStrongPassword(password)) {
-            System.out.println("Password must be at least 8 characters long and contain...");
+            System.out.println("The password must be at least 8 characters long and contain at least one lowercase and uppercase letter, \nnumber, and special character.");
             password = getInput(scanner, "Please enter a valid password:");
         }
         return password;

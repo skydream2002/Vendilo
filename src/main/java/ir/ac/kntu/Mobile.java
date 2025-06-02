@@ -8,7 +8,7 @@ public class Mobile extends DigitalProduct {
     private String internetNetwork;
 
     public Mobile() {
-        super.setType(ProductType.DIGITAL_PRODUCT);
+        super.setType(ProductType.DIGITAL);
     }
 
     @Override

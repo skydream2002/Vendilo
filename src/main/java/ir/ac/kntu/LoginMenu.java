@@ -18,7 +18,6 @@ public class LoginMenu {
             switch (choice) {
                 case 1 -> login();
                 case 2 -> {
-                    scanner.nextLine();
                     System.out.println("Enter your role : (customer or seller)");
                     System.out.println("supporter can't sign up");
                     String role = scanner.nextLine().trim().toLowerCase();

@@ -8,7 +8,7 @@ public class Laptop extends DigitalProduct {
     private boolean hasHaveWebcam;
 
     public Laptop() {
-        super.setType(ProductType.DIGITAL_PRODUCT);
+        super.setType(ProductType.DIGITAL);
     }
 
     @Override
