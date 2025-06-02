@@ -82,14 +82,14 @@ public class SearchProduct {
     }
 
     private static List<Product> filterProducts(SearchCriteria criteria) {
-        return getAllProducts().stream()
+        return new ArrayList<>(getAllProducts().stream()
                 .filter(product -> criteria.getName() == null
                         || product.getName().toLowerCase().contains(criteria.getName().toLowerCase()))
                 .filter(product -> criteria.getCategory() == null
                         || product.getType().name().equalsIgnoreCase(criteria.getCategory()))
                 .filter(product -> criteria.getMinPrice() == null || product.getPrice() >= criteria.getMinPrice())
                 .filter(product -> criteria.getMaxPrice() == null || product.getPrice() <= criteria.getMaxPrice())
-                .toList();
+                .toList());
     }
 
     private static String selectSortType(Scanner scanner) {
