@@ -50,6 +50,12 @@ public class Mobile extends DigitalProduct {
         System.out.println("Stock:");
         super.setStock(scanner.nextInt());
         scanner.nextLine();
+
+        System.out.println("RAM :");
+        super.setRam(scanner.nextLine());
+
+        System.out.println("Storage :");
+        super.setStorage(scanner.nextLine());
     }
 
     private void setCameraInfo(Scanner scanner) {

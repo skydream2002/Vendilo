@@ -16,6 +16,7 @@ public class Supporter extends User {
             System.out.println("-----------4.back-----------");
             System.out.println("choose :");
             int choice = scanner.nextInt();
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> handleAuthentication(scanner);
@@ -45,7 +46,7 @@ public class Supporter extends User {
             @Override
             public String formatItem(SellerSignUpRequest request) {
                 return "store name : " + request.getStoreName()
-                        + "seller's email : " + request.getEmail();
+                        + " seller's email : " + request.getEmail();
             }
         };
 
@@ -81,6 +82,7 @@ public class Supporter extends User {
 
                     UserRepository.getPendingSellerRequests().remove(request);
                     System.out.println("Request accepted successfully.");
+                    return;
                 }
                 case 2 -> {
                     System.out.println("Enter reason for rejection:");
@@ -88,6 +90,7 @@ public class Supporter extends User {
                     request.setReasonRejection(reason);
 
                     System.out.println("Request rejected. Reason: " + reason);
+                    return;
                 }
                 default -> System.out.println("Invalid selection.");
             }

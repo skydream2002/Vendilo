@@ -15,7 +15,7 @@ public class Book extends Product {
 
     @Override
     public void showDetails() {
-        System.out.println("{----Product Details (Book)----");
+        System.out.println("----Product Details (Book)----");
         System.out.println("Name : " + getName());
         System.out.println("Category : " + getType());
         System.out.println("Author : " + getAuthor());
@@ -25,7 +25,7 @@ public class Book extends Product {
         System.out.println("Pages : " + getPages());
         System.out.println("Genre : " + getGenre());
         System.out.println("Age Group : " + getAgeGroup());
-        System.out.println("ISBN : " + getISBN() + "}");
+        System.out.println("ISBN : " + getISBN());
         System.out.println("Stock : " + getStock());
     }
 

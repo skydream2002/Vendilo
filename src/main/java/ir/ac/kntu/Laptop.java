@@ -13,7 +13,7 @@ public class Laptop extends DigitalProduct {
 
     @Override
     public void showDetails() {
-        System.out.println("{----Product Details (Laptop)----");
+        System.out.println("----Product Details (Laptop)----");
         System.out.println("Name : " + getName());
         System.out.println("Category : " + getType());
         System.out.println("Brand : " + getBrand());
@@ -24,7 +24,7 @@ public class Laptop extends DigitalProduct {
         System.out.println("Bluetooth : " + isHasHaveBluetooth());
         System.out.println("Webcam : " + isHasHaveWebcam());
         System.out.println("Storage : " + getStorage());
-        System.out.println("RAM : " + getRam() + "}");
+        System.out.println("RAM : " + getRam());
         System.out.println("Stock : " + getStock());
     }
 
@@ -49,6 +49,12 @@ public class Laptop extends DigitalProduct {
         System.out.println("Stock:");
         super.setStock(scanner.nextInt());
         scanner.nextLine();
+
+        System.out.println("RAM :");
+        super.setRam(scanner.nextLine());
+
+        System.out.println("Storage :");
+        super.setStorage(scanner.nextLine());
     }
 
     private void readAndSetLaptopSpecificInfo(Scanner scanner) {
@@ -60,6 +66,7 @@ public class Laptop extends DigitalProduct {
 
         System.out.println("Webcam (true/false):");
         setHasHaveWebcam(scanner.nextBoolean());
+        scanner.nextLine();
     }
 
     public String getGPUModel() {

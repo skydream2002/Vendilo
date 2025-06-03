@@ -35,6 +35,7 @@ public class Seller extends User {
             System.out.println("-------5.back------");
             System.out.println("choose:");
             int choice = scanner.nextInt();
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> viewProducts(scanner);
@@ -103,7 +104,13 @@ public class Seller extends User {
             System.out.println("3. Mobile");
             System.out.println("0. back");
 
-            int choice = scanner.nextInt();
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                continue;
+            }
 
             switch (choice) {
                 case 0 -> {
@@ -113,16 +120,19 @@ public class Seller extends User {
                     Book book = new Book();
                     book.addProduct(scanner, this);
                     products.add(book);
+                    System.out.println("Book added.");
                 }
                 case 2 -> {
                     Laptop laptop = new Laptop();
                     laptop.addProduct(scanner, this);
                     products.add(laptop);
+                    System.out.println("Laptop added.");
                 }
                 case 3 -> {
                     Mobile mobile = new Mobile();
                     mobile.addProduct(scanner, this);
                     products.add(mobile);
+                    System.out.println("Mobile added.");
                 }
                 default -> System.out.println("Invalid category.");
             }

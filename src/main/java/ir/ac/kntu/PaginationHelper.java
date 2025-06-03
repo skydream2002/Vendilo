@@ -1,4 +1,4 @@
-package  ir.ac.kntu;
+package ir.ac.kntu;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -23,14 +23,26 @@ public class PaginationHelper<T> {
 
             if ("e".equals(input)) {
                 break;
-            } else if ("n".equals(input) && currentPage < totalPage - 1) {
-                pageHistory.push(currentPage);
-                currentPage++;
-            } else if ("p".equals(input) && currentPage > 0) {
-                pageHistory.push(currentPage);
-                currentPage--;
-            } else if ("b".equals(input) && !pageHistory.isEmpty()) {
-                currentPage = pageHistory.pop();
+            } else if ("n".equals(input)) {
+                if (currentPage < totalPage - 1) {
+                    pageHistory.push(currentPage);
+                    currentPage++;
+                } else {
+                    System.out.println("You are on the last page.");
+                }
+            } else if ("p".equals(input)) {
+                if (currentPage > 0) {
+                    pageHistory.push(currentPage);
+                    currentPage--;
+                } else {
+                    System.out.println("You are on the first page.");
+                }
+            } else if ("b".equals(input)) {
+                if (!pageHistory.isEmpty()) {
+                    currentPage = pageHistory.pop();
+                } else {
+                    System.out.println("nothing to back.");
+                }
             } else if (input.matches("\\d+")) {
                 int selection = Integer.parseInt(input);
                 int index = currentPage * PAGE_SIZE + selection - 1;
@@ -69,4 +81,3 @@ public class PaginationHelper<T> {
         return item.toString();
     }
 }
-
