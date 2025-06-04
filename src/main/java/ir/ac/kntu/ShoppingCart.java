@@ -220,8 +220,9 @@ public class ShoppingCart {
 
     private void completeCustomerOrder(Address address, double totalCost) {
         customer.getWallet().withdraw(totalCost, "Buying");
-        Order newOrder = new Order(products, customer, LocalDateTime.now(), address);
+        Order newOrder = new Order(new ArrayList<>(products), customer, LocalDateTime.now(), address);
         customer.getOrders().add(newOrder);
+        OrderRepository.addOrder(newOrder);
     }
 
     private class PaymentInfo {

@@ -25,7 +25,7 @@ public class UserRepository {
     }
 
     private static boolean isInvalidRole(String role) {
-        if ("support".equals(role)) {
+        if ("supporter".equals(role)) {
             System.out.println("You can't sign up as a supporter");
             return true;
         }

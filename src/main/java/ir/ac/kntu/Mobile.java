@@ -13,7 +13,7 @@ public class Mobile extends DigitalProduct {
 
     @Override
     public void showDetails() {
-        System.out.println("{----Product Details (Mobile)----");
+        System.out.println("----Product Details (Mobile)----");
         System.out.println("Name : " + getName());
         System.out.println("Category : " + getType());
         System.out.println("Brand : " + getBrand());
@@ -24,7 +24,7 @@ public class Mobile extends DigitalProduct {
         System.out.println("Rear Camera : " + getRearCamera());
         System.out.println("Network : " + getInternetNetwork());
         System.out.println("Storage : " + getStorage());
-        System.out.println("RAM : " + getRam() + "}");
+        System.out.println("RAM : " + getRam());
         System.out.println("Stock : " + getStock());
     }
 

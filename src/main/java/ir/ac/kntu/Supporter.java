@@ -31,6 +31,7 @@ public class Supporter extends User {
     }
 
     private void handleAuthentication(Scanner scanner) {
+        while (true) {
         List<SellerSignUpRequest> pendingRequests = UserRepository.getPendingSellerRequests().stream()
                 .filter(request -> request.getReasonRejection() == null)
                 .toList();
@@ -50,9 +51,13 @@ public class Supporter extends User {
             }
         };
 
-        pagination.paginate(pendingRequests, scanner, (request, sc) -> {
-            showRequest(scanner, request);
-        });
+        try {
+            pagination.paginate(pendingRequests, scanner, (request, sc) -> {
+                showRequest(scanner, request);
+            });
+        } catch (ExitPaginationException e) {
+        }
+    }
     }
 
     private void showRequest(Scanner scanner, SellerSignUpRequest request) {
@@ -82,7 +87,7 @@ public class Supporter extends User {
 
                     UserRepository.getPendingSellerRequests().remove(request);
                     System.out.println("Request accepted successfully.");
-                    return;
+                    throw new ExitPaginationException();
                 }
                 case 2 -> {
                     System.out.println("Enter reason for rejection:");
@@ -90,7 +95,7 @@ public class Supporter extends User {
                     request.setReasonRejection(reason);
 
                     System.out.println("Request rejected. Reason: " + reason);
-                    return;
+                    throw new ExitPaginationException();
                 }
                 default -> System.out.println("Invalid selection.");
             }

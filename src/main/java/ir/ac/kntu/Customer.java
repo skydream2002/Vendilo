@@ -25,6 +25,7 @@ public class Customer extends User {
             System.out.println("--------8.back-------");
             System.out.println("choose:");
             int choice = scanner.nextInt();
+            scanner.nextLine();
             switch (choice) {
                 case 1 -> {
                     if (shoppingCart == null) {
@@ -110,12 +111,7 @@ public class Customer extends User {
     }
 
     private void viewOpenSupportRequests(Scanner scanner) {
-        List<CustomerSupportRequest> openRequests = new ArrayList<>();
-        for (CustomerSupportRequest request : supportRequests) {
-            if (!"closed".equalsIgnoreCase(request.getStatus())) {
-                openRequests.add(request);
-            }
-        }
+        List<CustomerSupportRequest> openRequests = new ArrayList<>(supportRequests);
 
         if (openRequests.isEmpty()) {
             System.out.println("You have no open support requests.");
@@ -172,6 +168,7 @@ public class Customer extends User {
 
     public Customer(String email, String firstName, String lastName, String password, String phoneNumber) {
         super(email, firstName, lastName, password, phoneNumber);
+        this.shoppingCart = new ShoppingCart(this);
     }
 
     public List<Address> getAddresses() {
@@ -191,7 +188,7 @@ public class Customer extends User {
     }
 
     public List<Order> getOrders() {
-        return new ArrayList<>(orders);
+        return orders;
     }
 
     public void setOrders(List<Order> orders) {
