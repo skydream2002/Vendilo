@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,8 +13,7 @@ public class SearchProduct {
             System.out.println("1. Search");
             System.out.println("0. Back");
             System.out.print("Choose: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> searching(scanner, customer);
@@ -33,11 +33,12 @@ public class SearchProduct {
         String sortType = selectSortType(scanner);
         sortProducts(filteredProducts, sortType);
 
+        HtmlExporter.exportProductsToHtml(filteredProducts, "search-results.html"); //creat html
+
         PaginationHelper<Product> pagination = new PaginationHelper<>();
         pagination.paginate(filteredProducts, scanner, (product, sc) -> {
             showDetailsAndAddToCart(product, customer, scanner);
         });
-
     }
 
     private static SearchCriteria collectSearchCriteria(Scanner scanner) {
@@ -83,10 +84,18 @@ public class SearchProduct {
 
     private static List<Product> filterProducts(SearchCriteria criteria) {
         return new ArrayList<>(getAllProducts().stream()
-                .filter(product -> criteria.getName() == null
-                        || product.getName().toLowerCase().contains(criteria.getName().toLowerCase().trim()))
-                .filter(product -> criteria.getCategory() == null
-                        || product.getType().name().equalsIgnoreCase(criteria.getCategory().trim()))
+                .filter(product -> {
+                    if (criteria.getName() == null || criteria.getName().isBlank()) return true;
+                    String productName = product.getName().replaceAll("\\s+", "").toLowerCase();
+                    String searchName = criteria.getName().replaceAll("\\s+", "").toLowerCase();
+                    return productName.contains(searchName);
+                })
+                .filter(product -> {
+                    if (criteria.getCategory() == null || criteria.getCategory().isBlank()) return true;
+                    String productCategory = product.getType().name().replaceAll("\\s+", "").toLowerCase();
+                    String searchCategory = criteria.getCategory().replaceAll("\\s+", "").toLowerCase();
+                    return productCategory.contains(searchCategory);
+                })
                 .filter(product -> criteria.getMinPrice() == null || product.getPrice() >= criteria.getMinPrice())
                 .filter(product -> criteria.getMaxPrice() == null || product.getPrice() <= criteria.getMaxPrice())
                 .toList());

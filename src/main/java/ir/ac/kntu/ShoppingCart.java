@@ -1,11 +1,13 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class ShoppingCart {
     private List<Product> products = new ArrayList<>();
@@ -24,8 +26,7 @@ public class ShoppingCart {
             System.out.println("-----------4.Clear cart----------");
             System.out.println("-------------5.Back--------------");
             System.out.println("Choose an option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> viewProducts(scanner);
@@ -209,12 +210,19 @@ public class ShoppingCart {
     }
 
     private void processSellerPayment(Seller seller, List<Product> products) {
-        double sellerShare = products.stream()
-                .mapToDouble(product -> {
-                    product.setStock(product.getStock() - 1);
-                    return product.getPrice() * 0.9;
-                })
-                .sum();
+        Map<Product, Long> productCounts = products.stream()
+                .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
+
+        double sellerShare = 0;
+
+        for (Map.Entry<Product, Long> entry : productCounts.entrySet()) {
+            Product product = entry.getKey();
+            long quantity = entry.getValue();
+
+            product.setStock(product.getStock() - (int) quantity);
+            sellerShare += product.getPrice() * 0.9 * quantity;
+        }
+
         seller.getWallet().deposit(sellerShare, "Product sold to " + customer.getEmail());
     }
 
@@ -236,12 +244,20 @@ public class ShoppingCart {
     }
 
     private boolean checkStockAvailability() {
-        for (Product product : products) {
-            if (product.getStock() <= 0) {
-                System.out.println("Product " + product.getName() + " is out of stock.");
+        Map<Product, Long> productCounts = products.stream()
+                .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
+
+        for (Map.Entry<Product, Long> entry : productCounts.entrySet()) {
+            Product product = entry.getKey();
+            long countInCart = entry.getValue();
+
+            if (product.getStock() < countInCart) {
+                System.out.println("Product " + product.getName() + " has only " + product.getStock() +
+                        " in stock, but you added " + countInCart + " to the cart.");
                 return false;
             }
         }
+
         return true;
     }
 

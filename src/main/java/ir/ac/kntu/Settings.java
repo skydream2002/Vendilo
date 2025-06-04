@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.Scanner;
 
 public class Settings {
@@ -14,8 +15,8 @@ public class Settings {
             System.out.println("- 5. Edit phone number -");
             System.out.println("-------- 0. back -------");
             System.out.println("Select your choice :");
-            int selection = scanner.nextInt();
-            scanner.nextLine();
+            int selection = SafeInput.getInt(scanner);
+
             switch (selection) {
                 case 1 -> editFirstName(scanner, customer);
                 case 2 -> editLastName(scanner, customer);

@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -106,9 +107,8 @@ public class OrderService {
             double rate = -1;
             while (rate < 1 || rate > 5) {
                 System.out.println("Enter your rate (1 to 5):");
-                rate = sc.nextDouble();
-                sc.nextLine();
-
+                rate = SafeInput.getDouble(sc);
+                
                 if (rate < 1 || rate > 5) {
                     System.out.println("Invalid input. Rate must be between 1 and 5.");
                 }
