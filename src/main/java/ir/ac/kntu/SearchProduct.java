@@ -83,10 +83,18 @@ public class SearchProduct {
 
     private static List<Product> filterProducts(SearchCriteria criteria) {
         return new ArrayList<>(getAllProducts().stream()
-                .filter(product -> criteria.getName() == null
-                        || product.getName().toLowerCase().contains(criteria.getName().toLowerCase().trim()))
-                .filter(product -> criteria.getCategory() == null
-                        || product.getType().name().equalsIgnoreCase(criteria.getCategory().trim()))
+                .filter(product -> {
+                    if (criteria.getName() == null || criteria.getName().isBlank()) return true;
+                    String productName = product.getName().replaceAll("\\s+", "").toLowerCase();
+                    String searchName = criteria.getName().replaceAll("\\s+", "").toLowerCase();
+                    return productName.contains(searchName);
+                })
+                .filter(product -> {
+                    if (criteria.getCategory() == null || criteria.getCategory().isBlank()) return true;
+                    String productCategory = product.getType().name().replaceAll("\\s+", "").toLowerCase();
+                    String searchCategory = criteria.getCategory().replaceAll("\\s+", "").toLowerCase();
+                    return productCategory.contains(searchCategory);
+                })
                 .filter(product -> criteria.getMinPrice() == null || product.getPrice() >= criteria.getMinPrice())
                 .filter(product -> criteria.getMaxPrice() == null || product.getPrice() <= criteria.getMaxPrice())
                 .toList());
