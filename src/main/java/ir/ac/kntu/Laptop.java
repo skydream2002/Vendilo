@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.Scanner;
 
 public class Laptop extends DigitalProduct {
@@ -43,12 +44,26 @@ public class Laptop extends DigitalProduct {
         super.setBrand(scanner.nextLine());
 
         System.out.println("Price:");
-        super.setPrice(scanner.nextDouble());
-        scanner.nextLine();
+        while (true) {
+            double price = SafeInput.getDouble(scanner);
+            if (price > 0) {
+                super.setPrice(price);
+                break;
+            } else {
+                System.out.println("Price must be positive.");
+            }
+        }
 
         System.out.println("Stock:");
-        super.setStock(scanner.nextInt());
-        scanner.nextLine();
+        while (true) {
+            int stock = SafeInput.getInt(scanner);
+            if (stock > 0) {
+                super.setStock(stock);
+                break;
+            } else {
+                System.out.println("Stock must be positive.");
+            }
+        }
 
         System.out.println("RAM :");
         super.setRam(scanner.nextLine());
@@ -62,11 +77,10 @@ public class Laptop extends DigitalProduct {
         setGpuModel(scanner.nextLine());
 
         System.out.println("Bluetooth (true/false):");
-        setHasHaveBluetooth(scanner.nextBoolean());
+        setHasHaveBluetooth(SafeInput.getBooleanInput(scanner));
 
         System.out.println("Webcam (true/false):");
-        setHasHaveWebcam(scanner.nextBoolean());
-        scanner.nextLine();
+        setHasHaveWebcam(SafeInput.getBooleanInput(scanner));
     }
 
     public String getGPUModel() {

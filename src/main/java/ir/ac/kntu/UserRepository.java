@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -88,8 +89,7 @@ public class UserRepository {
 
     private static void createSellerRequest(Scanner scanner, UserInput input) {
         System.out.println("Enter your nationalCode:");
-        int nationalCode = scanner.nextInt();
-        scanner.nextLine();
+        int nationalCode = SafeInput.getInt(scanner);
 
         String province = getInput(scanner, "Enter your province:");
         String storeName = getInput(scanner, "Enter your Store title:");

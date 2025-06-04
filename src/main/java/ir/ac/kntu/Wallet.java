@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,23 +38,22 @@ public class Wallet {
             System.out.println("---------- 0. back ------------");
             System.out.println("Enter your choice: ");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             if (choice == 0) {
                 return;
             }
             if (userType == UserType.CUSTOMER && choice == 1) {
                 System.out.println("Enter the amount you want to deposit.");
-                double amount = scanner.nextDouble();
-                scanner.nextLine();
+                double amount = SafeInput.getDouble(scanner);
+
                 System.out.println("Enter the description for transaction");
                 String describtion = scanner.nextLine();
                 deposit(amount, describtion);
             } else if (userType == UserType.SELLER && choice == 1) {
                 System.out.println("Enter the amount you want to withdraw.");
-                double amount = scanner.nextDouble();
-                scanner.nextLine();
+                double amount = SafeInput.getDouble(scanner);
+
                 System.out.println("Enter the description for transaction");
                 String description = scanner.nextLine();
                 withdraw(amount, description);
@@ -127,8 +127,7 @@ public class Wallet {
             System.out.println(transaction);
             System.out.println("----------- 0. back -----------");
             System.out.println("Enter your selection: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 0 -> {

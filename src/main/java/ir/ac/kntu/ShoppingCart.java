@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,8 +25,7 @@ public class ShoppingCart {
             System.out.println("-----------4.Clear cart----------");
             System.out.println("-------------5.Back--------------");
             System.out.println("Choose an option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> viewProducts(scanner);

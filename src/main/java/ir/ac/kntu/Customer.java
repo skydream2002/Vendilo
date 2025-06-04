@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -24,8 +25,7 @@ public class Customer extends User {
             System.out.println("------7.Support------");
             System.out.println("--------8.back-------");
             System.out.println("choose:");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
             switch (choice) {
                 case 1 -> {
                     if (shoppingCart == null) {
@@ -60,8 +60,7 @@ public class Customer extends User {
             System.out.println("2. View my open requests");
             System.out.println("0. Back");
             System.out.print("Choose: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> submitSupportRequest(scanner);
@@ -83,8 +82,7 @@ public class Customer extends User {
             System.out.println("4. Order not received");
             System.out.println("0. back");
 
-            int categoryChoice = scanner.nextInt();
-            scanner.nextLine();
+            int categoryChoice = SafeInput.getInt(scanner);
 
             if (categoryChoice == 0) {
                 return;
@@ -144,8 +142,7 @@ public class Customer extends User {
             }
             System.out.println("---- 0. back ----");
             System.out.println("Choose :");
-            int selection = scanner.nextInt();
-            scanner.nextLine();
+            int selection = SafeInput.getInt(scanner);
             if (selection == 0) {
                 return;
             }

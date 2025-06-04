@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,8 +16,7 @@ public class Supporter extends User {
             System.out.println("----------3.Orders----------");
             System.out.println("-----------4.back-----------");
             System.out.println("choose :");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> handleAuthentication(scanner);
@@ -68,8 +68,7 @@ public class Supporter extends User {
             System.out.println("---- 2. Reject request ----");
             System.out.println("---- 0. back ----");
             System.out.println("Choose : ");
-            int selection = scanner.nextInt();
-            scanner.nextLine();
+            int selection = SafeInput.getInt(scanner);
 
             switch (selection) {
                 case 0 -> {
@@ -110,8 +109,7 @@ public class Supporter extends User {
             System.out.println("3. Filter by category");
             System.out.println("0. Back");
             System.out.print("Choose: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> displayRequests(SupportRepository.getAllRequests(), scanner);
@@ -164,8 +162,7 @@ public class Supporter extends User {
 
         System.out.println("1. Respond and update status");
         System.out.println("0. Back");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        int choice = SafeInput.getInt(scanner);
 
         if (choice == 1) {
             System.out.println("Enter your response:");
@@ -188,8 +185,7 @@ public class Supporter extends User {
             System.out.println("3. Filter by date range");
             System.out.println("0. Back");
             System.out.print("Choose: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> OrderService.orderMenu(this, OrderRepository.getAllOrders(), scanner);

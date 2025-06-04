@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -8,7 +9,7 @@ public class Address {
     private String province;
     private String city;
     private String description;
-
+    
     public void addressMenu(Customer customer, Scanner scanner) {
         while (true) {
             System.out.println("----- Address menu -----");
@@ -18,8 +19,7 @@ public class Address {
             System.out.println("---- 4.Edit address ----");
             System.out.println("------- 5. back --------");
             System.out.println("Enter your selection :");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> addingAddress(scanner, customer);

@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.Scanner;
 
 public class LoginMenu {
@@ -12,8 +13,7 @@ public class LoginMenu {
             System.out.println("-------2.Sign up-------");
             System.out.println("--------3.Exit---------");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> login();

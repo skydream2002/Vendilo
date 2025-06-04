@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,8 +13,7 @@ public class SearchProduct {
             System.out.println("1. Search");
             System.out.println("0. Back");
             System.out.print("Choose: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> searching(scanner, customer);
@@ -33,11 +33,12 @@ public class SearchProduct {
         String sortType = selectSortType(scanner);
         sortProducts(filteredProducts, sortType);
 
+        HtmlExporter.exportProductsToHtml(filteredProducts, "search-results.html"); //creat html
+
         PaginationHelper<Product> pagination = new PaginationHelper<>();
         pagination.paginate(filteredProducts, scanner, (product, sc) -> {
             showDetailsAndAddToCart(product, customer, scanner);
         });
-
     }
 
     private static SearchCriteria collectSearchCriteria(Scanner scanner) {

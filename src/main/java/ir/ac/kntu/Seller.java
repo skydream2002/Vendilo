@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.SafeInput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -34,8 +35,7 @@ public class Seller extends User {
             System.out.println("------4.Orders-----");
             System.out.println("-------5.back------");
             System.out.println("choose:");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> viewProducts(scanner);
@@ -75,22 +75,22 @@ public class Seller extends User {
             System.out.println("--- 2. Decrease Stock ---");
             System.out.println("--- 0. back ---");
             System.out.println("Choose :");
-            int selection = scanner.nextInt();
-            scanner.nextLine();
+            int selection = SafeInput.getInt(scanner);
+
             switch (selection) {
                 case 0 -> {
                     return;
                 }
                 case 1 -> {
                     System.out.println("Enter count :");
-                    int count = scanner.nextInt();
-                    scanner.nextLine();
+                    int count = SafeInput.getInt(scanner);
+
                     product.increaseStock(count);
                 }
                 case 2 -> {
                     System.out.println("Enter count :");
-                    int count = scanner.nextInt();
-                    scanner.nextLine();
+                    int count = SafeInput.getInt(scanner);
+
                     product.decreaseStock(count);
                 }
                 default -> System.out.println("Invalid selection.");
