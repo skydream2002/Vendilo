@@ -43,7 +43,6 @@ public class Seller extends User {
                 case 3 -> wallet.walletMenu(scanner);
                 case 4 -> OrderService.orderMenu(this, orders, scanner);
                 case 5 -> {
-                    scanner.close();
                     return;
                 }
                 default -> System.out.println("invalid choice");
@@ -77,6 +76,7 @@ public class Seller extends User {
             System.out.println("--- 0. back ---");
             System.out.println("Choose :");
             int selection = scanner.nextInt();
+            scanner.nextLine();
             switch (selection) {
                 case 0 -> {
                     return;
@@ -84,11 +84,13 @@ public class Seller extends User {
                 case 1 -> {
                     System.out.println("Enter count :");
                     int count = scanner.nextInt();
+                    scanner.nextLine();
                     product.increaseStock(count);
                 }
                 case 2 -> {
                     System.out.println("Enter count :");
                     int count = scanner.nextInt();
+                    scanner.nextLine();
                     product.decreaseStock(count);
                 }
                 default -> System.out.println("Invalid selection.");

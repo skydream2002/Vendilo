@@ -40,11 +40,12 @@ public abstract class Product {
     public void decreaseStock(int count) {
         if (count > stock) {
             System.out.println("Cannot decrease stock by more than available amount.");
+        } else {
+            for (int i = 0; i < count; i++) {
+                stock--;
+            }
+            System.out.println("Product inventory decreased by " + count + ".");
         }
-        for (int i = 0; i < count; i++) {
-            stock--;
-        }
-        System.out.println("Product inventory decreased by " + count + ".");
     }
 
     public String getName() {

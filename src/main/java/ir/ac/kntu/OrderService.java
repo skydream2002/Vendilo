@@ -25,7 +25,7 @@ public class OrderService {
     public static void showOrderDetail(User user, Order order, Scanner scanner) {
         while (true) {
             displayOrderInformation(user, order);
-            int choice = getMenuChoice(scanner);
+            String choice = getMenuChoice(scanner);
 
             if (!processUserChoice(choice, user, order, scanner)) {
                 break;
@@ -61,25 +61,24 @@ public class OrderService {
     private static void printMenuOptions(User user) {
         System.out.println("---- 0. back ----");
         if (user instanceof Customer) {
-            System.out.println("---- 1. rating ----");
+            System.out.println("---- R. rating ----");
         }
     }
 
-    private static int getMenuChoice(Scanner scanner) {
+    private static String getMenuChoice(Scanner scanner) {
         System.out.print("Enter your choice: ");
-        return scanner.nextInt();
+        return scanner.nextLine();
     }
 
-    private static boolean processUserChoice(int choice, User user, Order order, Scanner scanner) {
-        switch (choice) {
-            case 0:
-                return false;
-            case 1:
-                handleRatingOption(user, order, scanner);
-                return true;
-            default:
-                System.out.println("Invalid choice.");
-                return true;
+    private static boolean processUserChoice(String choice, User user, Order order, Scanner scanner) {
+        if ("0".equals(choice)) {
+            return false;
+        } else if ("R".equals(choice)) {
+            handleRatingOption(user, order, scanner);
+            return true;
+        } else {
+            System.out.println("Invalid choice.");
+            return false;
         }
     }
 

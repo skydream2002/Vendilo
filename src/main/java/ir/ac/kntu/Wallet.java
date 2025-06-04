@@ -70,30 +70,7 @@ public class Wallet {
     public void transactionMenu(Scanner scanner) {
         while (true) {
             System.out.println("------ Transaction Menu -----");
-
-            List<Transaction> filtered = getFilteredTransactions();
-
-            if (filtered.isEmpty()) {
-                System.out.println("No transactions found.");
-            } else {
-
-                if (filterStartDate != null && filterEndDate != null) {
-                    System.out.println("Filter active: " + filterStartDate.toLocalDate()
-                            + " to " + filterEndDate.toLocalDate());
-                } else {
-                    System.out.println("Filter not active.");
-                }
-
-                PaginationHelper<Transaction> pagination = new PaginationHelper<>() {
-                    @Override
-                    public String formatItem(Transaction transaction) {
-                        return transaction.trascationSummary();
-                    }
-                };
-                pagination.paginate(filtered, scanner, (transaction, sc) -> {
-                    transactionDetails(sc, transaction);
-                });
-            }
+            System.out.println("1. Show transactions");
             System.out.println("F. Filter by date range.");
             System.out.println("C. Clear filter.");
             System.out.println("0. Back");
@@ -105,13 +82,42 @@ public class Wallet {
                 case "0" -> {
                     return;
                 }
+                case "1" -> filtering(scanner);
                 case "f" -> {
                     setFilterRange(scanner);
                     System.out.println("Filter applied successfully.");
                 }
-                case "c" -> clearFilter();
+                case "c" -> {
+                    clearFilter();
+                    System.out.println("Filter cleared.");
+                }
                 default -> System.out.println("Invalid choice!");
             }
+        }
+    }
+
+    private void filtering(Scanner scanner) {
+        List<Transaction> filtered = getFilteredTransactions();
+        if (filtered.isEmpty()) {
+            System.out.println("No transactions found for the current filter.");
+        } else {
+
+            if (filterStartDate != null && filterEndDate != null) {
+                System.out.println("Filter active: " + filterStartDate.toLocalDate()
+                        + " to " + filterEndDate.toLocalDate());
+            } else {
+                System.out.println("No date filter applied.");
+            }
+
+            PaginationHelper<Transaction> pagination = new PaginationHelper<>() {
+                @Override
+                public String formatItem(Transaction transaction) {
+                    return transaction.trascationSummary();
+                }
+            };
+            pagination.paginate(filtered, scanner, (transaction, sc) -> {
+                transactionDetails(sc, transaction);
+            });
         }
     }
 
@@ -185,10 +191,9 @@ public class Wallet {
 
         accountBalance += amount;
         transactions.add(new Transaction(amount, "Deposit", LocalDateTime.now(), description));
-        System.out.println("The deposit was successful.");
     }
 
-    public void withdraw(double amount, String describtion) {
+    public void withdraw(double amount, String description) {
         if (amount <= 0) {
             System.out.println("Amount must be greater than zero.");
             return;
@@ -196,7 +201,7 @@ public class Wallet {
 
         if (accountBalance >= amount) {
             accountBalance -= amount;
-            transactions.add(new Transaction(-amount, "Withdraw", LocalDateTime.now(), describtion));
+            transactions.add(new Transaction(-amount, "Withdraw", LocalDateTime.now(), description));
             System.out.println("Paid " + amount + " from your wallet.\nRemaining amount :" + accountBalance);
         } else {
             System.out.println("Insufficient wallet balance!");

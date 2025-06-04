@@ -116,6 +116,7 @@ public class Address {
 
         PaginationHelper<Address> pagination = new PaginationHelper<>();
         pagination.paginate(addresses, scanner, (address, sc) -> {
+            showAddressDetails(customer);
         });
     }
 

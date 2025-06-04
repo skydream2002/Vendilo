@@ -48,6 +48,7 @@ public class PaginationHelper<T> {
                 int index = currentPage * PAGE_SIZE + selection - 1;
                 if (index >= 0 && index < items.size()) {
                     onItemSelected.accept(items.get(index), scanner);
+                    return;
                 } else {
                     System.out.println("Invalid selection.");
                 }
