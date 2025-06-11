@@ -9,9 +9,10 @@ public class DiscountByValue extends Discount {
     @Override
     public void showDiscountDetails(Scanner scanner) {
         while (true) {
-            System.out.println("--- Discount by value ----");
+            System.out.println("===== Discount By Value Details =====");
             System.out.println(this.getSummary());
-            System.out.println(" value : " + value);
+            System.out.printf("Value: %.2f\n", value);
+            System.out.printf("Minimum Order Price to apply: %.2f\n", value * 10);
             System.out.println("--- 0.back ---");
             int selection = SafeInput.getInt(scanner);
             if (selection == 0) {

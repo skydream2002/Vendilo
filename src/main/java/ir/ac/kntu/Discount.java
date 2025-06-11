@@ -9,7 +9,7 @@ public abstract class Discount {
     public abstract void showDiscountDetails(Scanner scanner);
 
     public String getSummary() {
-        return "Code: " + code + " | usage limit : " + usageLimit;
+        return "Code: " + code + " | Remaining uses : " + usageLimit;
     }
 
     public Discount(String code, int usageLimit) {

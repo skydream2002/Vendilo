@@ -9,9 +9,9 @@ public class DiscountByPercentage extends Discount {
     @Override
     public void showDiscountDetails(Scanner scanner) {
         while (true) {
-            System.out.println("--- Discount by percentage ----");
+            System.out.println("===== Discount By percentage Details =====");
             System.out.println(this.getSummary());
-            System.out.println(" percentage : " + percentage);
+            System.out.println(" percentage : %" + percentage);
             System.out.println("--- 0.back ---");
             int selection = SafeInput.getInt(scanner);
             if (selection == 0) {
