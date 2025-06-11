@@ -11,6 +11,7 @@ public class Customer extends User {
     private List<Order> orders = new ArrayList<>();
     private final Wallet wallet = new Wallet(UserType.CUSTOMER);
     private List<CustomerSupportRequest> supportRequests = new ArrayList<>();
+    private List<Discount> discounts = new ArrayList<>();
 
     @Override
     public void usersMenu(Scanner scanner) {
@@ -23,7 +24,8 @@ public class Customer extends User {
             System.out.println("------5.Orders-------");
             System.out.println("------6.Setting------");
             System.out.println("------7.Support------");
-            System.out.println("--------8.back-------");
+            System.out.println("--8.Discount codes --");
+            System.out.println("--------9.back-------");
             System.out.println("choose:");
             int choice = SafeInput.getInt(scanner);
             switch (choice) {
@@ -45,7 +47,8 @@ public class Customer extends User {
                     setting.settingMenu(this, scanner);
                 }
                 case 7 -> supportMenu(scanner);
-                case 8 -> {
+                case 8 -> discountMenu(scanner);
+                case 9 -> {
                     return;
                 }
                 default -> System.out.println("invalid choice.");
@@ -167,6 +170,27 @@ public class Customer extends User {
         super(email, firstName, lastName, password, phoneNumber);
         this.shoppingCart = new ShoppingCart(this);
     }
+
+    private void discountMenu(Scanner scanner) {
+    List<Discount> activeDiscounts = discounts;
+
+    if (activeDiscounts.isEmpty()) {
+        System.out.println("No active discount codes.");
+        return;
+    }
+
+    PaginationHelper<Discount> pagination = new PaginationHelper<>() {
+        @Override
+        public String formatItem(Discount discount) {
+            return discount.getSummary();
+        }
+    };
+
+    pagination.paginate(activeDiscounts, scanner, (discount, sc) -> {
+        discount.showDiscountDetails(scanner);
+    });
+}
+
 
     public List<Address> getAddresses() {
         return addresses;
