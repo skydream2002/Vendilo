@@ -7,17 +7,23 @@ public class DiscountByPercentage extends Discount {
     private double percentage;
 
     @Override
-    public void showDiscountDetails(Scanner scanner) {
+    public void showDiscountDetails(Customer customer, Scanner scanner) {
         while (true) {
             System.out.println("===== Discount By percentage Details =====");
             System.out.println(this.getSummary());
             System.out.println(" percentage : %" + percentage);
+            System.out.println("--- 1. Apply this discount ---");
             System.out.println("--- 0.back ---");
             int selection = SafeInput.getInt(scanner);
-            if (selection == 0) {
-                return;
-            } else {
-                System.out.println("Invalid selection.");
+            
+            switch (selection) {
+                case 1 -> {
+                    customer.setSelectedDiscount(this);
+                }
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid selection.");
             }
         }
     }

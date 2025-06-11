@@ -6,7 +6,7 @@ public abstract class Discount {
     private String code;
     private int usageLimit;
 
-    public abstract void showDiscountDetails(Scanner scanner);
+    public abstract void showDiscountDetails(Customer customer, Scanner scanner);
 
     public String getSummary() {
         return "Code: " + code + " | Remaining uses : " + usageLimit;

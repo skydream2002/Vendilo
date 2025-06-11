@@ -1,6 +1,9 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
+import main.java.ir.ac.kntu.Discount;
+import main.java.ir.ac.kntu.DiscountByPercentage;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,11 +152,68 @@ public class ShoppingCart {
         PaymentInfo paymentInfo = calculatePaymentInfo(selectedAddress);
         displayPaymentSummary(paymentInfo);
 
-        if (!confirmPayment(scanner, paymentInfo.totalCost)) {
+        handleDiscountSelection(scanner);
+
+        double finalCost = applyingDiscount(paymentInfo);
+        if (finalCost == -1) {
+            finalCost = paymentInfo.totalCost;
+        }
+
+        if (!confirmPayment(scanner, finalCost)) {
             return;
         }
 
-        processPayment(selectedAddress, paymentInfo.totalCost);
+        processPayment(selectedAddress, finalCost);
+    }
+
+    private double applyingDiscount(PaymentInfo paymentInfo) {
+        if (!isApplyDiscount()) {
+            return -1;
+        }
+
+        double finalCost;
+        Discount discount = customer.getSelectedDiscount();
+
+        if (discount instanceof DiscountByValue valueDiscount) {
+            finalCost = paymentInfo.totalCost - valueDiscount.getValue();
+        } else if (discount instanceof DiscountByPercentage percentageDiscount) {
+            finalCost = paymentInfo.totalCost - (getTotalPrice() * percentageDiscount.getPercentage()) / 100;
+        } else {
+            return -1;
+        }
+
+        System.out.println("Total cost with discount : " + finalCost);
+        return finalCost;
+    }
+
+    private void handleDiscountSelection(Scanner scanner) {
+        System.out.println("Do you want to apply a discount? (y/n)");
+        String selection = scanner.nextLine().trim().toLowerCase();
+
+        if (selection.equals("y")) {
+            customer.discountMenu(scanner);
+        } else if (!selection.equals("n")) {
+            System.out.println("Invalid selection.");
+            handleDiscountSelection(scanner);
+        }
+    }
+
+    private boolean isApplyDiscount() {
+        if (customer.getSelectedDiscount() == null) {
+            System.out.println("No discount selected.");
+            return false;
+        }
+        if (customer.getSelectedDiscount().getusageLimit() <= 0) {
+            System.out.println("Discount code is out of stock.");
+            return false;
+        }
+        if (customer.getSelectedDiscount() instanceof DiscountByValue discount) {
+            if (!(discount.getValue() * 10 < getTotalPrice())) {
+                System.out.println("The purchase must be more than ten times the discount.");
+                return false;
+            }
+        }
+        return true;
     }
 
     private PaymentInfo calculatePaymentInfo(Address address) {

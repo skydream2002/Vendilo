@@ -1,6 +1,8 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
+import main.java.ir.ac.kntu.Discount;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,6 +14,7 @@ public class Customer extends User {
     private final Wallet wallet = new Wallet(UserType.CUSTOMER);
     private List<CustomerSupportRequest> supportRequests = new ArrayList<>();
     private List<Discount> discounts = new ArrayList<>();
+    private Discount selectedDiscount;
 
     @Override
     public void usersMenu(Scanner scanner) {
@@ -169,28 +172,54 @@ public class Customer extends User {
     public Customer(String email, String firstName, String lastName, String password, String phoneNumber) {
         super(email, firstName, lastName, password, phoneNumber);
         this.shoppingCart = new ShoppingCart(this);
+        selectedDiscount = null;
     }
 
-    private void discountMenu(Scanner scanner) {
-    List<Discount> activeDiscounts = discounts;
+    public void discountMenu(Scanner scanner) {
+        List<Discount> activeDiscounts = discounts;
 
-    if (activeDiscounts.isEmpty()) {
-        System.out.println("No active discount codes.");
-        return;
-    }
-
-    PaginationHelper<Discount> pagination = new PaginationHelper<>() {
-        @Override
-        public String formatItem(Discount discount) {
-            return discount.getSummary();
+        if (activeDiscounts.isEmpty()) {
+            System.out.println("No active discount codes.");
+            return;
         }
-    };
 
-    pagination.paginate(activeDiscounts, scanner, (discount, sc) -> {
-        discount.showDiscountDetails(scanner);
-    });
-}
+        if (selectedDiscount != null) {
+            System.out.println("Currently selected discount: " + selectedDiscount.getSummary());
+            System.out.println("Do you want to:");
+            System.out.println("1. Keep current discount");
+            System.out.println("2. Remove discount");
+            System.out.println("3. Select a new one");
+            System.out.print("Enter choice (1/2/3): ");
+            String input = scanner.nextLine().trim();
 
+            switch (input) {
+                case "1":
+                    System.out.println("Keeping current discount.");
+                    return;
+                case "2":
+                    setSelectedDiscount(null);
+                    System.out.println("Discount removed.");
+                    return;
+                case "3":
+                    // proceed to selection menu
+                    break;
+                default:
+                    System.out.println("Invalid input.");
+                    return;
+            }
+        }
+
+        PaginationHelper<Discount> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(Discount discount) {
+                return discount.getSummary();
+            }
+        };
+
+        pagination.paginate(activeDiscounts, scanner, (discount, sc) -> {
+            discount.showDiscountDetails(this, scanner);
+        });
+    }
 
     public List<Address> getAddresses() {
         return addresses;
@@ -226,5 +255,17 @@ public class Customer extends User {
 
     public Wallet getWallet() {
         return wallet;
+    }
+
+    public Discount getSelectedDiscount() {
+        return selectedDiscount;
+    }
+
+    public void setSelectedDiscount(Discount selectedDiscount) {
+        this.selectedDiscount = selectedDiscount;
+    }
+
+    public void clearSelectedDiscount() {
+        this.selectedDiscount = null;
     }
 }
