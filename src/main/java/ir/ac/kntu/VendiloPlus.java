@@ -6,6 +6,9 @@ import java.time.Period;
 public class VendiloPlus {
     private LocalDate expirationDate;
 
+    public VendiloPlus() {
+    }
+
     public VendiloPlus(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
     }

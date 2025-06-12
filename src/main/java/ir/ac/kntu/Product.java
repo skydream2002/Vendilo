@@ -13,7 +13,7 @@ public abstract class Product {
     private int stock;
     private Map<String, Double> ratings = new HashMap<>();
 
-    public abstract void showDetails();
+    public abstract void showDetails(User user);
 
     @Override
     public String toString() {

@@ -16,12 +16,18 @@ public class Book extends Product {
     }
 
     @Override
-    public void showDetails() {
+    public void showDetails(User user) {
+        double finalPrice = getPrice();
+        if (user instanceof Customer customer) {
+            finalPrice = customer.getVendoliPlus().isActive()
+                        ? getPrice() * 0.95
+                        : getPrice();
+        }
         System.out.println("----Product Details (Book)----");
         System.out.println("Name : " + getName());
         System.out.println("Category : " + getType());
         System.out.println("Author : " + getAuthor());
-        System.out.println("Price : " + getPrice());
+        System.out.println("Price : " + finalPrice);
         System.out.println("Seller's Name : " + getSeller().getFirstName() + " " + getSeller().getLastName());
         System.out.println("Rating Average : " + getAverageRating());
         System.out.println("Pages : " + getPages());

@@ -17,6 +17,10 @@ public class Order {
         this.products = products;
     }
 
+    public Order(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
     public double calculateTotalPrice() {
         return products.stream().mapToDouble(Product::getPrice).sum();
     }

@@ -70,7 +70,7 @@ public class Seller extends User {
 
     private void changeStockAmount(Scanner scanner, Product product) {
         while (true) {
-            product.showDetails();
+            product.showDetails(this);
             System.out.println("--- 1. Increase Stock ---");
             System.out.println("--- 2. Decrease Stock ---");
             System.out.println("--- 0. back ---");

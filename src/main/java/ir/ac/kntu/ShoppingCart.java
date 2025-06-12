@@ -1,9 +1,6 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
-import main.java.ir.ac.kntu.Discount;
-import main.java.ir.ac.kntu.DiscountByPercentage;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,13 +58,24 @@ public class ShoppingCart {
             return;
         }
 
-        double totalPrice = getTotalPrice();
+        double totalPrice = customer.getVendoliPlus().isActive() ? getTotalPrice() * 0.95 : getTotalPrice();
         System.out.println("Total price : " + totalPrice + "toman");
 
-        PaginationHelper<Product> pagination = new PaginationHelper();
+        PaginationHelper<Product> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(Product product) {
+                double finalPrice = customer.getVendoliPlus().isActive()
+                        ? product.getPrice() * 0.95
+                        : product.getPrice();
+
+                return product.getName() +
+                        " | Price : " + finalPrice + " toman" +
+                        " | Category : " + product.getType().name();
+            }
+        };
         pagination.paginate(products, scanner, (product, sc) -> {
             while (true) {
-                product.showDetails();
+                product.showDetails(customer);
                 System.out.println("----- 1. Back -----");
                 System.out.print("Choose: ");
                 String choice = sc.nextLine();
@@ -126,13 +134,14 @@ public class ShoppingCart {
     }
 
     public void checkout(Scanner scanner) {
+        double totalCost = customer.getVendoliPlus().isActive() ? getTotalPrice() * 0.95 : getTotalPrice();
         if (products.isEmpty()) {
             System.out.println("Shopping cart is empty.");
             return;
         }
         while (true) {
             System.out.println("---- Checkout Menu ----");
-            System.out.println("--- Total Price : " + getTotalPrice());
+            System.out.println("--- Total Price : " + totalCost);
 
             Address selectedAddress = selectAddressWithPagination(scanner);
             if (selectedAddress == null) {
@@ -217,8 +226,9 @@ public class ShoppingCart {
     }
 
     private PaymentInfo calculatePaymentInfo(Address address) {
+        double totalProductPrice = customer.getVendoliPlus().isActive() ? getTotalPrice() * 0.95 : getTotalPrice();
         double shippingCost = handlePriceWithAddress(address);
-        double totalCost = getTotalPrice() + shippingCost;
+        double totalCost = totalProductPrice + shippingCost;
         return new PaymentInfo(shippingCost, totalCost);
     }
 
@@ -241,7 +251,6 @@ public class ShoppingCart {
             System.out.println("Insufficient wallet balance.");
             return false;
         }
-
         return true;
     }
 
@@ -333,7 +342,12 @@ public class ShoppingCart {
                 break;
             }
         }
-        return allInSameProvince ? shippingCost / 3.0 : shippingCost;
+
+        if (customer.getVendoliPlus().isActive()) {
+            return allInSameProvince ? 0 : shippingCost / 3.0;
+        } else {
+            return allInSameProvince ? shippingCost / 3.0 : shippingCost;
+        }
     }
 
     public List<Product> getProducts() {

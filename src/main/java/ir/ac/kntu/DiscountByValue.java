@@ -1,8 +1,6 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
-import main.java.ir.ac.kntu.Discount;
-
 import java.util.Scanner;
 
 public class DiscountByValue extends Discount {

@@ -1,8 +1,8 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
-import main.java.ir.ac.kntu.Discount;
 
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +15,7 @@ public class Customer extends User {
     private List<CustomerSupportRequest> supportRequests = new ArrayList<>();
     private List<Discount> discounts = new ArrayList<>();
     private Discount selectedDiscount;
+    private VendiloPlus vendoliPlus = new VendiloPlus();
 
     @Override
     public void usersMenu(Scanner scanner) {
@@ -28,7 +29,8 @@ public class Customer extends User {
             System.out.println("------6.Setting------");
             System.out.println("------7.Support------");
             System.out.println("--8.Discount codes --");
-            System.out.println("--------9.back-------");
+            System.out.println("---- 9.Vendilo + ----");
+            System.out.println("--------0.back-------");
             System.out.println("choose:");
             int choice = SafeInput.getInt(scanner);
             switch (choice) {
@@ -51,7 +53,8 @@ public class Customer extends User {
                 }
                 case 7 -> supportMenu(scanner);
                 case 8 -> discountMenu(scanner);
-                case 9 -> {
+                case 9 -> vendoliPlusMenu(scanner);
+                case 0 -> {
                     return;
                 }
                 default -> System.out.println("invalid choice.");
@@ -221,6 +224,117 @@ public class Customer extends User {
         });
     }
 
+    private void vendoliPlusMenu(Scanner scanner) {
+        while (true) {
+            printMenuTopics();
+            int choice = SafeInput.getInt(scanner);
+
+            if (!handleChoice(choice, scanner)) {
+                return;
+            }
+        }
+    }
+
+    private void printMenuTopics() {
+        System.out.println("========= Vendilo + ========");
+        System.out.println("---- 1.Buy subscription ----");
+        System.out.println("--- 2.Subscription status---");
+        System.out.println("--------- 0.back -----------");
+        System.out.println("Enter your choice :");
+    }
+
+    private boolean handleChoice(int number, Scanner scanner) {
+        switch (number) {
+            case 1 -> {
+                buySubscription(scanner);
+                return true;
+            }
+            case 2 -> {
+                subscriptionStatus(scanner);
+                return true;
+            }
+            case 0 -> {
+                return false;
+            }
+            default -> {
+                return true;
+            }
+        }
+    }
+
+    private void buySubscription(Scanner scanner) {
+        System.out.println("==== Vendilo subscriptions ====");
+        System.out.println("----- 1. One month(2000) ------");
+        System.out.println("----- 2.Three month(5000)-----");
+        System.out.println("------ 3. One year(19000)------");
+        System.out.println("---------- 0. back ------------");
+
+        int selection = SafeInput.getInt(scanner);
+        double price = switch (selection) {
+                        case 1 -> 2000;
+                        case 2 -> 5000;
+                        case 3 -> 19000;
+                        default -> 0;
+        };
+
+        if (!confirmPayment(scanner, price)) {
+            return;
+        }
+        handleBuySubscription(selection);
+    }
+
+    private void handleBuySubscription(int number) {
+        switch (number) {
+            case 1 -> { 
+                wallet.withdraw(2000, "buy 1 month vendilo +");
+                Period oneMonth = Period.ofMonths(1);
+                vendoliPlus.extendSubscription(oneMonth);
+            }
+            case 2 -> {
+                wallet.withdraw(5000, "buy 3 month vendilo +");
+                Period threeMonth = Period.ofMonths(3);
+                vendoliPlus.extendSubscription(threeMonth);
+            }
+            case 3 -> {
+                wallet.withdraw(19000, "buy 1 year vendilo +");
+                Period oneYear = Period.ofYears(1);
+                vendoliPlus.extendSubscription(oneYear);
+            }
+            case 0 -> {
+                return;
+            }
+        }
+    }
+
+    private boolean confirmPayment(Scanner scanner, double totalCost) {
+        System.out.println("Do you want to confirm payment? (y/n)");
+        String confirm = scanner.nextLine().trim().toLowerCase();
+
+        if (!"y".equals(confirm)) {
+            System.out.println("Checkout canceled.");
+            return false;
+        }
+
+        if (wallet.getAccountBalance() < totalCost) {
+            System.out.println("Insufficient wallet balance.");
+            return false;
+        }
+        return true;
+    }
+
+    private void subscriptionStatus(Scanner scanner) {
+        while (true) {
+            System.out.println("==== Status ====");
+            System.out.println(vendoliPlus);
+            System.out.println("--- 0. back ----");
+
+            int choice = SafeInput.getInt(scanner);
+            if (choice == 0) {
+                return;
+            }
+        }
+    }
+
     public List<Address> getAddresses() {
         return addresses;
     }
@@ -267,5 +381,13 @@ public class Customer extends User {
 
     public void clearSelectedDiscount() {
         this.selectedDiscount = null;
+    }
+
+    public VendiloPlus getVendoliPlus() {
+        return vendoliPlus;
+    }
+
+    public void setVendoliPlus(VendiloPlus vendoliPlus) {
+        this.vendoliPlus = vendoliPlus;
     }
 }

@@ -33,9 +33,20 @@ public class SearchProduct {
         String sortType = selectSortType(scanner);
         sortProducts(filteredProducts, sortType);
 
-        HtmlExporter.exportProductsToHtml(filteredProducts, "search-results.html"); //creat html
+        HtmlExporter.exportProductsToHtml(filteredProducts, "search-results.html"); // creat html
 
-        PaginationHelper<Product> pagination = new PaginationHelper<>();
+        PaginationHelper<Product> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(Product product) {
+                double finalPrice = customer.getVendoliPlus().isActive()
+                        ? product.getPrice() * 0.95
+                        : product.getPrice();
+
+                return product.getName() +
+                        " | Price : " + finalPrice +" toman" +
+                        " | Category : " + product.getType().name();
+            }
+        };
         pagination.paginate(filteredProducts, scanner, (product, sc) -> {
             showDetailsAndAddToCart(product, customer, scanner);
         });
@@ -85,13 +96,15 @@ public class SearchProduct {
     private static List<Product> filterProducts(SearchCriteria criteria) {
         return new ArrayList<>(getAllProducts().stream()
                 .filter(product -> {
-                    if (criteria.getName() == null || criteria.getName().isBlank()) return true;
+                    if (criteria.getName() == null || criteria.getName().isBlank())
+                        return true;
                     String productName = product.getName().replaceAll("\\s+", "").toLowerCase();
                     String searchName = criteria.getName().replaceAll("\\s+", "").toLowerCase();
                     return productName.contains(searchName);
                 })
                 .filter(product -> {
-                    if (criteria.getCategory() == null || criteria.getCategory().isBlank()) return true;
+                    if (criteria.getCategory() == null || criteria.getCategory().isBlank())
+                        return true;
                     String productCategory = product.getType().name().replaceAll("\\s+", "").toLowerCase();
                     String searchCategory = criteria.getCategory().replaceAll("\\s+", "").toLowerCase();
                     return productCategory.contains(searchCategory);
@@ -127,7 +140,7 @@ public class SearchProduct {
     }
 
     public static void showDetailsAndAddToCart(Product product, Customer customer, Scanner scanner) {
-        product.showDetails();
+        product.showDetails(customer);
 
         while (true) {
             System.out.println("Do you want to add this product to your cart? (y/n)");
