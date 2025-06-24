@@ -1,7 +1,6 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
-
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ public class Customer extends User {
     private List<Discount> discounts = new ArrayList<>();
     private Discount selectedDiscount;
     private VendiloPlus vendoliPlus = new VendiloPlus();
+    private List<Notification> notifications = new ArrayList<>();
 
     @Override
     public void usersMenu(Scanner scanner) {
@@ -30,6 +30,7 @@ public class Customer extends User {
             System.out.println("------7.Support------");
             System.out.println("--8.Discount codes --");
             System.out.println("---- 9.Vendilo + ----");
+            System.out.println("---10.notifications--");
             System.out.println("--------0.back-------");
             System.out.println("choose:");
             int choice = SafeInput.getInt(scanner);
@@ -54,6 +55,7 @@ public class Customer extends User {
                 case 7 -> supportMenu(scanner);
                 case 8 -> discountMenu(scanner);
                 case 9 -> vendoliPlusMenu(scanner);
+                case 10 -> {/* notification menu */}
                 case 0 -> {
                     return;
                 }
@@ -107,7 +109,7 @@ public class Customer extends User {
                 System.out.println("Enter your request description:");
                 String message = scanner.nextLine();
 
-                CustomerSupportRequest request = new CustomerSupportRequest(category, message);
+                CustomerSupportRequest request = new CustomerSupportRequest(category, message, this);
                 supportRequests.add(request);
                 SupportRepository.addRequest(request);
                 System.out.println("Request submitted successfully.");
@@ -389,5 +391,13 @@ public class Customer extends User {
 
     public void setVendoliPlus(VendiloPlus vendoliPlus) {
         this.vendoliPlus = vendoliPlus;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void addNotifications(Notification notification) {
+        this.notifications.add(notification);
     }
 }
