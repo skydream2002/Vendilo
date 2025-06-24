@@ -174,6 +174,7 @@ public class Supporter extends User {
             request.setStatus(status);
 
             Notification notification = new Notification("Support" , "your request has been reviewed");
+            notification.setRequest(request);
             request.getCustomer().addNotifications(notification);
 
             System.out.println("Response saved successfully.");

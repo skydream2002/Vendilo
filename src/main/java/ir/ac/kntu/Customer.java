@@ -55,7 +55,9 @@ public class Customer extends User {
                 case 7 -> supportMenu(scanner);
                 case 8 -> discountMenu(scanner);
                 case 9 -> vendoliPlusMenu(scanner);
-                case 10 -> {/* notification menu */}
+                case 10 -> {
+                    notificationMenu(scanner);
+                }
                 case 0 -> {
                     return;
                 }
@@ -273,10 +275,10 @@ public class Customer extends User {
 
         int selection = SafeInput.getInt(scanner);
         double price = switch (selection) {
-                        case 1 -> 2000;
-                        case 2 -> 5000;
-                        case 3 -> 19000;
-                        default -> 0;
+            case 1 -> 2000;
+            case 2 -> 5000;
+            case 3 -> 19000;
+            default -> 0;
         };
 
         if (!confirmPayment(scanner, price)) {
@@ -287,7 +289,7 @@ public class Customer extends User {
 
     private void handleBuySubscription(int number) {
         switch (number) {
-            case 1 -> { 
+            case 1 -> {
                 wallet.withdraw(2000, "buy 1 month vendilo +");
                 Period oneMonth = Period.ofMonths(1);
                 vendoliPlus.extendSubscription(oneMonth);
@@ -334,6 +336,71 @@ public class Customer extends User {
             if (choice == 0) {
                 return;
             }
+        }
+    }
+
+    private void printNotiMenuHeader() {
+        System.out.println("*****== Notifications Menu ==*****");
+        System.out.println("------ 1. view notifications -----");
+        System.out.println("------------- 0. back ------------");
+    }
+
+    private void notificationMenu(Scanner scanner) {
+        while (true) {
+            printNotiMenuHeader();
+            if (!choosingNotiMenu(scanner)) {
+                return;
+            }
+        }
+    }
+
+    private boolean choosingNotiMenu(Scanner scanner) {
+        int selection = SafeInput.getInt(scanner);
+
+        switch (selection) {
+            case 1 -> {
+                showNotification(scanner);
+                return true;
+            }
+            case 0 -> {
+                return false;
+            }
+            default -> {
+                return true;
+            }
+        }
+    }
+
+    private void showNotification(Scanner scanner) {
+        if (this.notifications.isEmpty()) {
+            System.out.println("No notification found.");
+            return;
+        }
+
+        PaginationHelper<Notification> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(Notification notification) {
+                return notification.getTopic();
+            }
+        };
+        pagination.paginate(this.notifications, scanner, (notification, sc) -> {
+            showNotiDetails(sc, notification);
+        });
+    }
+
+    private void showNotiDetails(Scanner scanner, Notification notification) {
+        System.out.println("=== Notification Details ===");
+        System.out.println(notification);
+
+        System.out.println("---1. go to support menu ---");
+        System.out.println("--------- 0.back -----------");
+        int choice = SafeInput.getInt(scanner);
+        if (choice == 0) {
+            return;
+        } else if (choice == 1) {
+            showRequestDetails(notification.getRequest(), scanner);
+        } else {
+            System.out.println("invalid choice.");
         }
     }
 
