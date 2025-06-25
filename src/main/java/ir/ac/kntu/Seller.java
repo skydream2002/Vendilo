@@ -82,6 +82,9 @@ public class Seller extends User {
                     return;
                 }
                 case 1 -> {
+                    if (product.getStock() == 0) {
+                        notifyInterestedCustomers(product);
+                    }
                     System.out.println("Enter count :");
                     int count = SafeInput.getInt(scanner);
 
@@ -96,6 +99,16 @@ public class Seller extends User {
                 default -> System.out.println("Invalid selection.");
             }
         }
+    }
+
+    private void notifyInterestedCustomers(Product product) {
+        for (Customer customer : product.getInterestedCustomers()) {
+            Notification notification = new Notification(
+                    "Product Back In Stock",
+                    "The product '" + product.getName() + "' is now available!", product);
+            customer.addNotifications(notification);
+        }
+        product.getInterestedCustomers().clear();
     }
 
     public void addingProduct(Scanner scanner) {

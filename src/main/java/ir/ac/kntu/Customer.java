@@ -392,15 +392,31 @@ public class Customer extends User {
         System.out.println("=== Notification Details ===");
         System.out.println(notification);
 
-        System.out.println("---1. go to support menu ---");
-        System.out.println("--------- 0.back -----------");
+        if (notification.getProduct() != null) {
+            System.out.println("--- 1. View Product Details ---");
+        } else if (notification.getRequest() != null) {
+            System.out.println("--- 1. Go to Support Menu ---");
+        }
+
+        System.out.println("----------- 0. Back -----------");
+
         int choice = SafeInput.getInt(scanner);
-        if (choice == 0) {
-            return;
-        } else if (choice == 1) {
-            showRequestDetails(notification.getRequest(), scanner);
-        } else {
-            System.out.println("invalid choice.");
+
+        switch (choice) {
+            case 0 -> {
+                return;
+            }
+            case 1 -> {
+                if (notification.getProduct() != null) {
+                    Product product = notification.getProduct();
+                    product.showDetails(this); // this == customer
+                } else if (notification.getRequest() != null) {
+                    showRequestDetails(notification.getRequest(), scanner);
+                } else {
+                    System.out.println("This notification has no associated content.");
+                }
+            }
+            default -> System.out.println("Invalid choice.");
         }
     }
 

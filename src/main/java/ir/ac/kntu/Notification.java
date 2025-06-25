@@ -1,11 +1,18 @@
 package ir.ac.kntu;
 
 public class Notification {
+    private Product product;
     private CustomerSupportRequest request;
     private String topic;
     private String details;
 
     public Notification() {
+    }
+
+    public Notification(String topic, String details, Product product) {
+        this.product = product;
+        this.topic = topic;
+        this.details = details;
     }
 
     public Notification(String topic, String details) {
@@ -22,6 +29,14 @@ public class Notification {
 
     public String getTopic() {
         return topic;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public void setTopic(String topic) {

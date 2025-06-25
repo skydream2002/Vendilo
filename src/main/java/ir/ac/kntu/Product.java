@@ -1,6 +1,8 @@
 package ir.ac.kntu;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.Scanner;
@@ -12,8 +14,17 @@ public abstract class Product {
     private Seller seller;
     private int stock;
     private Map<String, Double> ratings = new HashMap<>();
+    private List<Customer> interestedCustomers = new ArrayList<>();
 
     public abstract void showDetails(User user);
+
+    public void addInterestedCustomer(Customer customer) {
+        if (!interestedCustomers.contains(customer)) {
+            interestedCustomers.add(customer);
+        } else {
+            System.out.println("You’ve already subscribed to be notified when this product is back in stock.");
+        }
+    }
 
     @Override
     public String toString() {
@@ -102,4 +113,9 @@ public abstract class Product {
     public void setStock(int stock) {
         this.stock = stock;
     }
+
+    public List<Customer> getInterestedCustomers() {
+        return interestedCustomers;
+    }
+
 }

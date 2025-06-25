@@ -143,7 +143,12 @@ public class SearchProduct {
         product.showDetails(customer);
 
         while (true) {
-            System.out.println("Do you want to add this product to your cart? (y/n)");
+            if (product.getStock() == 0) {
+                System.out.println("Do you want to be notified when it's back in stock? (1/n)");
+            } else {
+                System.out.println("Do you want to add this product to your cart? (y/n)");
+            }
+            
             String answer = scanner.nextLine().trim().toLowerCase();
 
             if ("y".equals(answer)) {
@@ -151,6 +156,10 @@ public class SearchProduct {
                 System.out.println("Added to your cart.");
                 return;
             } else if ("n".equals(answer)) {
+                return;
+            } else if ("1".equals(answer)) {
+                product.addInterestedCustomer(customer);
+                System.out.println("You will be notified when it's back in stock.");
                 return;
             } else {
                 System.out.println("Invalid choice. Please type y or n.");
