@@ -22,6 +22,12 @@ public abstract class User {
     public User() {
     }
 
+    @Override
+    public String toString() {
+        return firstName + " " + lastName + " | email : " + email + " | phoneNumber : "
+                + phoneNumber;
+    }
+
     public String getFirstName() {
         return firstName;
     }
