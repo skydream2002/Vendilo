@@ -1,11 +1,13 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Scanner;
 
 public class Supporter extends User {
     private String userName;
+    private EnumSet<SupportSection> sections = EnumSet.noneOf(SupportSection.class);
 
     @Override
     public void usersMenu(Scanner scanner) {
@@ -32,32 +34,32 @@ public class Supporter extends User {
 
     private void handleAuthentication(Scanner scanner) {
         while (true) {
-        List<SellerSignUpRequest> pendingRequests = UserRepository.getPendingSellerRequests().stream()
-                .filter(request -> request.getReasonRejection() == null)
-                .toList();
+            List<SellerSignUpRequest> pendingRequests = UserRepository.getPendingSellerRequests().stream()
+                    .filter(request -> request.getReasonRejection() == null)
+                    .toList();
 
-        if (pendingRequests.isEmpty()) {
-            System.out.println("No pending seller requests.");
-            return;
-        }
-
-        System.out.println("--- Sign up requests ---");
-
-        PaginationHelper<SellerSignUpRequest> pagination = new PaginationHelper<>() {
-            @Override
-            public String formatItem(SellerSignUpRequest request) {
-                return "store name : " + request.getStoreName()
-                        + " seller's email : " + request.getEmail();
+            if (pendingRequests.isEmpty()) {
+                System.out.println("No pending seller requests.");
+                return;
             }
-        };
 
-        try {
-            pagination.paginate(pendingRequests, scanner, (request, sc) -> {
-                showRequest(scanner, request);
-            });
-        } catch (ExitPaginationException e) {
+            System.out.println("--- Sign up requests ---");
+
+            PaginationHelper<SellerSignUpRequest> pagination = new PaginationHelper<>() {
+                @Override
+                public String formatItem(SellerSignUpRequest request) {
+                    return "store name : " + request.getStoreName()
+                            + " seller's email : " + request.getEmail();
+                }
+            };
+
+            try {
+                pagination.paginate(pendingRequests, scanner, (request, sc) -> {
+                    showRequest(scanner, request);
+                });
+            } catch (ExitPaginationException e) {
+            }
         }
-    }
     }
 
     private void showRequest(Scanner scanner, SellerSignUpRequest request) {
@@ -104,31 +106,53 @@ public class Supporter extends User {
     private void handleCustomersRequests(Scanner scanner) {
         while (true) {
             System.out.println("--- Support Request Management ---");
-            System.out.println("1. View all requests");
+            System.out.println("1. View all assigned requests");
             System.out.println("2. Filter by status");
             System.out.println("3. Filter by category");
             System.out.println("0. Back");
             System.out.print("Choose: ");
             int choice = SafeInput.getInt(scanner);
 
+            List<CustomerSupportRequest> requests = SupportRepository.getAllRequests().stream()
+                    .filter(req -> sections.stream()
+                            .anyMatch(section -> section.name().equalsIgnoreCase(req.getCategory())))
+                    .toList();
+
             switch (choice) {
-                case 1 -> displayRequests(SupportRepository.getAllRequests(), scanner);
+                case 1 -> displayRequests(requests, scanner);
                 case 2 -> {
-                    System.out.println("Enter status (submitted/in progress/closed):");
-                    String status = scanner.nextLine().toLowerCase();
-                    List<CustomerSupportRequest> filtered = SupportRepository.getRequestsByStatus(status);
-                    displayRequests(filtered, scanner);
+                    System.out.print("Enter status (submitted/in progress/closed): ");
+                    String status = scanner.nextLine().trim().toLowerCase();
+                    displayRequests(requests.stream()
+                            .filter(req -> req.getStatus().equalsIgnoreCase(status))
+                            .toList(), scanner);
                 }
-                case 3 -> {
-                    System.out.println("Enter category:");
-                    String category = scanner.nextLine();
-                    List<CustomerSupportRequest> filtered = SupportRepository.getRequestsByCategory(category);
-                    displayRequests(filtered, scanner);
-                }
+                case 3 -> filterCategory(scanner, requests);
                 case 0 -> {
                     return;
                 }
-                default -> System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+    private void filterCategory(Scanner scanner, List<CustomerSupportRequest> requests) {
+        List<SupportSection> sectionList = sections.stream().toList();
+        while (true) {
+            for (int i = 0; i < sections.size(); i++) {
+                System.out.println((i + 1) + ". " + sectionList.get(i).name());
+            }
+            System.out.println("0. back");
+            int selection = SafeInput.getInt(scanner);
+
+            if (selection == 0) {
+                return;
+            } else if (selection >= 1 && selection <= sectionList.size()) {
+                String selectedCategory = sectionList.get(selection - 1).name();
+                displayRequests(requests.stream()
+                        .filter(req -> req.getCategory().equalsIgnoreCase(selectedCategory))
+                        .toList(), scanner);
+            } else {
+                System.out.println("Invalid choice.");
             }
         }
     }
@@ -173,7 +197,7 @@ public class Supporter extends User {
             String status = scanner.nextLine().toLowerCase();
             request.setStatus(status);
 
-            Notification notification = new Notification("Support" , "your request has been reviewed");
+            Notification notification = new Notification("Support", "your request has been reviewed");
             notification.setRequest(request);
             request.getCustomer().addNotifications(notification);
 
@@ -224,4 +248,21 @@ public class Supporter extends User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+    public EnumSet<SupportSection> getSections() {
+        return sections;
+    }
+
+    public void setSections(EnumSet<SupportSection> sections) {
+        this.sections = sections;
+    }
+
+    public void addSection(SupportSection section) {
+        sections.add(section);
+    }
+
+    public void removeSection(SupportSection section) {
+        sections.remove(section);
+    }
+
 }
