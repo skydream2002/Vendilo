@@ -9,6 +9,7 @@ public class UserRepository {
     private static final List<Customer> customers = new ArrayList<>();
     private static final List<Seller> sellers = new ArrayList<>();
     private static final List<Supporter> supports = new ArrayList<>();
+    private static final List<Manager> managers = new ArrayList<>();
     private static final List<SellerSignUpRequest> pendingRequests = new ArrayList<>();
 
     public static void signUp(String role, Scanner scanner) {
@@ -51,7 +52,7 @@ public class UserRepository {
         return scanner.nextLine();
     }
 
-    private static String getValidEmail(Scanner scanner) {
+    public static String getValidEmail(Scanner scanner) {
         String email = getInput(scanner, "Enter your email:");
         while (!isValidEmail(email) || emailExists(email)) {
             email = getInput(scanner, "Invalid or duplicate email. Please enter a valid and unique email:");
@@ -59,7 +60,7 @@ public class UserRepository {
         return email;
     }
 
-    private static String getValidPassword(Scanner scanner) {
+    public static String getValidPassword(Scanner scanner) {
         String password = getInput(scanner, "Enter password:");
         while (!isStrongPassword(password)) {
             System.out.println(
@@ -69,7 +70,7 @@ public class UserRepository {
         return password;
     }
 
-    private static String getValidPhoneNumber(Scanner scanner) {
+    public static String getValidPhoneNumber(Scanner scanner) {
         String phone = getInput(scanner, "Enter phone number:");
         while (!isValidPhoneNumber(phone) || phoneExists(phone)) {
             phone = getInput(scanner, "Invalid or duplicate phone number. Please enter a valid one:");
@@ -152,6 +153,10 @@ public class UserRepository {
         return pendingRequests;
     }
 
+    public static List<Manager> getManagers() {
+        return managers;
+    }
+
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
@@ -162,6 +167,10 @@ public class UserRepository {
 
     public static void addSupport(Supporter support) {
         supports.add(support);
+    }
+
+    public static void addManager(Manager manager) {
+        managers.add(manager);
     }
 
     public static List<Customer> getCustomers() {

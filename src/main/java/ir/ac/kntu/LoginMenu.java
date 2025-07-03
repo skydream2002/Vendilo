@@ -54,7 +54,11 @@ public class LoginMenu {
 
         for (User user : UserRepository.getAllUsers()) {
             if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
-                System.out.println("Login succesfully");
+                if (!user.isActive()) {
+                    System.out.println("Your account has been blocked.");
+                    return;
+                }
+                System.out.println("Login successfully");
                 user.usersMenu(scanner);
                 return;
             }

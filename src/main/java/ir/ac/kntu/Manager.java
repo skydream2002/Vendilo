@@ -62,6 +62,7 @@ public class Manager extends User {
             System.out.println("----- 2. View customers ------");
             System.out.println("------ 3. View sellers -------");
             System.out.println("----- 4. View supporters -----");
+            System.out.println("- 5.Add Manager or Supporter -");
             System.out.println("---------- 0. back -----------");
 
             int choice = SafeInput.getInt(scanner);
@@ -89,6 +90,10 @@ public class Manager extends User {
                 viewUsersMenu(scanner, "supporter");
                 return true;
             }
+            case 5 -> {
+                createManagerOrSupporter(scanner);
+                return true;
+            }
             case 0 -> {
                 return false;
             }
@@ -96,6 +101,64 @@ public class Manager extends User {
                 return true;
             }
         }
+    }
+
+    private void createManagerOrSupporter(Scanner scanner) {
+        printHeader();
+        int choice = SafeInput.getInt(scanner);
+        System.out.println("Enter first name:");
+        String firstName = scanner.nextLine();
+        System.out.println("Enter last name:");
+        String lastName = scanner.nextLine();
+
+        String email = UserRepository.getValidEmail(scanner);
+
+        String password = UserRepository.getValidPassword(scanner);
+
+        String phoneNumber = UserRepository.getValidPhoneNumber(scanner);
+
+        switch (choice) {
+            case 1 -> {
+                Manager manager = new Manager(email, firstName, lastName, password, phoneNumber);
+                UserRepository.addManager(manager);
+                System.out.println("Manager created successfully.");
+            }
+            case 2 -> {
+                Supporter supporter = new Supporter(email, firstName, lastName, password, phoneNumber);
+                assignSupportSections(scanner, supporter);
+                UserRepository.addSupport(supporter);
+                System.out.println("Supporter created successfully.");
+            }
+            case 0 -> {
+                return;
+            }
+            default -> System.out.println("Invalid choice.");
+        }
+    }
+
+    private void assignSupportSections(Scanner scanner, Supporter supporter) {
+        System.out.println("Assign support sections (enter 0 to finish):");
+        while (true) {
+            for (int i = 0; i < SupportSection.values().length; i++) {
+                System.out.println((i + 1) + ". " + SupportSection.values()[i]);
+            }
+            int sectionIndex = SafeInput.getInt(scanner) - 1;
+            if (sectionIndex == -1) {
+                break;
+            }
+            if (sectionIndex >= 0 && sectionIndex < SupportSection.values().length) {
+                supporter.addSection(SupportSection.values()[sectionIndex]);
+            } else {
+                System.out.println("Invalid index.");
+            }
+        }
+    }
+
+    private void printHeader() {
+        System.out.println("Choose role to create:");
+        System.out.println("1. Manager");
+        System.out.println("2. Supporter");
+        System.out.println("0.back");
     }
 
     private void viewUsersMenu(Scanner scanner, String role) {
@@ -108,7 +171,7 @@ public class Manager extends User {
             switch (selection) {
                 case 1 -> viewAllUsers(scanner, role, "");
                 case 2 -> {
-                    String name = scanner.nextLine();
+                    String name = scanner.nextLine().trim();
                     viewAllUsers(scanner, role, name);
                 }
                 case 0 -> {
@@ -141,7 +204,8 @@ public class Manager extends User {
         PaginationHelper<User> pagination = new PaginationHelper<>() {
             @Override
             public String formatItem(User user) {
-                return user.getFirstName() + " " + user.getLastName() + " | " + user.getPhoneNumber();
+                return user.getFirstName() + " " + user.getLastName() + " | "
+                        + (user.isActive() ? "Active" : "Blocked");
             }
         };
         pagination.paginate(users, scanner, (user, sc) -> {
@@ -164,14 +228,36 @@ public class Manager extends User {
             System.out.println("****= User details =****");
             System.out.println(user);
             System.out.println("-- 1.Edit information --");
-            System.out.println("---- 2. Block user -----");
+
+            if (user.isActive()) {
+                System.out.println("---- 2. Block user -----");
+            } else {
+                System.out.println("--- 2. Unblock user ----");
+            }
+
+            if (user instanceof Supporter) {
+                System.out.println("-- 3. Edit Support Sections --");
+            }
             System.out.println("------- 0. back --------");
 
             int choice = SafeInput.getInt(scanner);
 
             switch (choice) {
                 case 1 -> editInformation(scanner, user);
-                case 2 -> blockUser(user);
+                case 2 -> {
+                    if (user.isActive()) {
+                        blockUser(user);
+                        System.out.println("User blocked.");
+                    } else {
+                        unblockUser(user);
+                        System.out.println("User unblocked.");
+                    }
+                }
+                case 3 -> {
+                    if (user instanceof Supporter supporter) {
+                        editSupporterSections(scanner, supporter);
+                    }
+                }
                 case 0 -> {
                     return;
                 }
@@ -214,14 +300,51 @@ public class Manager extends User {
     }
 
     private void blockUser(User user) {
-        if (user instanceof Customer customer) {
-            UserRepository.getCustomers().remove(customer);
-        } else if (user instanceof Seller seller) {
-            UserRepository.getSellers().remove(seller);
-        } else if (user instanceof Supporter supporter) {
-            UserRepository.getSupports().remove(supporter);
-        }
+        user.setActive(false);
+    }
 
+    private void unblockUser(User user) {
+        user.setActive(true);
+    }
+
+    private void editSupporterSections(Scanner scanner, Supporter supporter) {
+        while (true) {
+            supporter.printSections();
+            System.out.println("1. Add Section");
+            System.out.println("2. Remove Section");
+            System.out.println("0. Back");
+
+            int choice = SafeInput.getInt(scanner);
+            switch (choice) {
+                case 1 -> addSection(scanner, supporter);
+                case 2 -> removeSection(scanner, supporter);
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+    private void addSection(Scanner scanner, Supporter supporter) {
+        for (SupportSection section : SupportSection.values()) {
+            System.out.println(section.ordinal() + 1 + ". " + section);
+        }
+        int index = SafeInput.getInt(scanner) - 1;
+        if (index >= 0 && index < SupportSection.values().length) {
+            supporter.addSection(SupportSection.values()[index]);
+        }
+    }
+
+    private void removeSection(Scanner scanner, Supporter supporter) {
+        List<SupportSection> current = new ArrayList<>(supporter.getSections());
+        for (int i = 0; i < current.size(); i++) {
+            System.out.println(i + 1 + ". " + current.get(i));
+        }
+        int index = SafeInput.getInt(scanner) - 1;
+        if (index >= 0 && index < current.size()) {
+            supporter.removeSection(current.get(index));
+        }
     }
 
     public Manager(String email, String firstName, String lastName, String password, String phoneNumber) {

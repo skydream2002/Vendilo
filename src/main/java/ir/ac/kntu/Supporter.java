@@ -253,6 +253,14 @@ public class Supporter extends User {
         return sections;
     }
 
+    public void printSections() {
+        System.out.println("--- Assigned secions ---");
+        for (SupportSection section : sections) {
+            System.out.println(section.name());
+        }
+        System.out.println("------------------------");
+    }
+
     public void setSections(EnumSet<SupportSection> sections) {
         this.sections = sections;
     }

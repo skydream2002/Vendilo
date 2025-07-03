@@ -8,6 +8,7 @@ public abstract class User {
     private String email;
     private String phoneNumber;
     private String password;
+    private boolean active = true;
 
     public abstract void usersMenu(Scanner scanner);
 
@@ -21,6 +22,15 @@ public abstract class User {
 
     public User() {
     }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
 
     @Override
     public String toString() {
