@@ -1,7 +1,8 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Manager extends User {
 
@@ -73,19 +74,19 @@ public class Manager extends User {
     private boolean handleUserOption(Scanner scanner, int number) {
         switch (number) {
             case 1 -> {
-                
+                viewUsersMenu(scanner, "user");
                 return true;
             }
             case 2 -> {
-
+                viewUsersMenu(scanner, "customer");
                 return true;
             }
             case 3 -> {
-
+                viewUsersMenu(scanner, "seller");
                 return true;
             }
             case 4 -> {
-
+                viewUsersMenu(scanner, "supporter");
                 return true;
             }
             case 0 -> {
@@ -97,24 +98,86 @@ public class Manager extends User {
         }
     }
 
-    private void viewAllUsers(Scanner scanner) {
+    private void viewUsersMenu(Scanner scanner, String role) {
+        while (true) {
+            handleRole(role);
+            System.out.println("---- 2. filter by name ----");
+            System.out.println("--------- 0. back ---------");
+
+            int selection = SafeInput.getInt(scanner);
+            switch (selection) {
+                case 1 -> viewAllUsers(scanner, role, "");
+                case 2 -> {
+                    String name = scanner.nextLine();
+                    viewAllUsers(scanner, role, name);
+                }
+                case 0 -> {
+                    return;
+                }
+            }
+        }
+    }
+
+    private void handleRole(String role) {
+        switch (role) {
+            case "customer" -> System.out.println("---- 1. view all customers ----");
+            case "seller" -> System.out.println("---- 1. view all sellers ----");
+            case "user" -> System.out.println("---- 1. view all users ----");
+            case "supporter" -> System.out.println("---- 1. view all supporters ----");
+        }
+    }
+
+    private void viewAllUsers(Scanner scanner, String role, String name) {
+        List<User> users;
+        if ("".equals(name.trim())) {
+            users = returnUsers(role);
+        } else {
+            users = returnUsers(role).stream()
+                    .filter(user -> (user.getFirstName() + " " + user.getLastName())
+                            .toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
         PaginationHelper<User> pagination = new PaginationHelper<>() {
             @Override
             public String formatItem(User user) {
                 return user.getFirstName() + " " + user.getLastName() + " | " + user.getPhoneNumber();
             }
         };
-        pagination.paginate(UserRepository.getAllUsers(), scanner, (sc, user) -> {
-            user.showUserDetails();
+        pagination.paginate(users, scanner, (user, sc) -> {
+            showUserDetails(scanner, user);
         });
     }
 
-    private void showUserDetails() {
-
+    private List<User> returnUsers(String role) {
+        return switch (role) {
+            case "customer" -> new ArrayList<>(UserRepository.getCustomers());
+            case "seller" -> new ArrayList<>(UserRepository.getSellers());
+            case "user" -> new ArrayList<>(UserRepository.getAllUsers());
+            case "supporter" -> new ArrayList<>(UserRepository.getSupports());
+            default -> Collections.emptyList();
+        };
     }
 
+    private void showUserDetails(Scanner scanner, User user) {
+        while (true) {
+            System.out.println("****= User details =****");
+            System.out.println(user);
+            System.out.println("------- 0. back --------");
+
+            int choice = SafeInput.getInt(scanner);
+
+            if (choice == 0) {
+                break;
+            } else {
+                System.out.println("Invalid choice.");
+            }
+        }
+
+    }
 
     public Manager(String email, String firstName, String lastName, String password, String phoneNumber) {
         super(email, firstName, lastName, password, phoneNumber);
     }
+
 }
