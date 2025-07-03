@@ -163,15 +163,63 @@ public class Manager extends User {
         while (true) {
             System.out.println("****= User details =****");
             System.out.println(user);
+            System.out.println("-- 1.Edit information --");
+            System.out.println("---- 2. Block user -----");
             System.out.println("------- 0. back --------");
 
             int choice = SafeInput.getInt(scanner);
 
-            if (choice == 0) {
-                break;
-            } else {
-                System.out.println("Invalid choice.");
+            switch (choice) {
+                case 1 -> editInformation(scanner, user);
+                case 2 -> blockUser(user);
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid choice.");
             }
+        }
+    }
+
+    private void editInformation(Scanner scanner, User user) {
+        while (true) {
+            System.out.println("-- 1. Edit first name --");
+            System.out.println("--- 2.Edit last name ---");
+            System.out.println("-------- 0. back -------");
+            System.out.println("Select your choice :");
+            int selection = SafeInput.getInt(scanner);
+
+            switch (selection) {
+                case 1 -> editFirstName(scanner, user);
+                case 2 -> editLastName(scanner, user);
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Invalid selection.");
+            }
+        }
+    }
+
+    private void editFirstName(Scanner scanner, User user) {
+        System.out.println("Enter new first name :");
+        String firstName = scanner.nextLine();
+        user.setFirstName(firstName);
+        System.out.println("First name updated.");
+    }
+
+    private void editLastName(Scanner scanner, User user) {
+        System.out.println("Enter new last name :");
+        String lastName = scanner.nextLine();
+        user.setLastName(lastName);
+        System.out.println("Last name updated.");
+    }
+
+    private void blockUser(User user) {
+        if (user instanceof Customer customer) {
+            UserRepository.getCustomers().remove(customer);
+        } else if (user instanceof Seller seller) {
+            UserRepository.getSellers().remove(seller);
+        } else if (user instanceof Supporter supporter) {
+            UserRepository.getSupports().remove(supporter);
         }
 
     }
