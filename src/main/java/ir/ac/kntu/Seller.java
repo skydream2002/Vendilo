@@ -103,7 +103,7 @@ public class Seller extends User {
 
     private void notifyInterestedCustomers(Product product) {
         for (Customer customer : product.getInterestedCustomers()) {
-            Notification notification = new Notification(
+            MyNotification notification = new MyNotification(
                     "Product Back In Stock",
                     "The product '" + product.getName() + "' is now available!", product);
             customer.addNotifications(notification);
@@ -152,6 +152,13 @@ public class Seller extends User {
                 default -> System.out.println("Invalid category.");
             }
         }
+    }
+
+    public double getTotalSales() {
+        return orders.stream()
+                .flatMap(order -> order.getProducts().stream())
+                .mapToDouble(product -> product.getPrice() * 0.9)
+                .sum();
     }
 
     public Seller(String email, String firstName, String lastName, String password, String phoneNumber) {

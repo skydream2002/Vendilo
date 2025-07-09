@@ -50,6 +50,7 @@ public class Manager extends User {
                 return false;
             }
             default -> {
+                System.out.println("Invalid choice.");
                 return true;
             }
         }
@@ -201,6 +202,11 @@ public class Manager extends User {
                     .collect(Collectors.toList());
         }
 
+        if (users.isEmpty()) {
+            System.out.println("No users found for this criteria.");
+            return;
+        }
+
         PaginationHelper<User> pagination = new PaginationHelper<>() {
             @Override
             public String formatItem(User user) {
@@ -332,7 +338,13 @@ public class Manager extends User {
         }
         int index = SafeInput.getInt(scanner) - 1;
         if (index >= 0 && index < SupportSection.values().length) {
-            supporter.addSection(SupportSection.values()[index]);
+            if (!supporter.getSections().contains(SupportSection.values()[index])) {
+                supporter.addSection(SupportSection.values()[index]);
+            } else {
+                System.out.println("Section already added.");
+            }
+        } else {
+            System.out.println("invalid choice.");
         }
     }
 
@@ -344,6 +356,68 @@ public class Manager extends User {
         int index = SafeInput.getInt(scanner) - 1;
         if (index >= 0 && index < current.size()) {
             supporter.removeSection(current.get(index));
+        }
+    }
+
+    private void salesPerformance(Scanner scanner) {
+        while (true) {
+            System.out.println("----- Sales performance -----");
+            System.out.println("---- 1. View all sellers ----");
+            System.out.println("----- 2. Search seller ------");
+            System.out.println("---------- 0. back ----------");
+
+            int choice = SafeInput.getInt(scanner);
+            if (!handleSalePer(choice, scanner)) {
+                return;
+            }
+        }
+    }
+
+    private boolean handleSalePer(int number, Scanner scanner) {
+        switch (number) {
+            case 1 -> {
+                
+                return true;
+            }
+            case 2 -> {
+
+                return true;
+            }
+            case 0 -> {
+                return false;
+            }
+            default -> {
+                System.out.println("Invalid chioce.");
+                return true;
+            }
+        }
+    }
+
+    private void viewSellersPer(Scanner scanner) {
+        PaginationHelper<Seller> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(Seller seller) {
+                return seller.getFirstName() + " " + seller.getLastName() + " | " + "Total sales : "
+                + seller.getTotalSales();
+            }
+        };
+
+        pagination.paginate(UserRepository.getSellers(), scanner, (seller, sc) -> {
+            bonusToSeller(scanner, seller);
+        });
+    }
+
+    private void bonusToSeller(Scanner scanner, Seller seller) {
+        while (true) {
+            System.out.println("--- Bonus to the seller ---");
+            System.out.println("How much do you want to reward? (please enter)");
+            System.out.println("---- (-1). back ------");
+            double selection = SafeInput.getDouble(scanner);
+
+            if (selection == -1) {
+                return;
+            }
+            seller.getWallet().deposit(selection, "Reward from manager");
         }
     }
 

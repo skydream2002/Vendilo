@@ -15,7 +15,7 @@ public class Customer extends User {
     private List<Discount> discounts = new ArrayList<>();
     private Discount selectedDiscount;
     private VendiloPlus vendoliPlus = new VendiloPlus();
-    private List<Notification> notifications = new ArrayList<>();
+    private List<MyNotification> notifications = new ArrayList<>();
 
     @Override
     public void usersMenu(Scanner scanner) {
@@ -377,9 +377,9 @@ public class Customer extends User {
             return;
         }
 
-        PaginationHelper<Notification> pagination = new PaginationHelper<>() {
+        PaginationHelper<MyNotification> pagination = new PaginationHelper<>() {
             @Override
-            public String formatItem(Notification notification) {
+            public String formatItem(MyNotification notification) {
                 return notification.getTopic();
             }
         };
@@ -388,7 +388,7 @@ public class Customer extends User {
         });
     }
 
-    private void showNotiDetails(Scanner scanner, Notification notification) {
+    private void showNotiDetails(Scanner scanner, MyNotification notification) {
         System.out.println("=== Notification Details ===");
         System.out.println(notification);
 
@@ -476,11 +476,11 @@ public class Customer extends User {
         this.vendoliPlus = vendoliPlus;
     }
 
-    public List<Notification> getNotifications() {
+    public List<MyNotification> getNotifications() {
         return notifications;
     }
 
-    public void addNotifications(Notification notification) {
+    public void addNotifications(MyNotification notification) {
         this.notifications.add(notification);
     }
 }
