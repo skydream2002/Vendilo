@@ -58,7 +58,7 @@ public class ShoppingCart {
             return;
         }
 
-        double totalPrice = customer.getVendoliPlus().isActive() ? getTotalPrice() * 0.95 : getTotalPrice();
+        double totalPrice = getFinalPriceWithDiscount();
         System.out.println("Total price : " + totalPrice + "toman");
 
         PaginationHelper<Product> pagination = new PaginationHelper<>() {
@@ -134,14 +134,12 @@ public class ShoppingCart {
     }
 
     public void checkout(Scanner scanner) {
-        double totalCost = customer.getVendoliPlus().isActive() ? getTotalPrice() * 0.95 : getTotalPrice();
         if (products.isEmpty()) {
             System.out.println("Shopping cart is empty.");
             return;
         }
         while (true) {
             System.out.println("---- Checkout Menu ----");
-            System.out.println("--- Total Price : " + totalCost);
 
             Address selectedAddress = selectAddressWithPagination(scanner);
             if (selectedAddress == null) {
@@ -180,16 +178,7 @@ public class ShoppingCart {
             return -1;
         }
 
-        double finalCost;
-        Discount discount = customer.getSelectedDiscount();
-
-        if (discount instanceof DiscountByValue valueDiscount) {
-            finalCost = paymentInfo.totalCost - valueDiscount.getValue();
-        } else if (discount instanceof DiscountByPercentage percentageDiscount) {
-            finalCost = paymentInfo.totalCost - (getTotalPrice() * percentageDiscount.getPercentage()) / 100;
-        } else {
-            return -1;
-        }
+        double finalCost = getFinalPriceWithDiscount();
 
         System.out.println("Total cost with discount : " + finalCost);
         return finalCost;
@@ -226,7 +215,7 @@ public class ShoppingCart {
     }
 
     private PaymentInfo calculatePaymentInfo(Address address) {
-        double totalProductPrice = customer.getVendoliPlus().isActive() ? getTotalPrice() * 0.95 : getTotalPrice();
+        double totalProductPrice = getFinalPriceWithDiscount();
         double shippingCost = handlePriceWithAddress(address);
         double totalCost = totalProductPrice + shippingCost;
         return new PaymentInfo(shippingCost, totalCost);
@@ -348,6 +337,23 @@ public class ShoppingCart {
         } else {
             return allInSameProvince ? shippingCost / 3.0 : shippingCost;
         }
+    }
+
+    public double getFinalPriceWithDiscount() {
+        double basePrice = customer.getVendoliPlus().isActive() ? getTotalPrice() * 0.95 : getTotalPrice();
+        Discount discount = customer.getSelectedDiscount();
+
+        if (discount == null || !isApplyDiscount()) {
+            return basePrice;
+        }
+
+        if (discount instanceof DiscountByValue valueDiscount) {
+            return Math.max(0, basePrice - valueDiscount.getValue());
+        } else if (discount instanceof DiscountByPercentage percentageDiscount) {
+            return Math.max(0, basePrice - (basePrice * percentageDiscount.getPercentage() / 100));
+        }
+
+        return basePrice;
     }
 
     public List<Product> getProducts() {
