@@ -1,6 +1,7 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -154,8 +155,10 @@ public class Seller extends User {
         }
     }
 
-    public double getTotalSales() {
+    public double getMonthlySales(LocalDateTime now) {
+        LocalDateTime oneMonthAgo = now.minusMonths(1);
         return orders.stream()
+                .filter(order -> order.getOrderDate().isAfter(oneMonthAgo))
                 .flatMap(order -> order.getProducts().stream())
                 .mapToDouble(product -> product.getPrice() * 0.9)
                 .sum();

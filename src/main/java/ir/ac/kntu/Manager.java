@@ -1,6 +1,7 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -398,7 +399,7 @@ public class Manager extends User {
             @Override
             public String formatItem(Seller seller) {
                 return seller.getFirstName() + " " + seller.getLastName() + " | " + "Total sales : "
-                + seller.getTotalSales();
+                + seller.getMonthlySales(LocalDateTime.now());
             }
         };
 
