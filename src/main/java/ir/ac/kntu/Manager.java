@@ -31,7 +31,7 @@ public class Manager extends User {
                 return true;
             }
             case 2 -> {
-
+                salesPerformance(scanner);
                 return true;
             }
             case 3 -> {
@@ -376,11 +376,11 @@ public class Manager extends User {
     private boolean handleSalePer(int number, Scanner scanner) {
         switch (number) {
             case 1 -> {
-                
+                viewSellersPer(scanner);
                 return true;
             }
             case 2 -> {
-
+                searchSeller(scanner);
                 return true;
             }
             case 0 -> {
@@ -415,10 +415,24 @@ public class Manager extends User {
             double selection = SafeInput.getDouble(scanner);
 
             if (selection == -1) {
+                System.out.println("Canceled reward.");
                 return;
             }
             seller.getWallet().deposit(selection, "Reward from manager");
         }
+    }
+
+    private void searchSeller(Scanner scanner) {
+        System.out.println("Please enter seller's code :");
+        String code = scanner.nextLine();
+        
+        for (Seller seller : UserRepository.getSellers()) {
+            if (code.equals(seller.getAgencyCode())) {
+                bonusToSeller(scanner, seller);
+                return;
+            }
+        }
+        System.out.println("No seller found with this code.");
     }
 
     public Manager(String email, String firstName, String lastName, String password, String phoneNumber) {

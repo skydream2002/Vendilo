@@ -197,7 +197,7 @@ public class Supporter extends User {
             String status = scanner.nextLine().toLowerCase();
             request.setStatus(status);
 
-            Notification notification = new Notification("Support", "your request has been reviewed");
+            MyNotification notification = new MyNotification("Support", "your request has been reviewed");
             notification.setRequest(request);
             request.getCustomer().addNotifications(notification);
 
