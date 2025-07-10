@@ -1,6 +1,7 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -418,6 +419,14 @@ public class Customer extends User {
             }
             default -> System.out.println("Invalid choice.");
         }
+    }
+
+    public double getMonthlyPurchase(LocalDateTime now) {
+        LocalDateTime oneMonthAgo = now.minusMonths(1);
+        return orders.stream()
+                    .filter(order -> order.getOrderDate().isAfter(oneMonthAgo))
+                    .mapToDouble(Order::getFinalCost)
+                    .sum();
     }
 
     public List<Address> getAddresses() {

@@ -263,7 +263,7 @@ public class ShoppingCart {
     }
 
     private void createSellerOrder(Seller seller, List<Product> products, Address address) {
-        Order order = new Order(products, customer, LocalDateTime.now(), address);
+        Order order = new Order(products, customer, LocalDateTime.now(), address, getTotalPrice());
         seller.getOrders().add(order);
     }
 
@@ -286,7 +286,7 @@ public class ShoppingCart {
 
     private void completeCustomerOrder(Address address, double totalCost) {
         customer.getWallet().withdraw(totalCost, "Buying");
-        Order newOrder = new Order(new ArrayList<>(products), customer, LocalDateTime.now(), address);
+        Order newOrder = new Order(new ArrayList<>(products), customer, LocalDateTime.now(), address, totalCost);
         customer.getOrders().add(newOrder);
         OrderRepository.addOrder(newOrder);
     }

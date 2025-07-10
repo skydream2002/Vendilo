@@ -9,16 +9,26 @@ public class Order {
     private List<Product> products = new ArrayList<>();
     private Address shippingAddress;
     private LocalDateTime orderDate;
+    private double finalCost;
 
-    public Order(List<Product> products, Customer customer, LocalDateTime orderDate, Address shippingAddress) {
+    public Order(List<Product> products, Customer customer, LocalDateTime orderDate, Address shippingAddress, double finalCost) {
         this.customer = customer;
         this.orderDate = orderDate;
         this.shippingAddress = shippingAddress;
         this.products = products;
+        this.finalCost = finalCost;
     }
 
     public Order(LocalDateTime orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public double getFinalCost() {
+        return finalCost;
+    }
+
+    public void setFinalCost(double finalCost) {
+        this.finalCost = finalCost;
     }
 
     public double calculateTotalPrice() {
