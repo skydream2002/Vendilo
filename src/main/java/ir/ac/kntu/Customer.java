@@ -56,9 +56,7 @@ public class Customer extends User {
                 case 7 -> supportMenu(scanner);
                 case 8 -> discountMenu(scanner);
                 case 9 -> vendoliPlusMenu(scanner);
-                case 10 -> {
-                    notificationMenu(scanner);
-                }
+                case 10 -> notificationMenu(scanner);
                 case 0 -> {
                     return;
                 }
@@ -491,5 +489,9 @@ public class Customer extends User {
 
     public void addNotifications(MyNotification notification) {
         this.notifications.add(notification);
+    }
+
+    public void addDiscount(Discount discount) {
+        this.discounts.add(discount);
     }
 }

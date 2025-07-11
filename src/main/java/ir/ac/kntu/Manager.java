@@ -2,6 +2,7 @@ package ir.ac.kntu;
 
 import ir.ac.kntu.util.SafeInput;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class Manager extends User {
                 return true;
             }
             case 3 -> {
-
+                viewCustomersPer(scanner);
                 return true;
             }
             case 4 -> {
@@ -399,7 +400,7 @@ public class Manager extends User {
             @Override
             public String formatItem(Seller seller) {
                 return seller.getFirstName() + " " + seller.getLastName() + " | " + "Total sales : "
-                + seller.getMonthlySales(LocalDateTime.now());
+                        + seller.getMonthlySales(LocalDateTime.now());
             }
         };
 
@@ -426,7 +427,7 @@ public class Manager extends User {
     private void searchSeller(Scanner scanner) {
         System.out.println("Please enter seller's code :");
         String code = scanner.nextLine();
-        
+
         for (Seller seller : UserRepository.getSellers()) {
             if (code.equals(seller.getAgencyCode())) {
                 bonusToSeller(scanner, seller);
@@ -434,6 +435,79 @@ public class Manager extends User {
             }
         }
         System.out.println("No seller found with this code.");
+    }
+
+    private void viewCustomersPer(Scanner scanner) {
+        PaginationHelper<Customer> pagination = new PaginationHelper<>() {
+            @Override
+            public String formatItem(Customer customer) {
+                return customer.getFirstName() + " " + customer.getLastName() + " | " + "Total purchase : "
+                        + customer.getMonthlyPurchase(LocalDateTime.now());
+            }
+        };
+
+        pagination.paginate(UserRepository.getCustomers(), scanner, (customer, sc) -> {
+            rewardToBuyer(scanner, customer);
+        });
+    }
+
+    private void rewardToBuyer(Scanner scanner, Customer customer) {
+        while (true) {
+            System.out.println("--- 1. Discount by percentage ---");
+            System.out.println("------ 2. Discount by value -----");
+            System.out.println("--------- 3. Vendilo + ----------");
+            System.out.println("----------- 0. back -------------");
+
+            int choice = SafeInput.getInt(scanner);
+            switch (choice) {
+                case 1 -> giveDiscountByPercentage(scanner, customer);
+                case 2 -> giveDiscountByValue(scanner, customer);
+                case 3 -> extendVendiloPlus(scanner, customer);
+                case 0 -> {
+                    return;
+                }
+            }
+        }
+    }
+
+    private void giveDiscountByPercentage(Scanner scanner, Customer customer) {
+        System.out.println("Please enter discount's code : ");
+        String code = scanner.nextLine();
+        System.out.println("Enter the usage limit : ");
+        int usageLimit = SafeInput.getInt(scanner);
+        System.out.println("Enter the Percentage : ");
+        double percentage = SafeInput.getDouble(scanner);
+
+        DiscountByPercentage discount = new DiscountByPercentage(percentage, code, usageLimit);
+        customer.addDiscount(discount);
+        MyNotification noti = new MyNotification("Discount", "The manager gave you a discount(by percentage) code.");
+        customer.addNotifications(noti);
+    }
+
+    private void giveDiscountByValue(Scanner scanner, Customer customer) {
+        System.out.println("Please enter discount's code : ");
+        String code = scanner.nextLine();
+        System.out.println("Enter the usage limit : ");
+        int usageLimit = SafeInput.getInt(scanner);
+        System.out.println("Enter the value : ");
+        double value = SafeInput.getDouble(scanner);
+
+        DiscountByValue discount = new DiscountByValue(value, code, usageLimit);
+        customer.addDiscount(discount);
+
+        MyNotification noti = new MyNotification("Discount", "The manager gave you a discount(by value) code.");
+        customer.addNotifications(noti);
+    }
+
+    private void extendVendiloPlus(Scanner scanner, Customer customer) {
+        System.out.println("How many days of subscription do you want to add?");
+        int days = SafeInput.getInt(scanner);
+
+        Period period = Period.ofDays(days);
+        customer.getVendoliPlus().extendSubscription(period);
+
+        MyNotification noti = new MyNotification("Vendilo +", "The manager gave you " + days + " days subscription of venilo +.");
+        customer.addNotifications(noti);
     }
 
     public Manager(String email, String firstName, String lastName, String password, String phoneNumber) {
