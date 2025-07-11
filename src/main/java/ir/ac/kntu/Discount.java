@@ -25,11 +25,11 @@ public abstract class Discount {
         this.code = code;
     }
 
-    public int getusageLimit() {
+    public int getUsageLimit() {
         return usageLimit;
     }
 
-    public void setusageLimit(int usageLimit) {
+    public void setUsageLimit(int usageLimit) {
         this.usageLimit = usageLimit;
     }
 

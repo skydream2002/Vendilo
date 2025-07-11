@@ -506,8 +506,70 @@ public class Manager extends User {
         Period period = Period.ofDays(days);
         customer.getVendoliPlus().extendSubscription(period);
 
-        MyNotification noti = new MyNotification("Vendilo +", "The manager gave you " + days + " days subscription of venilo +.");
+        MyNotification noti = new MyNotification("Vendilo +",
+                "The manager gave you " + days + " days subscription of venilo +.");
         customer.addNotifications(noti);
+    }
+
+    private void universalDiscount(Scanner scanner) {
+        while (true) {
+            System.out.println("--- 1. Discount by percentage ---");
+            System.out.println("------ 2. Discount by value -----");
+            System.out.println("----------- 0. back -------------");
+
+            int selection = SafeInput.getInt(scanner);
+
+            switch (selection) {
+                case 1 -> percentageDiscount(scanner);
+                case 2 -> valueDiscount(scanner);
+                case 0 -> {
+                    return;
+                }
+            }
+        }
+    }
+
+    private void percentageDiscount(Scanner scanner) {
+        System.out.println("Please enter discount's code : ");
+        String code = scanner.nextLine();
+        System.out.println("Enter the usage limit : ");
+        int usageLimit = SafeInput.getInt(scanner);
+        System.out.println("Enter the Percentage : ");
+        double percentage = SafeInput.getDouble(scanner);
+        DiscountByPercentage discount = new DiscountByPercentage(percentage, code, usageLimit);
+
+        addGeneralDiscount(discount);
+    }
+
+    private void valueDiscount(Scanner scanner) {
+        System.out.println("Please enter discount's code : ");
+        String code = scanner.nextLine();
+        System.out.println("Enter the usage limit : ");
+        int usageLimit = SafeInput.getInt(scanner);
+        System.out.println("Enter the value : ");
+        double value = SafeInput.getDouble(scanner);
+        DiscountByValue discount = new DiscountByValue(value, code, usageLimit);
+
+        addGeneralDiscount(discount);
+    }
+
+    private void addGeneralDiscount(Discount discount) {
+        MyNotification noti = new MyNotification("discount", "Universal discount from manager.");
+
+        for (Customer customer : UserRepository.getCustomers()) {
+            Discount newDiscount;
+
+            if (discount instanceof DiscountByPercentage perc) {
+                newDiscount = new DiscountByPercentage(perc.getPercentage(), perc.getCode(), perc.getUsageLimit());
+            } else if (discount instanceof DiscountByValue val) {
+                newDiscount = new DiscountByValue(val.getValue(), val.getCode(), val.getUsageLimit());
+            } else {
+                continue;
+            }
+
+            customer.addDiscount(newDiscount);
+            customer.addNotifications(noti);
+        }
     }
 
     public Manager(String email, String firstName, String lastName, String password, String phoneNumber) {
