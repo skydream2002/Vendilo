@@ -41,11 +41,11 @@ public class Manager extends User {
                 return true;
             }
             case 4 -> {
-
+                universalDiscount(scanner);
                 return true;
             }
             case 5 -> {
-
+                universalMessage(scanner);
                 return true;
             }
             case 0 -> {
@@ -570,6 +570,17 @@ public class Manager extends User {
             customer.addDiscount(newDiscount);
             customer.addNotifications(noti);
         }
+    }
+
+    private void universalMessage(Scanner scanner) {
+        System.out.println("Enter your message :");
+        String message = scanner.nextLine();
+
+        for (Customer customer : UserRepository.getCustomers()) {
+            MyNotification noti = new MyNotification("Universal message", message);
+            customer.addNotifications(noti);
+        }
+
     }
 
     public Manager(String email, String firstName, String lastName, String password, String phoneNumber) {
