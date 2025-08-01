@@ -131,6 +131,7 @@ public class Supporter extends User {
                 case 0 -> {
                     return;
                 }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }

@@ -103,13 +103,13 @@ public class Seller extends User {
     }
 
     private void notifyInterestedCustomers(Product product) {
-        for (Customer customer : product.getInterestedCustomers()) {
+        for (Customer customer : product.getWaitingList()) {
             MyNotification notification = new MyNotification(
                     "Product Back In Stock",
                     "The product '" + product.getName() + "' is now available!", product);
             customer.addNotifications(notification);
         }
-        product.getInterestedCustomers().clear();
+        product.getWaitingList().clear();
     }
 
     public void addingProduct(Scanner scanner) {
@@ -120,39 +120,38 @@ public class Seller extends User {
             System.out.println("3. Mobile");
             System.out.println("0. back");
 
-            int choice;
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input! Please enter a number.");
-                continue;
-            }
+            int choice = SafeInput.getInt(scanner);
 
-            switch (choice) {
-                case 0 -> {
-                    return;
-                }
-                case 1 -> {
-                    Book book = new Book();
-                    book.addProduct(scanner, this);
-                    products.add(book);
-                    System.out.println("Book added.");
-                }
-                case 2 -> {
-                    Laptop laptop = new Laptop();
-                    laptop.addProduct(scanner, this);
-                    products.add(laptop);
-                    System.out.println("Laptop added.");
-                }
-                case 3 -> {
-                    Mobile mobile = new Mobile();
-                    mobile.addProduct(scanner, this);
-                    products.add(mobile);
-                    System.out.println("Mobile added.");
-                }
-                default -> System.out.println("Invalid category.");
+            if (!handleOptions(choice, scanner)) {
+                return;
             }
         }
+    }
+
+    private boolean handleOptions(int number, Scanner scanner) {
+        if (number == 0) {
+            return false;
+        }
+
+        Product product = createProduct(number);
+        if (product == null) {
+            System.out.println("Invalid category.");
+            return true;
+        }
+
+        product.addProduct(scanner, this);
+        products.add(product);
+        System.out.println(product.getClass().getSimpleName() + " added.");
+        return true;
+    }
+
+    private Product createProduct(int number) {
+        return switch (number) {
+            case 1 -> new Book();
+            case 2 -> new Laptop();
+            case 3 -> new Mobile();
+            default -> null;
+        };
     }
 
     public double getMonthlySales(LocalDateTime now) {

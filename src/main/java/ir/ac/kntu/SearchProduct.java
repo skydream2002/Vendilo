@@ -33,8 +33,6 @@ public class SearchProduct {
         String sortType = selectSortType(scanner);
         sortProducts(filteredProducts, sortType);
 
-        HtmlExporter.exportProductsToHtml(filteredProducts, "search-results.html"); // creat html
-
         PaginationHelper<Product> pagination = new PaginationHelper<>() {
             @Override
             public String formatItem(Product product) {
@@ -43,7 +41,7 @@ public class SearchProduct {
                         : product.getPrice();
 
                 return product.getName() +
-                        " | Price : " + finalPrice +" toman" +
+                        " | Price : " + finalPrice + " toman" +
                         " | Category : " + product.getType().name();
             }
         };
@@ -96,15 +94,17 @@ public class SearchProduct {
     private static List<Product> filterProducts(SearchCriteria criteria) {
         return new ArrayList<>(getAllProducts().stream()
                 .filter(product -> {
-                    if (criteria.getName() == null || criteria.getName().isBlank())
+                    if (criteria.getName() == null || criteria.getName().isBlank()) {
                         return true;
+                    }
                     String productName = product.getName().replaceAll("\\s+", "").toLowerCase();
                     String searchName = criteria.getName().replaceAll("\\s+", "").toLowerCase();
                     return productName.contains(searchName);
                 })
                 .filter(product -> {
-                    if (criteria.getCategory() == null || criteria.getCategory().isBlank())
+                    if (criteria.getCategory() == null || criteria.getCategory().isBlank()) {
                         return true;
+                    }
                     String productCategory = product.getType().name().replaceAll("\\s+", "").toLowerCase();
                     String searchCategory = criteria.getCategory().replaceAll("\\s+", "").toLowerCase();
                     return productCategory.contains(searchCategory);
@@ -148,7 +148,7 @@ public class SearchProduct {
             } else {
                 System.out.println("Do you want to add this product to your cart? (y/n)");
             }
-            
+
             String answer = scanner.nextLine().trim().toLowerCase();
 
             if ("y".equals(answer)) {

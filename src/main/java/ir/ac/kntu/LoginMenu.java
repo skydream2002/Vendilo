@@ -51,7 +51,10 @@ public class LoginMenu {
                 return;
             }
         }
+        searchUser(email, password);
+    }
 
+    private void searchUser(String email, String password) {
         for (User user : UserRepository.getAllUsers()) {
             if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
                 if (!user.isActive()) {

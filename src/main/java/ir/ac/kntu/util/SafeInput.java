@@ -31,9 +31,9 @@ public class SafeInput {
     public static boolean getBooleanInput(Scanner scanner) {
         while (true) {
             String input = scanner.nextLine().trim().toLowerCase();
-            if (input.equals("true")) {
+            if ("true".equals(input)) {
                 return true;
-            } else if (input.equals("false")) {
+            } else if ("false".equals(input)) {
                 return false;
             } else {
                 System.out.println("please enter just true or false");

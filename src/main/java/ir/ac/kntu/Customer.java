@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class Customer extends User {
     private List<Address> addresses = new ArrayList<>();
-    private ShoppingCart shoppingCart;
+    private ShoppingCart shoppingCart = new ShoppingCart(this);
     private List<Order> orders = new ArrayList<>();
     private final Wallet wallet = new Wallet(UserType.CUSTOMER);
     private List<CustomerSupportRequest> supportRequests = new ArrayList<>();
@@ -21,25 +21,11 @@ public class Customer extends User {
     @Override
     public void usersMenu(Scanner scanner) {
         while (true) {
-            System.out.println("----Customer Menu----");
-            System.out.println("---1.Shopping Cart---");
-            System.out.println("-2.Searching Products");
-            System.out.println("-----3.Addresses-----");
-            System.out.println("------4.Wallet-------");
-            System.out.println("------5.Orders-------");
-            System.out.println("------6.Setting------");
-            System.out.println("------7.Support------");
-            System.out.println("--8.Discount codes --");
-            System.out.println("---- 9.Vendilo + ----");
-            System.out.println("---10.notifications--");
-            System.out.println("--------0.back-------");
-            System.out.println("choose:");
+            printCustomerMenu();
+
             int choice = SafeInput.getInt(scanner);
             switch (choice) {
                 case 1 -> {
-                    if (shoppingCart == null) {
-                        shoppingCart = new ShoppingCart(this);
-                    }
                     shoppingCart.shoppingCartMenu(scanner);
                 }
                 case 2 -> SearchProduct.showSearchMenu(this, scanner);
@@ -65,6 +51,22 @@ public class Customer extends User {
         }
     }
 
+    private void printCustomerMenu() {
+        System.out.println("----Customer Menu----");
+        System.out.println("---1.Shopping Cart---");
+        System.out.println("-2.Searching Products");
+        System.out.println("-----3.Addresses-----");
+        System.out.println("------4.Wallet-------");
+        System.out.println("------5.Orders-------");
+        System.out.println("------6.Setting------");
+        System.out.println("------7.Support------");
+        System.out.println("--8.Discount codes --");
+        System.out.println("---- 9.Vendilo + ----");
+        System.out.println("---10.notifications--");
+        System.out.println("--------0.back-------");
+        System.out.println("choose:");
+    }
+
     private void supportMenu(Scanner scanner) {
         while (true) {
             System.out.println("---- Support Menu ----");
@@ -87,13 +89,7 @@ public class Customer extends User {
 
     private void submitSupportRequest(Scanner scanner) {
         while (true) {
-            System.out.println("Select request category:");
-            System.out.println("1. Product quality issue");
-            System.out.println("2. Order mismatch");
-            System.out.println("3. Settings / technical issues");
-            System.out.println("4. Order not received");
-            System.out.println("0. back");
-
+            printRequestCategories();
             int categoryChoice = SafeInput.getInt(scanner);
 
             if (categoryChoice == 0) {
@@ -118,6 +114,15 @@ public class Customer extends User {
                 System.out.println("Invalid category.");
             }
         }
+    }
+
+    private void printRequestCategories() {
+        System.out.println("Select request category:");
+        System.out.println("1. Product quality issue");
+        System.out.println("2. Order mismatch");
+        System.out.println("3. Settings / technical issues");
+        System.out.println("4. Order not received");
+        System.out.println("0. back");
     }
 
     private void viewOpenSupportRequests(Scanner scanner) {
@@ -189,32 +194,40 @@ public class Customer extends User {
             return;
         }
 
-        if (selectedDiscount != null) {
-            System.out.println("Currently selected discount: " + selectedDiscount.getSummary());
-            System.out.println("Do you want to:");
-            System.out.println("1. Keep current discount");
-            System.out.println("2. Remove discount");
-            System.out.println("3. Select a new one");
-            System.out.print("Enter choice (1/2/3): ");
-            String input = scanner.nextLine().trim();
-
-            switch (input) {
-                case "1":
-                    System.out.println("Keeping current discount.");
-                    return;
-                case "2":
-                    setSelectedDiscount(null);
-                    System.out.println("Discount removed.");
-                    return;
-                case "3":
-                    // proceed to selection menu
-                    break;
-                default:
-                    System.out.println("Invalid input.");
-                    return;
-            }
+        if (selectedDiscount != null && !handleExistingDiscount(scanner)) {
+            return;
         }
 
+        showDiscountPagination(scanner, activeDiscounts);
+    }
+
+    private boolean handleExistingDiscount(Scanner scanner) {
+        System.out.println("Currently selected discount: " + selectedDiscount.getSummary());
+        System.out.println("Do you want to:");
+        System.out.println("1. Keep current discount");
+        System.out.println("2. Remove discount");
+        System.out.println("3. Select a new one");
+        System.out.print("Enter choice (1/2/3): ");
+        String input = scanner.nextLine().trim();
+
+        switch (input) {
+            case "1":
+                System.out.println("Keeping current discount.");
+                return false;
+            case "2":
+                setSelectedDiscount(null);
+                System.out.println("Discount removed.");
+                return false;
+            case "3":
+                // proceed to selection menu
+                return true;
+            default:
+                System.out.println("Invalid input.");
+                return false;
+        }
+    }
+
+    private void showDiscountPagination(Scanner scanner, List<Discount> activeDiscounts) {
         PaginationHelper<Discount> pagination = new PaginationHelper<>() {
             @Override
             public String formatItem(Discount discount) {
@@ -306,6 +319,7 @@ public class Customer extends User {
             case 0 -> {
                 return;
             }
+            default -> System.out.println("Invalid chioce.");
         }
     }
 
@@ -422,9 +436,9 @@ public class Customer extends User {
     public double getMonthlyPurchase(LocalDateTime now) {
         LocalDateTime oneMonthAgo = now.minusMonths(1);
         return orders.stream()
-                    .filter(order -> order.getOrderDate().isAfter(oneMonthAgo))
-                    .mapToDouble(Order::getFinalCost)
-                    .sum();
+                .filter(order -> order.getOrderDate().isAfter(oneMonthAgo))
+                .mapToDouble(Order::getFinalCost)
+                .sum();
     }
 
     public List<Address> getAddresses() {

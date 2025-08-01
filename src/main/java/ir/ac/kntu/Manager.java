@@ -180,6 +180,7 @@ public class Manager extends User {
                 case 0 -> {
                     return;
                 }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }
@@ -190,6 +191,8 @@ public class Manager extends User {
             case "seller" -> System.out.println("---- 1. view all sellers ----");
             case "user" -> System.out.println("---- 1. view all users ----");
             case "supporter" -> System.out.println("---- 1. view all supporters ----");
+            default -> {
+            }
         }
     }
 
@@ -250,26 +253,41 @@ public class Manager extends User {
 
             int choice = SafeInput.getInt(scanner);
 
-            switch (choice) {
-                case 1 -> editInformation(scanner, user);
-                case 2 -> {
-                    if (user.isActive()) {
-                        blockUser(user);
-                        System.out.println("User blocked.");
-                    } else {
-                        unblockUser(user);
-                        System.out.println("User unblocked.");
-                    }
+            if (!handleShowUserOptions(choice, scanner, user)) {
+                return;
+            }
+
+        }
+    }
+
+    private boolean handleShowUserOptions(int number, Scanner scanner, User user) {
+        switch (number) {
+            case 1 -> {
+                editInformation(scanner, user);
+                return true;
+            }
+            case 2 -> {
+                if (user.isActive()) {
+                    blockUser(user);
+                    System.out.println("User blocked.");
+                } else {
+                    unblockUser(user);
+                    System.out.println("User unblocked.");
                 }
-                case 3 -> {
-                    if (user instanceof Supporter supporter) {
-                        editSupporterSections(scanner, supporter);
-                    }
+                return true;
+            }
+            case 3 -> {
+                if (user instanceof Supporter supporter) {
+                    editSupporterSections(scanner, supporter);
                 }
-                case 0 -> {
-                    return;
-                }
-                default -> System.out.println("Invalid choice.");
+                return true;
+            }
+            case 0 -> {
+                return false;
+            }
+            default -> {
+                System.out.println("Invalid choice.");
+                return true;
             }
         }
     }
@@ -466,6 +484,7 @@ public class Manager extends User {
                 case 0 -> {
                     return;
                 }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }
@@ -525,6 +544,7 @@ public class Manager extends User {
                 case 0 -> {
                     return;
                 }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }

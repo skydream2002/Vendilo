@@ -17,8 +17,8 @@ public class Mobile extends DigitalProduct {
         double finalPrice = getPrice();
         if (user instanceof Customer customer) {
             finalPrice = customer.getVendoliPlus().isActive()
-                        ? getPrice() * 0.95
-                        : getPrice();
+                    ? getPrice() * 0.95
+                    : getPrice();
         }
         System.out.println("----Product Details (Mobile)----");
         System.out.println("Name : " + getName());
@@ -51,6 +51,19 @@ public class Mobile extends DigitalProduct {
         super.setBrand(scanner.nextLine());
 
         System.out.println("Price:");
+        setMobilePrice(scanner);
+
+        System.out.println("Stock:");
+        setMobileStock(scanner);
+
+        System.out.println("RAM :");
+        super.setRam(scanner.nextLine());
+
+        System.out.println("Storage :");
+        super.setStorage(scanner.nextLine());
+    }
+
+    private void setMobilePrice(Scanner scanner) {
         while (true) {
             double price = SafeInput.getDouble(scanner);
             if (price > 0) {
@@ -60,8 +73,9 @@ public class Mobile extends DigitalProduct {
                 System.out.println("Price must be positive.");
             }
         }
+    }
 
-        System.out.println("Stock:");
+    private void setMobileStock(Scanner scanner) {
         while (true) {
             int stock = SafeInput.getInt(scanner);
             if (stock > 0) {
@@ -71,12 +85,6 @@ public class Mobile extends DigitalProduct {
                 System.out.println("Stock must be positive.");
             }
         }
-
-        System.out.println("RAM :");
-        super.setRam(scanner.nextLine());
-
-        System.out.println("Storage :");
-        super.setStorage(scanner.nextLine());
     }
 
     private void setCameraInfo(Scanner scanner) {

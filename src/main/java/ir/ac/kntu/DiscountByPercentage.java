@@ -15,7 +15,7 @@ public class DiscountByPercentage extends Discount {
             System.out.println("--- 1. Apply this discount ---");
             System.out.println("--- 0.back ---");
             int selection = SafeInput.getInt(scanner);
-            
+
             switch (selection) {
                 case 1 -> {
                     customer.setSelectedDiscount(this);
@@ -44,12 +44,12 @@ public class DiscountByPercentage extends Discount {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("DiscountWithValue{");
-        sb.append("percentage :").append(percentage).append("%");
-        sb.append("| code : ").append(super.getCode());
-        sb.append("| usage limit : ").append(super.getUsageLimit());
-        sb.append('}');
-        return sb.toString();
+        StringBuilder discount = new StringBuilder();
+        discount.append("DiscountWithValue{");
+        discount.append("percentage :").append(percentage).append("%");
+        discount.append("| code : ").append(super.getCode());
+        discount.append("| usage limit : ").append(super.getUsageLimit());
+        discount.append('}');
+        return discount.toString();
     }
 }

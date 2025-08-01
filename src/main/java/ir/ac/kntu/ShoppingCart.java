@@ -161,7 +161,7 @@ public class ShoppingCart {
 
         handleDiscountSelection(scanner);
 
-        double finalCost = applyingDiscount(paymentInfo);
+        double finalCost = applyingDiscount();
         if (finalCost == -1) {
             finalCost = paymentInfo.totalCost;
         }
@@ -173,7 +173,7 @@ public class ShoppingCart {
         processPayment(selectedAddress, finalCost);
     }
 
-    private double applyingDiscount(PaymentInfo paymentInfo) {
+    private double applyingDiscount() {
         if (!isApplyDiscount()) {
             return -1;
         }
@@ -188,9 +188,9 @@ public class ShoppingCart {
         System.out.println("Do you want to apply a discount? (y/n)");
         String selection = scanner.nextLine().trim().toLowerCase();
 
-        if (selection.equals("y")) {
+        if ("y".equals(selection)) {
             customer.discountMenu(scanner);
-        } else if (!selection.equals("n")) {
+        } else if (!"n".equals(selection)) {
             System.out.println("Invalid selection.");
             handleDiscountSelection(scanner);
         }
@@ -349,8 +349,8 @@ public class ShoppingCart {
 
         if (discount instanceof DiscountByValue valueDiscount) {
             return Math.max(0, basePrice - valueDiscount.getValue());
-        } else if (discount instanceof DiscountByPercentage percentageDiscount) {
-            return Math.max(0, basePrice - (basePrice * percentageDiscount.getPercentage() / 100));
+        } else if (discount instanceof DiscountByPercentage percentDiscount) {
+            return Math.max(0, basePrice - (basePrice * percentDiscount.getPercentage() / 100));
         }
 
         return basePrice;

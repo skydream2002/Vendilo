@@ -14,13 +14,13 @@ public abstract class Product {
     private Seller seller;
     private int stock;
     private Map<String, Double> ratings = new HashMap<>();
-    private List<Customer> interestedCustomers = new ArrayList<>();
+    private List<Customer> waitingList = new ArrayList<>();
 
     public abstract void showDetails(User user);
 
     public void addInterestedCustomer(Customer customer) {
-        if (!interestedCustomers.contains(customer)) {
-            interestedCustomers.add(customer);
+        if (!waitingList.contains(customer)) {
+            waitingList.add(customer);
         } else {
             System.out.println("You’ve already subscribed to be notified when this product is back in stock.");
         }
@@ -114,8 +114,8 @@ public abstract class Product {
         this.stock = stock;
     }
 
-    public List<Customer> getInterestedCustomers() {
-        return interestedCustomers;
+    public List<Customer> getWaitingList() {
+        return waitingList;
     }
 
 }
