@@ -19,6 +19,7 @@ public class DiscountByPercentage extends Discount {
             switch (selection) {
                 case 1 -> {
                     customer.setSelectedDiscount(this);
+                    return;
                 }
                 case 0 -> {
                     return;
@@ -47,7 +48,7 @@ public class DiscountByPercentage extends Discount {
         sb.append("DiscountWithValue{");
         sb.append("percentage :").append(percentage).append("%");
         sb.append("| code : ").append(super.getCode());
-        sb.append("| usage limit : ").append(super.getusageLimit());
+        sb.append("| usage limit : ").append(super.getUsageLimit());
         sb.append('}');
         return sb.toString();
     }

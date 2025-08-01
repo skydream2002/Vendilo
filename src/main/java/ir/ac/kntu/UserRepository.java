@@ -190,6 +190,7 @@ public class UserRepository {
         all.addAll(customers);
         all.addAll(sellers);
         all.addAll(supports);
+        all.addAll(managers);
         return all;
     }
 

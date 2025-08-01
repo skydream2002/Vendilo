@@ -201,7 +201,7 @@ public class ShoppingCart {
             System.out.println("No discount selected.");
             return false;
         }
-        if (customer.getSelectedDiscount().getusageLimit() <= 0) {
+        if (customer.getSelectedDiscount().getUsageLimit() <= 0) {
             System.out.println("Discount code is out of stock.");
             return false;
         }
