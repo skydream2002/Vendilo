@@ -22,7 +22,6 @@ public class Customer extends User {
     public void usersMenu(Scanner scanner) {
         while (true) {
             printCustomerMenu();
-
             int choice = SafeInput.getInt(scanner);
             switch (choice) {
                 case 1 -> {
@@ -75,7 +74,6 @@ public class Customer extends User {
             System.out.println("0. Back");
             System.out.print("Choose: ");
             int choice = SafeInput.getInt(scanner);
-
             switch (choice) {
                 case 1 -> submitSupportRequest(scanner);
                 case 2 -> viewOpenSupportRequests(scanner);
@@ -102,7 +100,6 @@ public class Customer extends User {
                     case 4 -> "Order not received";
                     default -> "";
                 };
-
                 System.out.println("Enter your request description:");
                 String message = scanner.nextLine();
 
@@ -132,7 +129,6 @@ public class Customer extends User {
             System.out.println("You have no open support requests.");
             return;
         }
-
         PaginationHelper<CustomerSupportRequest> pagination = new PaginationHelper<>() {
             @Override
             public String formatItem(CustomerSupportRequest request) {
@@ -369,7 +365,6 @@ public class Customer extends User {
 
     private boolean choosingNotiMenu(Scanner scanner) {
         int selection = SafeInput.getInt(scanner);
-
         switch (selection) {
             case 1 -> {
                 showNotification(scanner);
@@ -389,7 +384,6 @@ public class Customer extends User {
             System.out.println("No notification found.");
             return;
         }
-
         PaginationHelper<MyNotification> pagination = new PaginationHelper<>() {
             @Override
             public String formatItem(MyNotification notification) {
@@ -404,17 +398,13 @@ public class Customer extends User {
     private void showNotiDetails(Scanner scanner, MyNotification notification) {
         System.out.println("=== Notification Details ===");
         System.out.println(notification);
-
         if (notification.getProduct() != null) {
             System.out.println("--- 1. View Product Details ---");
         } else if (notification.getRequest() != null) {
             System.out.println("--- 1. Go to Support Menu ---");
         }
-
         System.out.println("----------- 0. Back -----------");
-
         int choice = SafeInput.getInt(scanner);
-
         switch (choice) {
             case 0 -> {
                 return;

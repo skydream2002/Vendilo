@@ -64,12 +64,7 @@ public class Supporter extends User {
 
     private void showRequest(Scanner scanner, SellerSignUpRequest request) {
         while (true) {
-            System.out.println("--- Request details ---");
-            System.out.println(request);
-            System.out.println("---- 1. Accept request ----");
-            System.out.println("---- 2. Reject request ----");
-            System.out.println("---- 0. back ----");
-            System.out.println("Choose : ");
+            printHeader(request);
             int selection = SafeInput.getInt(scanner);
 
             switch (selection) {
@@ -101,6 +96,15 @@ public class Supporter extends User {
                 default -> System.out.println("Invalid selection.");
             }
         }
+    }
+
+    private void printHeader(SellerSignUpRequest request) {
+        System.out.println("--- Request details ---");
+        System.out.println(request);
+        System.out.println("---- 1. Accept request ----");
+        System.out.println("---- 2. Reject request ----");
+        System.out.println("---- 0. back ----");
+        System.out.println("Choose : ");
     }
 
     private void handleCustomersRequests(Scanner scanner) {

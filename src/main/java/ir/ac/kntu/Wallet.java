@@ -18,52 +18,61 @@ public class Wallet {
     }
 
     public void walletMenu(Scanner scanner) {
-
         while (true) {
-            System.out.println("--------- Wallet Menu ---------");
-            System.out.println("-- Account Balance: " + accountBalance + " --");
-
-            int optionNumber = 1;
-
-            if (userType == UserType.CUSTOMER) {
-                System.out.println("--------- " + optionNumber + ". Deposit ----------");
-                optionNumber++;
-            }
-            if (userType == UserType.SELLER) {
-                System.out.println("--------- " + optionNumber + ". Withdraw ---------");
-                optionNumber++;
-            }
-            System.out.println("------ " + optionNumber + ". Transactions --------");
-            optionNumber++;
-            System.out.println("---------- 0. back ------------");
-            System.out.println("Enter your choice: ");
-
+            walletMenuOptions();
             int choice = SafeInput.getInt(scanner);
 
-            if (choice == 0) {
+            if (!handleWalletOptions(choice, scanner)) {
                 return;
             }
-            if (userType == UserType.CUSTOMER && choice == 1) {
-                System.out.println("Enter the amount you want to deposit.");
-                double amount = SafeInput.getDouble(scanner);
+        }
+    }
 
-                System.out.println("Enter the description for transaction");
-                String describtion = scanner.nextLine();
-                deposit(amount, describtion);
-            } else if (userType == UserType.SELLER && choice == 1) {
-                System.out.println("Enter the amount you want to withdraw.");
-                double amount = SafeInput.getDouble(scanner);
+    private void walletMenuOptions() {
+        System.out.println("--------- Wallet Menu ---------");
+        System.out.println("-- Account Balance: " + accountBalance + " --");
 
-                System.out.println("Enter the description for transaction");
-                String description = scanner.nextLine();
-                withdraw(amount, description);
-            } else if ((userType == UserType.CUSTOMER && choice == 2) ||
-                    (userType == UserType.SELLER && choice == 2)) {
-                transactionMenu(scanner);
-            } else {
-                System.out.println("Invalid choice!");
-            }
+        int optionNumber = 1;
 
+        if (userType == UserType.CUSTOMER) {
+            System.out.println("--------- " + optionNumber + ". Deposit ----------");
+            optionNumber++;
+        }
+        if (userType == UserType.SELLER) {
+            System.out.println("--------- " + optionNumber + ". Withdraw ---------");
+            optionNumber++;
+        }
+        System.out.println("------ " + optionNumber + ". Transactions --------");
+        optionNumber++;
+        System.out.println("---------- 0. back ------------");
+        System.out.println("Enter your choice: ");
+    }
+
+    private boolean handleWalletOptions(int choice, Scanner scanner) {
+        if (choice == 0) {
+            return false;
+        } else if (userType == UserType.CUSTOMER && choice == 1) {
+            System.out.println("Enter the amount you want to deposit.");
+            double amount = SafeInput.getDouble(scanner);
+
+            System.out.println("Enter the description for transaction");
+            String describtion = scanner.nextLine();
+            deposit(amount, describtion);
+            return true;
+        } else if (userType == UserType.SELLER && choice == 1) {
+            System.out.println("Enter the amount you want to withdraw.");
+            double amount = SafeInput.getDouble(scanner);
+
+            System.out.println("Enter the description for transaction");
+            String description = scanner.nextLine();
+            withdraw(amount, description);
+            return true;
+        } else if ((userType == UserType.CUSTOMER && choice == 2) || (userType == UserType.SELLER && choice == 2)) {
+            transactionMenu(scanner);
+            return true;
+        } else {
+            System.out.println("Invalid choice!");
+            return true;
         }
     }
 

@@ -19,6 +19,7 @@ public class MyNotification {
         this.details = details;
         this.topic = topic;
     }
+
     public CustomerSupportRequest getRequest() {
         return request;
     }
@@ -42,9 +43,11 @@ public class MyNotification {
     public void setTopic(String topic) {
         this.topic = topic;
     }
+
     public String getDetails() {
         return details;
     }
+
     public void setDetails(String details) {
         this.details = details;
     }
