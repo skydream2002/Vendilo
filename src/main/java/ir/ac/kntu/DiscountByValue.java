@@ -20,6 +20,7 @@ public class DiscountByValue extends Discount {
             switch (selection) {
                 case 1 -> {
                     customer.setSelectedDiscount(this);
+                    return;
                 }
                 case 0 -> {
                     return;

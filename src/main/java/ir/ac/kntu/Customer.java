@@ -92,12 +92,13 @@ public class Customer extends User {
 
             if (categoryChoice == 0) {
                 return;
-            } else if (categoryChoice >= 1 && categoryChoice <= 4) {
+            } else if (categoryChoice >= 1 && categoryChoice <= 5) {
                 String category = switch (categoryChoice) {
-                    case 1 -> "Product quality issue";
-                    case 2 -> "Order mismatch";
-                    case 3 -> "Settings issue";
-                    case 4 -> "Order not received";
+                    case 1 -> "QUALITY_REPORT";
+                    case 2 -> "ORDER_DISCREPANCY";
+                    case 3 -> "DELIVERY_PROBLEM";
+                    case 4 -> "SETTINGS";
+                    case 5 -> "ORDER_REJECTION";
                     default -> "";
                 };
                 System.out.println("Enter your request description:");
@@ -117,8 +118,9 @@ public class Customer extends User {
         System.out.println("Select request category:");
         System.out.println("1. Product quality issue");
         System.out.println("2. Order mismatch");
-        System.out.println("3. Settings / technical issues");
-        System.out.println("4. Order not received");
+        System.out.println("3. Delivery problem");
+        System.out.println("4. Settings / technical issues");
+        System.out.println("5. Order not received");
         System.out.println("0. back");
     }
 
@@ -282,6 +284,10 @@ public class Customer extends User {
         System.out.println("---------- 0. back ------------");
 
         int selection = SafeInput.getInt(scanner);
+
+        if (selection == 0) {
+            return;
+        }
         double price = switch (selection) {
             case 1 -> 2000;
             case 2 -> 5000;

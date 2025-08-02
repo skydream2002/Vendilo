@@ -17,6 +17,10 @@ public abstract class Discount {
         this.usageLimit = usageLimit;
     }
 
+    public void decreaseUsageLimit() {
+        this.usageLimit--;
+    }
+
     public String getCode() {
         return code;
     }

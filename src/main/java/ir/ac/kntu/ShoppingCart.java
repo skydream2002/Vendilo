@@ -161,7 +161,7 @@ public class ShoppingCart {
 
         handleDiscountSelection(scanner);
 
-        double finalCost = applyingDiscount();
+        double finalCost = applyingDiscount(paymentInfo);
         if (finalCost == -1) {
             finalCost = paymentInfo.totalCost;
         }
@@ -173,12 +173,13 @@ public class ShoppingCart {
         processPayment(selectedAddress, finalCost);
     }
 
-    private double applyingDiscount() {
+    private double applyingDiscount(PaymentInfo paymentInfo) {
         if (!isApplyDiscount()) {
             return -1;
         }
 
         double finalCost = getFinalPriceWithDiscount();
+        finalCost += paymentInfo.shippingCost;
 
         System.out.println("Total cost with discount : " + finalCost);
         return finalCost;
@@ -250,8 +251,13 @@ public class ShoppingCart {
             createSellerOrder(seller, products, address);
             processSellerPayment(seller, products);
         });
-
         completeCustomerOrder(address, totalCost);
+
+        if (customer.getSelectedDiscount() != null && isDiscountApplied()) {
+            customer.getSelectedDiscount().decreaseUsageLimit();
+            customer.setSelectedDiscount(null); // حذف کد تخفیف استفاده شده
+        }
+
         clearCart();
         System.out.println("Order completed successfully!");
     }
@@ -289,6 +295,23 @@ public class ShoppingCart {
         Order newOrder = new Order(new ArrayList<>(products), customer, LocalDateTime.now(), address, totalCost);
         customer.getOrders().add(newOrder);
         OrderRepository.addOrder(newOrder);
+    }
+
+    private boolean isDiscountApplied() {
+        Discount discount = customer.getSelectedDiscount();
+        if (discount == null) {
+            return false;
+        }
+
+        if (discount.getUsageLimit() <= 0) {
+            return false;
+        }
+
+        if (discount instanceof DiscountByValue discountByValue) {
+            return discountByValue.getValue() * 10 < getTotalPrice();
+        }
+
+        return true;
     }
 
     private class PaymentInfo {
