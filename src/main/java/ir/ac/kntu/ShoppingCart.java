@@ -255,7 +255,7 @@ public class ShoppingCart {
 
         if (customer.getSelectedDiscount() != null && isDiscountApplied()) {
             customer.getSelectedDiscount().decreaseUsageLimit();
-            customer.setSelectedDiscount(null); // حذف کد تخفیف استفاده شده
+            customer.setSelectedDiscount(null);
         }
 
         clearCart();
